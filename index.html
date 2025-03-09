@@ -6,7 +6,6 @@
     <title>Языковая лаборатория</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Стили остаются без изменений, добавлены только стили для модального окна регистрации */
         :root {
             --primary-color: #00FF99;
             --secondary-color: #FFD700;
@@ -922,16 +921,13 @@
     </style>
 </head>
 <body>
-    <!-- Загрузочный экран -->
     <div class="loading-screen">
         <div class="loading-spinner"></div>
         <p class="loading-text">ИНИЦИАЛИЗАЦИЯ...</p>
     </div>
 
-    <!-- Кастомный курсор -->
     <div class="cursor"></div>
 
-    <!-- Органические фоновые элементы -->
     <div class="bio-bg"></div>
     <div class="hex-grid"></div>
     <div class="particles-container"></div>
@@ -942,7 +938,6 @@
         <button class="bio-btn" id="explore-btn">ИССЛЕДОВАТЬ</button>
     </header>
 
-    <!-- Модальное окно регистрации -->
     <div class="register-modal" id="register-modal">
         <h3>Регистрация</h3>
         <form id="register-form">
@@ -1009,7 +1004,6 @@
                 </div>
             </div>
 
-            <!-- Всплывающее окно курса -->
             <div class="course-popup" id="course-popup">
                 <span class="popup-close">×</span>
                 <h3 id="popup-title"></h3>
@@ -1042,7 +1036,6 @@
         </section>
     </div>
 
-    <!-- Модальное окно успеха -->
     <div class="success-modal" id="success-modal">
         <div class="success-icon">✓</div>
         <h3 id="success-title">Сообщение отправлено!</h3>
@@ -1065,15 +1058,31 @@
         </div>
     </footer>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-qRTFlszcMafJv1eesYg-PUxsxYoo28U",
+            authDomain: "misha-and-anna-48e4c.firebaseapp.com",
+            projectId: "misha-and-anna-48e4c",
+            storageBucket: "misha-and-anna-48e4c.firebasestorage.app",
+            messagingSenderId: "822036073579",
+            appId: "1:822036073579:web:cd59fd4f5362b5f0bb752e",
+            measurementId: "G-XR86X6PXMX"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Симуляция загрузки
             setTimeout(function() {
                 document.querySelector('.loading-screen').style.opacity = '0';
                 document.querySelector('.loading-screen').style.visibility = 'hidden';
             }, 2000);
 
-            // Кастомный курсор
             const cursor = document.querySelector('.cursor');
             document.addEventListener('mousemove', function(e) {
                 cursor.style.left = e.clientX + 'px';
@@ -1137,7 +1146,6 @@
                 document.querySelector('.bio-bg').style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(0, 255, 153, 0.15), transparent 50%)`;
             });
 
-            // Показать модальное окно регистрации после нажатия "Исследовать"
             document.getElementById('explore-btn').addEventListener('click', function() {
                 document.querySelector('header').style.opacity = '0';
                 document.querySelector('header').style.transform = 'translateY(-50px)';
@@ -1148,22 +1156,41 @@
                 }, 800);
             });
 
-            // Обработка формы регистрации
-            document.getElementById('register-form').addEventListener('submit', function(e) {
+            document.getElementById('register-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
+                const name = document.getElementById('reg-name').value;
+                const email = document.getElementById('reg-email').value;
+                const password = document.getElementById('reg-password').value;
                 const role = document.getElementById('reg-role').value;
-                document.getElementById('success-title').textContent = 'Регистрация успешна!';
-                document.getElementById('success-message').textContent = role === 'student' 
-                    ? 'Добро пожаловать, ученик! Теперь вы можете записаться на курсы.' 
-                    : 'Добро пожаловать, преподаватель! Вы получите доступ к управлению курсами.';
-                document.getElementById('success-modal').classList.add('active');
-                
-                setTimeout(function() {
-                    document.getElementById('success-modal').classList.remove('active');
-                    document.getElementById('register-modal').classList.remove('active');
-                    document.getElementById('main-content').classList.add('active');
-                }, 2000);
+
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    await addDoc(collection(db, "users"), {
+                        uid: user.uid,
+                        name: name,
+                        email: email,
+                        role: role,
+                        createdAt: new Date().toISOString()
+                    });
+
+                    document.getElementById('success-title').textContent = 'Регистрация успешна!';
+                    document.getElementById('success-message').textContent = role === 'student' 
+                        ? 'Добро пожаловать, ученик! Теперь вы можете записаться на курсы.' 
+                        : 'Добро пожаловать, преподаватель! Вы получите доступ к управлению курсами.';
+                    document.getElementById('success-modal').classList.add('active');
+                    
+                    setTimeout(function() {
+                        document.getElementById('success-modal').classList.remove('active');
+                        document.getElementById('register-modal').classList.remove('active');
+                        document.getElementById('main-content').classList.add('active');
+                    }, 2000);
+                } catch (e) {
+                    console.error("Ошибка при регистрации: ", e);
+                    alert("Ошибка: " + e.message);
+                }
 
                 this.reset();
             });
@@ -1198,18 +1225,35 @@
                 document.getElementById('course-popup').classList.remove('active');
             });
 
-            document.getElementById('contact-form').addEventListener('submit', function(e) {
+            document.getElementById('contact-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                document.getElementById('success-title').textContent = 'Сообщение отправлено!';
-                document.getElementById('success-message').textContent = 'Спасибо за обращение. Мы свяжемся с вами в ближайшее время.';
-                document.getElementById('success-modal').classList.add('active');
-                
-                this.reset();
-                
-                setTimeout(function() {
-                    document.getElementById('success-modal').classList.remove('active');
-                }, 3000);
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const message = document.getElementById('message').value;
+
+                const newMessage = {
+                    name: name,
+                    email: email,
+                    message: message,
+                    createdAt: new Date().toISOString()
+                };
+
+                try {
+                    await addDoc(collection(db, "messages"), newMessage);
+                    document.getElementById('success-title').textContent = 'Сообщение отправлено!';
+                    document.getElementById('success-message').textContent = 'Спасибо за обращение. Мы свяжемся с вами в ближайшее время.';
+                    document.getElementById('success-modal').classList.add('active');
+                    
+                    this.reset();
+                    
+                    setTimeout(function() {
+                        document.getElementById('success-modal').classList.remove('active');
+                    }, 3000);
+                } catch (e) {
+                    console.error("Ошибка при отправке сообщения: ", e);
+                    alert("Произошла ошибка при отправке сообщения. Попробуйте снова.");
+                }
             });
         });
     </script>
