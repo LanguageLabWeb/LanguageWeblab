@@ -677,6 +677,22 @@
             color: transparent;
         }
 
+        /* Стили для выпадающего списка */
+        .schedule-modal select {
+            background: rgba(10, 46, 43, 0.9); /* Тёмный фон */
+            color: var(--light-text); /* Белый текст */
+            border: 1px solid var(--secondary-color);
+        }
+
+        .schedule-modal select option {
+            background: var(--darker-bg); /* Тёмный фон для опций */
+            color: var(--light-text); /* Белый текст */
+        }
+
+        .schedule-modal select[multiple] {
+            height: 150px; /* Увеличиваем высоту для выбора нескольких вариантов */
+        }
+
         .contact-form button,
         .auth-modal button,
         .schedule-modal button {
@@ -1197,10 +1213,10 @@
                 <label for="course-select">Курс</label>
             </div>
             <div class="form-group">
-                <select id="time-select" required>
-                    <option value="">Выберите время</option>
+                <select id="time-select" multiple required>
+                    <option value="">Выберите до 2 времён</option>
                 </select>
-                <label for="time-select">Время</label>
+                <label for="time-select">Время (выберите до 2 вариантов)</label>
             </div>
             <button type="submit">Подтвердить запись</button>
         </form>
@@ -1529,7 +1545,7 @@
 
             courseSelect.addEventListener('change', function() {
                 const selectedCourse = this.value;
-                timeSelect.innerHTML = '<option value="">Выберите время</option>';
+                timeSelect.innerHTML = '<option value="">Выберите до 2 времён</option>';
                 
                 if (courseSchedule[selectedCourse]) {
                     courseSchedule[selectedCourse].forEach(time => {
@@ -1541,14 +1557,22 @@
                 }
             });
 
+            timeSelect.addEventListener('change', function() {
+                const selectedOptions = Array.from(this.selectedOptions);
+                if (selectedOptions.length > 2) {
+                    alert('Вы можете выбрать не более 2 времён!');
+                    selectedOptions.slice(2).forEach(option => option.selected = false);
+                }
+            });
+
             document.getElementById('schedule-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
                 const course = courseSelect.value;
-                const time = timeSelect.value;
+                const selectedTimes = Array.from(timeSelect.selectedOptions).map(option => option.value);
                 
-                if (!course || !time) {
-                    alert('Пожалуйста, выберите курс и время');
+                if (!course || selectedTimes.length === 0) {
+                    alert('Пожалуйста, выберите курс и хотя бы одно время');
                     return;
                 }
 
@@ -1558,14 +1582,14 @@
                         userEmail: currentUser.email,
                         userName: currentUser.displayName || currentUser.email.split('@')[0],
                         course: course,
-                        time: time,
+                        times: selectedTimes,
                         enrolledAt: new Date().toISOString(),
                         status: 'pending'
                     };
 
                     await addDoc(collection(db, "enrollments"), enrollment);
 
-                    const message = `Новая запись на курс:\nИмя: ${enrollment.userName}\nEmail: ${enrollment.userEmail}\nКурс: ${enrollment.course}\nВремя: ${enrollment.time}`;
+                    const message = `Новая запись на курс:\nИмя: ${enrollment.userName}\nEmail: ${enrollment.userEmail}\nКурс: ${enrollment.course}\nВремя: ${selectedTimes.join(', ')}`;
                     const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(message)}`;
 
                     const response = await fetch(url);
@@ -1574,7 +1598,7 @@
                     }
 
                     document.getElementById('success-title').textContent = 'Запись подтверждена!';
-                    document.getElementById('success-message').textContent = `Вы записаны на ${course} в ${time}. Учитель уведомлён через Telegram.`;
+                    document.getElementById('success-message').textContent = `Вы записаны на ${course} в ${selectedTimes.join(' и ')}. Учитель уведомлён через Telegram.`;
                     document.getElementById('success-modal').classList.add('active');
                     
                     scheduleModal.classList.remove('active');
