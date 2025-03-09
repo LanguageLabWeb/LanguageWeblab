@@ -1033,6 +1033,172 @@
             75% { clip-path: inset(0 0 0 100%); opacity: 1; }
             100% { clip-path: inset(0 100% 0 0); opacity: 0.5; }
         }
+
+        .profile-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 46, 43, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 30px var(--primary-color);
+            z-index: 1000;
+            color: var(--light-text);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
+        }
+
+        .profile-modal.active {
+            display: block;
+            animation: modalFade 0.5s ease-in;
+        }
+
+        .profile-modal h3 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .profile-modal h4 {
+            color: var(--secondary-color);
+            font-family: 'Orbitron', sans-serif;
+            margin: 20px 0 10px;
+        }
+
+        .profile-modal button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: var(--darker-bg);
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--primary-color);
+            animation: breathe 3s infinite ease-in-out;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 20px;
+        }
+
+        .profile-modal button:hover {
+            box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        #enrolled-courses li {
+            background: rgba(0, 255, 153, 0.1);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .edit-profile-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 46, 43, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 30px var(--primary-color);
+            z-index: 1000;
+            color: var(--light-text);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
+        }
+
+        .edit-profile-modal.active {
+            display: block;
+            animation: modalFade 0.5s ease-in;
+        }
+
+        .edit-profile-modal h3 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .teacher-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 46, 43, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 30px var(--primary-color);
+            z-index: 1000;
+            color: var(--light-text);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
+        }
+
+        .teacher-modal.active {
+            display: block;
+            animation: modalFade 0.5s ease-in;
+        }
+
+        .teacher-modal h3 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .teacher-modal h4 {
+            color: var(--secondary-color);
+            font-family: 'Orbitron', sans-serif;
+            margin: 20px 0 10px;
+        }
+
+        #teacher-enrollments li {
+            background: rgba(0, 255, 153, 0.1);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #teacher-enrollments button {
+            padding: 5px 10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: var(--darker-bg);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        #teacher-enrollments button:hover {
+            box-shadow: 0 0 10px var(--primary-color);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -1217,6 +1383,42 @@
         </form>
     </div>
 
+    <div class="profile-modal" id="profile-modal">
+        <span class="popup-close">×</span>
+        <h3>Личный кабинет</h3>
+        <div id="profile-info">
+            <p><strong>Имя:</strong> <span id="profile-name"></span></p>
+            <p><strong>Email:</strong> <span id="profile-email"></span></p>
+        </div>
+        <button id="edit-profile-btn">Редактировать профиль</button>
+        <h4>Мои курсы</h4>
+        <ul id="enrolled-courses" style="list-style: none; padding: 0;"></ul>
+        <button id="logout-btn">Выйти</button>
+    </div>
+
+    <div class="edit-profile-modal" id="edit-profile-modal">
+        <span class="popup-close">×</span>
+        <h3>Редактировать профиль</h3>
+        <form id="edit-profile-form">
+            <div class="form-group">
+                <input type="text" id="edit-name" placeholder=" " required>
+                <label for="edit-name">Новое имя</label>
+            </div>
+            <div class="form-group">
+                <input type="password" id="edit-password" placeholder=" ">
+                <label for="edit-password">Новый пароль (оставьте пустым, если не меняете)</label>
+            </div>
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+
+    <div class="teacher-modal" id="teacher-modal">
+        <span class="popup-close">×</span>
+        <h3>Учительский кабинет</h3>
+        <h4>Заявки на курсы</h4>
+        <ul id="teacher-enrollments" style="list-style: none; padding: 0;"></ul>
+    </div>
+
     <footer>
         <div class="footer-content">
             <div class="footer-logo">
@@ -1226,6 +1428,7 @@
                 <a href="#" class="social-link">FB</a>
                 <a href="#" class="social-link">IG</a>
                 <a href="#" class="social-link">TW</a>
+                <button id="profile-btn" class="bio-btn" style="display: none;">Личный кабинет</button>
             </div>
             <div class="copyright">
                 © 2025 Языковая Лаборатория. Все права защищены.
@@ -1235,8 +1438,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-qRTFlszcMafJv1eesYg-PUxsxYoo28U",
@@ -1268,6 +1471,7 @@
 
         const telegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
         const teacherChatId = '1042168412';
+        const teacherEmail = "languageweblab@gmail.com";
 
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
@@ -1359,8 +1563,205 @@
             });
 
             let currentUser = null;
+            const profileBtn = document.getElementById('profile-btn');
+            const profileModal = document.getElementById('profile-modal');
+            const editProfileModal = document.getElementById('edit-profile-modal');
+            const teacherModal = document.getElementById('teacher-modal');
+            const profileName = document.getElementById('profile-name');
+            const profileEmail = document.getElementById('profile-email');
+            const enrolledCourses = document.getElementById('enrolled-courses');
+            const logoutBtn = document.getElementById('logout-btn');
+            const editProfileBtn = document.getElementById('edit-profile-btn');
+
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
+                if (user) {
+                    profileBtn.style.display = 'inline-block';
+                    document.getElementById('main-content').classList.add('active');
+                    if (user.email === teacherEmail) {
+                        profileBtn.textContent = 'Учительский кабинет';
+                    } else {
+                        profileBtn.textContent = 'Личный кабинет';
+                    }
+                } else {
+                    profileBtn.style.display = 'none';
+                    document.getElementById('main-content').classList.remove('active');
+                    document.querySelector('header').style.display = 'block';
+                    document.querySelector('header').style.opacity = '1';
+                    document.querySelector('header').style.transform = 'translateY(0)';
+                }
+            });
+
+            async function loadStudentCourses() {
+                enrolledCourses.innerHTML = '';
+                try {
+                    const q = query(collection(db, "enrollments"), where("userId", "==", currentUser.uid));
+                    const querySnapshot = await getDocs(q);
+                    if (querySnapshot.empty) {
+                        enrolledCourses.innerHTML = '<li>Вы пока не записаны на курсы</li>';
+                    } else {
+                        querySnapshot.forEach((doc) => {
+                            const data = doc.data();
+                            const courseItem = document.createElement('li');
+                            courseItem.innerHTML = `
+                                ${data.course}: Занятие 1 - ${data.time1}${data.time2 ? `, Занятие 2 - ${data.time2}` : ''} (Статус: ${data.status})
+                                <button class="delete-course" data-id="${doc.id}">Удалить</button>
+                            `;
+                            enrolledCourses.appendChild(courseItem);
+                        });
+
+                        document.querySelectorAll('.delete-course').forEach(btn => {
+                            btn.addEventListener('click', async () => {
+                                const docId = btn.getAttribute('data-id');
+                                try {
+                                    await deleteDoc(doc(db, "enrollments", docId));
+                                    document.getElementById('success-title').textContent = 'Запись удалена!';
+                                    document.getElementById('success-message').textContent = 'Вы успешно отменили запись на курс.';
+                                    document.getElementById('success-modal').classList.add('active');
+                                    setTimeout(() => document.getElementById('success-modal').classList.remove('active'), 2000);
+                                    loadStudentCourses();
+                                } catch (e) {
+                                    console.error("Ошибка удаления: ", e);
+                                    alert("Ошибка: " + e.message);
+                                }
+                            });
+                        });
+                    }
+                } catch (e) {
+                    console.error("Ошибка загрузки курсов: ", e);
+                    enrolledCourses.innerHTML = '<li>Ошибка загрузки курсов</li>';
+                }
+            }
+
+            async function loadTeacherEnrollments() {
+                const teacherEnrollments = document.getElementById('teacher-enrollments');
+                teacherEnrollments.innerHTML = '';
+                try {
+                    const q = query(collection(db, "enrollments"));
+                    const querySnapshot = await getDocs(q);
+                    if (querySnapshot.empty) {
+                        teacherEnrollments.innerHTML = '<li>Заявок на курсы пока нет</li>';
+                    } else {
+                        querySnapshot.forEach((doc) => {
+                            const data = doc.data();
+                            const enrollmentItem = document.createElement('li');
+                            enrollmentItem.innerHTML = `
+                                ${data.userName} (${data.userEmail}): ${data.course}, Занятие 1 - ${data.time1}${data.time2 ? `, Занятие 2 - ${data.time2}` : ''} (Статус: ${data.status})
+                                <div>
+                                    <button class="approve-btn" data-id="${doc.id}" ${data.status !== 'pending' ? 'disabled' : ''}>Подтвердить</button>
+                                    <button class="reject-btn" data-id="${doc.id}" ${data.status !== 'pending' ? 'disabled' : ''}>Отклонить</button>
+                                </div>
+                            `;
+                            teacherEnrollments.appendChild(enrollmentItem);
+                        });
+
+                        document.querySelectorAll('.approve-btn').forEach(btn => {
+                            btn.addEventListener('click', async () => {
+                                const docId = btn.getAttribute('data-id');
+                                try {
+                                    await updateDoc(doc(db, "enrollments", docId), { status: 'approved' });
+                                    loadTeacherEnrollments();
+                                } catch (e) {
+                                    console.error("Ошибка подтверждения: ", e);
+                                    alert("Ошибка: " + e.message);
+                                }
+                            });
+                        });
+
+                        document.querySelectorAll('.reject-btn').forEach(btn => {
+                            btn.addEventListener('click', async () => {
+                                const docId = btn.getAttribute('data-id');
+                                try {
+                                    await updateDoc(doc(db, "enrollments", docId), { status: 'rejected' });
+                                    loadTeacherEnrollments();
+                                } catch (e) {
+                                    console.error("Ошибка отклонения: ", e);
+                                    alert("Ошибка: " + e.message);
+                                }
+                            });
+                        });
+                    }
+                } catch (e) {
+                    console.error("Ошибка загрузки заявок: ", e);
+                    teacherEnrollments.innerHTML = '<li>Ошибка загрузки заявок</li>';
+                }
+            }
+
+            profileBtn.addEventListener('click', async () => {
+                if (!currentUser) {
+                    alert('Пожалуйста, войдите в систему');
+                    return;
+                }
+
+                profileName.textContent = currentUser.displayName || currentUser.email.split('@')[0];
+                profileEmail.textContent = currentUser.email;
+
+                if (currentUser.email === teacherEmail) {
+                    teacherModal.classList.add('active');
+                    loadTeacherEnrollments();
+                } else {
+                    profileModal.classList.add('active');
+                    loadStudentCourses();
+                }
+            });
+
+            document.querySelector('#profile-modal .popup-close').addEventListener('click', () => {
+                profileModal.classList.remove('active');
+            });
+
+            document.querySelector('#edit-profile-modal .popup-close').addEventListener('click', () => {
+                editProfileModal.classList.remove('active');
+            });
+
+            document.querySelector('#teacher-modal .popup-close').addEventListener('click', () => {
+                teacherModal.classList.remove('active');
+            });
+
+            editProfileBtn.addEventListener('click', () => {
+                document.getElementById('edit-name').value = currentUser.displayName || '';
+                editProfileModal.classList.add('active');
+            });
+
+            document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newName = document.getElementById('edit-name').value;
+                const newPassword = document.getElementById('edit-password').value;
+
+                try {
+                    if (newName && newName !== currentUser.displayName) {
+                        await updateProfile(currentUser, { displayName: newName });
+                    }
+                    if (newPassword) {
+                        await updatePassword(currentUser, newPassword);
+                    }
+                    document.getElementById('success-title').textContent = 'Профиль обновлён!';
+                    document.getElementById('success-message').textContent = 'Изменения успешно сохранены.';
+                    document.getElementById('success-modal').classList.add('active');
+                    setTimeout(() => {
+                        document.getElementById('success-modal').classList.remove('active');
+                        editProfileModal.classList.remove('active');
+                        profileName.textContent = currentUser.displayName || currentUser.email.split('@')[0];
+                    }, 2000);
+                } catch (e) {
+                    console.error("Ошибка обновления профиля: ", e);
+                    alert("Ошибка: " + e.message);
+                }
+            });
+
+            logoutBtn.addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    profileModal.classList.remove('active');
+                    document.getElementById('success-title').textContent = 'Выход выполнен!';
+                    document.getElementById('success-message').textContent = 'Вы успешно вышли из системы.';
+                    document.getElementById('success-modal').classList.add('active');
+                    setTimeout(() => {
+                        document.getElementById('success-modal').classList.remove('active');
+                    }, 2000);
+                } catch (e) {
+                    console.error("Ошибка при выходе: ", e);
+                    alert("Ошибка выхода: " + e.message);
+                }
             });
 
             const registerForm = document.getElementById('register-form');
@@ -1401,7 +1802,6 @@
                         setTimeout(function() {
                             document.getElementById('success-modal').classList.remove('active');
                             document.getElementById('auth-modal').classList.remove('active');
-                            document.getElementById('main-content').classList.add('active');
                         }, 2000);
                     } catch (e) {
                         console.error("Ошибка при регистрации: ", e);
@@ -1425,9 +1825,6 @@
 
                     try {
                         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-                        console.log("Вход успешен:", user.uid);
-
                         document.getElementById('success-title').textContent = 'Вход выполнен!';
                         document.getElementById('success-message').textContent = 'Добро пожаловать обратно! Вы успешно вошли в систему как ученик.';
                         document.getElementById('success-modal').classList.add('active');
@@ -1435,7 +1832,6 @@
                         setTimeout(function() {
                             document.getElementById('success-modal').classList.remove('active');
                             document.getElementById('auth-modal').classList.remove('active');
-                            document.getElementById('main-content').classList.add('active');
                         }, 2000);
                     } catch (e) {
                         console.error("Ошибка при входе: ", e);
@@ -1456,7 +1852,6 @@
 
                     const email = document.getElementById('teacher-email').value;
                     const password = document.getElementById('teacher-password').value;
-                    const teacherEmail = "languageweblab@gmail.com";
 
                     if (email !== teacherEmail) {
                         alert("Неверный email учителя!");
@@ -1465,8 +1860,6 @@
 
                     try {
                         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-                        
                         document.getElementById('success-title').textContent = 'Вход выполнен!';
                         document.getElementById('success-message').textContent = 'Добро пожаловать, учитель! Вы получили доступ к управлению курсами.';
                         document.getElementById('success-modal').classList.add('active');
@@ -1474,7 +1867,6 @@
                         setTimeout(function() {
                             document.getElementById('success-modal').classList.remove('active');
                             document.getElementById('auth-modal').classList.remove('active');
-                            document.getElementById('main-content').classList.add('active');
                         }, 2000);
                     } catch (e) {
                         console.error("Ошибка при входе учителя: ", e);
@@ -1485,7 +1877,7 @@
                 });
             }
 
-            const courseData = {
+                        const courseData = {
                 russian: {
                     title: 'Русский язык',
                     description: 'Курс русского языка охватывает грамматику, орфографию и стилистику. Подходит как для начинающих, так и для тех, кто хочет улучшить свои навыки письма и общения.'
