@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Языковая лаборатория - Вход</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="loading-screen">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">ИНИЦИАЛИЗАЦИЯ...</p>
+    </div>
+
+    <div class="cursor"></div>
+    <div class="bio-bg"></div>
+    <div class="hex-grid"></div>
+    <div class="particles-container"></div>
+
+    <header>
+        <h1 class="title"> puissent лаборатория</h1>
+        <p class="subtitle">Современные технологии изучения языков и математики</p>
+        <button class="bio-btn" id="explore-btn">ИССЛЕДОВАТЬ</button>
+    </header>
+
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-tabs">
+            <div class="auth-tab active" data-tab="register">Регистрация</div>
+            <div class="auth-tab" data-tab="login">Вход ученика</div>
+            <div class="auth-tab" data-tab="teacher">Вход учителя</div>
+        </div>
+        
+        <div class="auth-content active" id="register-content">
+            <form id="register-form">
+                <div class="form-group">
+                    <input type="text" id="reg-name" placeholder=" " required>
+                    <label for="reg-name">Ваше имя</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="reg-email" placeholder=" " required>
+                    <label for="reg-email">Электронная почта</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="reg-password" placeholder=" " required>
+                    <label for="reg-password">Пароль</label>
+                </div>
+                <button type="submit">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+            </form>
+        </div>
+        
+        <div class="auth-content" id="login-content">
+            <form id="login-form">
+                <div class="form-group">
+                    <input type="email" id="login-email" placeholder=" " required>
+                    <label for="login-email">Электронная почта</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="login-password" placeholder=" " required>
+                    <label for="login-password">Пароль</label>
+                </div>
+                <button type="submit">ВОЙТИ</button>
+            </form>
+        </div>
+        
+        <div class="auth-content" id="teacher-content">
+            <form id="teacher-form">
+                <div class="form-group">
+                    <input type="email" id="teacher-email" placeholder=" " required>
+                    <label for="teacher-email">Электронная почта учителя</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="teacher-password" placeholder=" " required>
+                    <label for="teacher-password">Пароль</label>
+                </div>
+                <button type="submit">ВОЙТИ КАК УЧИТЕЛЬ</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="success-modal" id="success-modal">
+        <div class="success-icon">✓</div>
+        <h3 id="success-title">Успех!</h3>
+        <p id="success-message"></p>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
