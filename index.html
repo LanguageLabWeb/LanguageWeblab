@@ -622,7 +622,7 @@
         .schedule-modal select {
             width: 100%;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(10, 46, 43, 0.9);
             border: 1px solid var(--secondary-color);
             border-radius: 5px;
             color: var(--light-text);
@@ -666,7 +666,7 @@
             border-color: var(--primary-color);
             box-shadow: 0 0 15px var(--primary-color);
             outline: none;
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(10, 46, 43, 1);
         }
 
         .contact-form input::placeholder, 
@@ -677,20 +677,9 @@
             color: transparent;
         }
 
-        /* Стили для выпадающего списка */
-        .schedule-modal select {
-            background: rgba(10, 46, 43, 0.9); /* Тёмный фон */
-            color: var(--light-text); /* Белый текст */
-            border: 1px solid var(--secondary-color);
-        }
-
         .schedule-modal select option {
-            background: var(--darker-bg); /* Тёмный фон для опций */
-            color: var(--light-text); /* Белый текст */
-        }
-
-        .schedule-modal select[multiple] {
-            height: 150px; /* Увеличиваем высоту для выбора нескольких вариантов */
+            background: var(--darker-bg);
+            color: var(--light-text);
         }
 
         .contact-form button,
@@ -1213,10 +1202,16 @@
                 <label for="course-select">Курс</label>
             </div>
             <div class="form-group">
-                <select id="time-select" multiple required>
-                    <option value="">Выберите до 2 времён</option>
+                <select id="time-select-1" required>
+                    <option value="">Выберите время</option>
                 </select>
-                <label for="time-select">Время (выберите до 2 вариантов)</label>
+                <label for="time-select-1">Занятие 1</label>
+            </div>
+            <div class="form-group">
+                <select id="time-select-2">
+                    <option value="">Выберите время (опционально)</option>
+                </select>
+                <label for="time-select-2">Занятие 2</label>
             </div>
             <button type="submit">Подтвердить запись</button>
         </form>
@@ -1265,16 +1260,13 @@
             alert("Не удалось инициализировать Firebase: " + e.message);
         }
 
-        // Расписание курсов
         const courseSchedule = {
             'Курс английского': ['Понедельник, 16:00', 'Среда, 16:00', 'Пятница, 10:00', 'Пятница, 19:00', 'Суббота, 10:00', 'Суббота, 19:00', 'Воскресенье, 10:00', 'Воскресенье, 15:00'],
             'Курс русского': ['Понедельник, 17:00', 'Среда, 17:00', 'Пятница, 11:00', 'Пятница, 14:00', 'Пятница, 15:00', 'Суббота, 11:00', 'Суббота, 14:00', 'Суббота, 15:00'],
             'Курс математики': ['Понедельник, 18:00', 'Среда, 18:00', 'Пятница, 17:00', 'Суббота, 17:00', 'Воскресенье, 11:00', 'Воскресенье, 14:00', 'Воскресенье, 17:00', 'Воскресенье, 19:00']
         };
 
-        // Токен Telegram-бота
         const telegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
-        // Ваш chat_id
         const teacherChatId = '1042168412';
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1526,7 +1518,8 @@
             const coursePopup = document.getElementById('course-popup');
             const scheduleModal = document.getElementById('schedule-modal');
             const courseSelect = document.getElementById('course-select');
-            const timeSelect = document.getElementById('time-select');
+            const timeSelect1 = document.getElementById('time-select-1');
+            const timeSelect2 = document.getElementById('time-select-2');
 
             coursePopup.querySelector('button').addEventListener('click', function() {
                 if (!currentUser) {
@@ -1545,23 +1538,21 @@
 
             courseSelect.addEventListener('change', function() {
                 const selectedCourse = this.value;
-                timeSelect.innerHTML = '<option value="">Выберите до 2 времён</option>';
+                timeSelect1.innerHTML = '<option value="">Выберите время</option>';
+                timeSelect2.innerHTML = '<option value="">Выберите время (опционально)</option>';
                 
                 if (courseSchedule[selectedCourse]) {
                     courseSchedule[selectedCourse].forEach(time => {
-                        const option = document.createElement('option');
-                        option.value = time;
-                        option.textContent = time;
-                        timeSelect.appendChild(option);
+                        const option1 = document.createElement('option');
+                        option1.value = time;
+                        option1.textContent = time;
+                        timeSelect1.appendChild(option1);
+                        
+                        const option2 = document.createElement('option');
+                        option2.value = time;
+                        option2.textContent = time;
+                        timeSelect2.appendChild(option2);
                     });
-                }
-            });
-
-            timeSelect.addEventListener('change', function() {
-                const selectedOptions = Array.from(this.selectedOptions);
-                if (selectedOptions.length > 2) {
-                    alert('Вы можете выбрать не более 2 времён!');
-                    selectedOptions.slice(2).forEach(option => option.selected = false);
                 }
             });
 
@@ -1569,10 +1560,16 @@
                 e.preventDefault();
                 
                 const course = courseSelect.value;
-                const selectedTimes = Array.from(timeSelect.selectedOptions).map(option => option.value);
+                const time1 = timeSelect1.value;
+                const time2 = timeSelect2.value;
                 
-                if (!course || selectedTimes.length === 0) {
-                    alert('Пожалуйста, выберите курс и хотя бы одно время');
+                if (!course || !time1) {
+                    alert('Пожалуйста, выберите курс и хотя бы одно время для Занятия 1');
+                    return;
+                }
+
+                if (time1 === time2 && time2 !== "") {
+                    alert('Пожалуйста, выберите разные времена для Занятия 1 и Занятия 2');
                     return;
                 }
 
@@ -1582,14 +1579,15 @@
                         userEmail: currentUser.email,
                         userName: currentUser.displayName || currentUser.email.split('@')[0],
                         course: course,
-                        times: selectedTimes,
+                        time1: time1,
+                        time2: time2 || null,
                         enrolledAt: new Date().toISOString(),
                         status: 'pending'
                     };
 
                     await addDoc(collection(db, "enrollments"), enrollment);
 
-                    const message = `Новая запись на курс:\nИмя: ${enrollment.userName}\nEmail: ${enrollment.userEmail}\nКурс: ${enrollment.course}\nВремя: ${selectedTimes.join(', ')}`;
+                    const message = `Новая запись на курс:\nИмя: ${enrollment.userName}\nEmail: ${enrollment.userEmail}\nКурс: ${enrollment.course}\nЗанятие 1: ${enrollment.time1}${enrollment.time2 ? `\nЗанятие 2: ${enrollment.time2}` : ''}`;
                     const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(message)}`;
 
                     const response = await fetch(url);
@@ -1598,7 +1596,7 @@
                     }
 
                     document.getElementById('success-title').textContent = 'Запись подтверждена!';
-                    document.getElementById('success-message').textContent = `Вы записаны на ${course} в ${selectedTimes.join(' и ')}. Учитель уведомлён через Telegram.`;
+                    document.getElementById('success-message').textContent = `Вы записаны на ${course}: Занятие 1 - ${time1}${time2 ? `, Занятие 2 - ${time2}` : ''}. Учитель уведомлён через Telegram.`;
                     document.getElementById('success-modal').classList.add('active');
                     
                     scheduleModal.classList.remove('active');
