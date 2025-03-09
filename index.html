@@ -586,8 +586,8 @@
 
         .contact-form input, 
         .contact-form textarea,
-        .register-modal input,
-        .register-modal select {
+        .auth-modal input,
+        .auth-modal select {
             width: 100%;
             padding: 15px;
             background: rgba(255, 255, 255, 0.08);
@@ -600,7 +600,7 @@
         }
 
         .contact-form label,
-        .register-modal label {
+        .auth-modal label {
             position: absolute;
             top: 15px;
             left: 15px;
@@ -613,10 +613,10 @@
         .contact-form textarea:focus ~ label,
         .contact-form input:not(:placeholder-shown) ~ label,
         .contact-form textarea:not(:placeholder-shown) ~ label,
-        .register-modal input:focus ~ label,
-        .register-modal select:focus ~ label,
-        .register-modal input:not(:placeholder-shown) ~ label,
-        .register-modal select:not(:placeholder-shown) ~ label {
+        .auth-modal input:focus ~ label,
+        .auth-modal select:focus ~ label,
+        .auth-modal input:not(:placeholder-shown) ~ label,
+        .auth-modal select:not(:placeholder-shown) ~ label {
             top: -25px;
             left: 5px;
             font-size: 0.9rem;
@@ -625,8 +625,8 @@
 
         .contact-form input:focus, 
         .contact-form textarea:focus,
-        .register-modal input:focus,
-        .register-modal select:focus {
+        .auth-modal input:focus,
+        .auth-modal select:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 15px var(--primary-color);
             outline: none;
@@ -635,13 +635,13 @@
 
         .contact-form input::placeholder, 
         .contact-form textarea::placeholder,
-        .register-modal input::placeholder,
-        .register-modal select::placeholder {
+        .auth-modal input::placeholder,
+        .auth-modal select::placeholder {
             color: transparent;
         }
 
         .contact-form button,
-        .register-modal button {
+        .auth-modal button {
             width: 100%;
             padding: 15px;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
@@ -661,7 +661,7 @@
         }
 
         .contact-form button::before,
-        .register-modal button::before {
+        .auth-modal button::before {
             content: '';
             position: absolute;
             top: -100%;
@@ -674,7 +674,7 @@
         }
 
         .contact-form button:hover::before,
-        .register-modal button:hover::before {
+        .auth-modal button:hover::before {
             animation: shineEffect 1.5s;
         }
 
@@ -684,7 +684,7 @@
         }
 
         .contact-form button:hover,
-        .register-modal button:hover {
+        .auth-modal button:hover {
             box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color);
             transform: translateY(-5px);
         }
@@ -852,7 +852,7 @@
             100% { opacity: 1; }
         }
 
-        .register-modal {
+        .auth-modal {
             display: none;
             position: fixed;
             top: 50%;
@@ -872,7 +872,7 @@
             clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
         }
 
-        .register-modal.active {
+        .auth-modal.active {
             display: block;
             animation: modalFade 0.5s ease-in;
         }
@@ -911,6 +911,18 @@
             color: var(--primary-color);
             margin-bottom: 15px;
         }
+
+        .auth-toggle {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .auth-toggle:hover {
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
@@ -931,7 +943,7 @@
         <button class="bio-btn" id="explore-btn">ИССЛЕДОВАТЬ</button>
     </header>
 
-    <div class="register-modal" id="register-modal">
+    <div class="auth-modal" id="register-modal">
         <h3>Регистрация</h3>
         <form id="register-form">
             <div class="form-group">
@@ -956,6 +968,23 @@
             </div>
             <button type="submit">ЗАРЕГИСТРИРОВАТЬСЯ</button>
         </form>
+        <p class="auth-toggle" id="show-login">Уже есть аккаунт? Войти</p>
+    </div>
+
+    <div class="auth-modal" id="login-modal">
+        <h3>Вход</h3>
+        <form id="login-form">
+            <div class="form-group">
+                <input type="email" id="login-email" placeholder=" " required>
+                <label for="login-email">Электронная почта</label>
+            </div>
+            <div class="form-group">
+                <input type="password" id="login-password" placeholder=" " required>
+                <label for="login-password">Пароль</label>
+            </div>
+            <button type="submit">ВОЙТИ</button>
+        </form>
+        <p class="auth-toggle" id="show-register">Нет аккаунта? Зарегистрироваться</p>
     </div>
 
     <div class="content" id="main-content">
@@ -1054,7 +1083,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-qRTFlszcMafJv1eesYg-PUxsxYoo28U",
@@ -1149,6 +1178,18 @@
                 }, 800);
             });
 
+            // Переключение между регистрацией и входом
+            document.getElementById('show-login').addEventListener('click', function() {
+                document.getElementById('register-modal').classList.remove('active');
+                document.getElementById('login-modal').classList.add('active');
+            });
+
+            document.getElementById('show-register').addEventListener('click', function() {
+                document.getElementById('login-modal').classList.remove('active');
+                document.getElementById('register-modal').classList.add('active');
+            });
+
+            // Обработка регистрации
             document.getElementById('register-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
@@ -1182,6 +1223,34 @@
                     }, 2000);
                 } catch (e) {
                     console.error("Ошибка при регистрации: ", e);
+                    alert("Ошибка: " + e.message);
+                }
+
+                this.reset();
+            });
+
+            // Обработка входа
+            document.getElementById('login-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+
+                    document.getElementById('success-title').textContent = 'Вход выполнен!';
+                    document.getElementById('success-message').textContent = 'Добро пожаловать обратно! Вы успешно вошли в систему.';
+                    document.getElementById('success-modal').classList.add('active');
+                    
+                    setTimeout(function() {
+                        document.getElementById('success-modal').classList.remove('active');
+                        document.getElementById('login-modal').classList.remove('active');
+                        document.getElementById('main-content').classList.add('active');
+                    }, 2000);
+                } catch (e) {
+                    console.error("Ошибка при входе: ", e);
                     alert("Ошибка: " + e.message);
                 }
 
