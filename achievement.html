@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя История</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --primary-color: #00FFAA;
+        --secondary-color: #FFD700;
+        --accent-color: #41C7FF;
+        --dark-bg: #081C1A;
+        --darker-bg: #051514;
+        --light-text: #E0F7FA;
+        --glow-shadow: 0 0 20px rgba(0, 255, 170, 0.8), 0 0 40px rgba(0, 255, 170, 0.4);
+        --gold-glow: 0 0 20px rgba(255, 215, 0, 0.7);
+        --blue-glow: 0 0 20px rgba(65, 199, 255, 0.7);
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Raleway', sans-serif;
+        background: var(--dark-bg);
+        color: var(--light-text);
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    .bio-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 50%, rgba(0, 255, 170, 0.15), rgba(65, 199, 255, 0.05), transparent 60%);
+        z-index: -1;
+        animation: pulseBG 12s infinite ease-in-out;
+    }
+
+    /* Добавляем "звезды" на фоне */
+    .bio-bg::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle, white 1px, transparent 1px);
+        background-size: 50px 50px;
+        opacity: 0.3;
+    }
+
+    /* Линии сетки */
+    .grid-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            linear-gradient(to right, rgba(0, 255, 170, 0.05) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(0, 255, 170, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        z-index: -1;
+        opacity: 0.4;
+    }
+
+    @keyframes pulseBG {
+        0%, 100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 0.9; transform: scale(1.08); }
+    }
+
+    #my-history {
+        padding: 120px 20px;
+        position: relative;
+        min-height: 100vh;
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 80px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .title {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 5rem;
+        color: var(--primary-color);
+        text-shadow: var(--glow-shadow);
+        animation: growText 2.5s ease-out forwards;
+        position: relative;
+        letter-spacing: 3px;
+    }
+
+    .title::before {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        color: var(--accent-color);
+        filter: blur(15px);
+        opacity: 0.5;
+        animation: glitchTitle 5s infinite;
+    }
+
+    @keyframes glitchTitle {
+        0%, 91%, 94%, 100% { transform: translate(0, 0) skew(0deg); }
+        92% { transform: translate(-5px, 3px) skew(2deg); }
+        93% { transform: translate(5px, -3px) skew(-2deg); }
+    }
+
+    .title::after {
+        content: '';
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, var(--primary-color), var(--secondary-color), transparent);
+        animation: pulseWidth 4s infinite ease-in-out;
+    }
+
+    @keyframes pulseWidth {
+        0%, 100% { width: 70%; opacity: 0.8; }
+        50% { width: 90%; opacity: 1; }
+    }
+
+    .subtitle {
+        font-size: 2rem;
+        color: var(--secondary-color);
+        text-shadow: var(--gold-glow);
+        animation: fadeIn 2.5s ease-out 0.7s forwards;
+        opacity: 0;
+        letter-spacing: 1px;
+    }
+
+    @keyframes growText {
+        0% { transform: scale(0.4); opacity: 0; filter: blur(15px); }
+        100% { transform: scale(1); opacity: 1; filter: blur(0); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(25px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .history-container {
+        position: relative;
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height: 1200px;
+    }
+
+    .dna-timeline {
+        width: 300px;
+        height: 1200px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+    }
+
+    .dna-strand-1, .dna-strand-2 {
+        stroke-dasharray: 2400;
+        stroke-dashoffset: 2400;
+        animation: drawDNA 6s ease-out forwards;
+    }
+
+    .dna-strand-2 {
+        animation-delay: 0.3s;
+    }
+
+    @keyframes drawDNA {
+        to { stroke-dashoffset: 0; }
+    }
+
+    .dna-node {
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.6s ease-out;
+        cursor: pointer;
+        filter: drop-shadow(0 0 8px var(--primary-color));
+    }
+
+    .dna-node.active {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: var(--glow-shadow);
+        animation: pulseNode 2s infinite ease-in-out;
+    }
+
+    .dna-node:hover {
+        transform: scale(1.3);
+        filter: drop-shadow(0 0 15px var(--primary-color));
+    }
+
+    @keyframes pulseNode {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .energy-pulse {
+        stroke-dasharray: 50 1150;
+        stroke-dashoffset: 0;
+        animation: energyFlow 4s infinite linear;
+    }
+
+    /* Добавляем дополнительный эффект для ДНК */
+    .dna-connectors {
+        opacity: 0.5;
+        stroke-dasharray: 10;
+        animation: flowConnectors 20s infinite linear;
+    }
+
+    @keyframes flowConnectors {
+        to { stroke-dashoffset: -500; }
+    }
+
+    @keyframes energyFlow {
+        0% { stroke-dashoffset: 1200; }
+        100% { stroke-dashoffset: 0; }
+    }
+
+    .timeline-content {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+    }
+
+    .timeline-event {
+        max-width: 600px;
+        background: rgba(10, 46, 43, 0.7);
+        backdrop-filter: blur(15px);
+        padding: 30px;
+        border-radius: 15px;
+        margin: 30px auto;
+        opacity: 0;
+        transform: translateY(100px) scale(0.8);
+        transition: all 1s ease-out;
+        position: relative;
+        clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
+        box-shadow: 0 0 20px rgba(0, 255, 170, 0.3);
+        border: 2px solid transparent;
+        background-clip: padding-box;
+    }
+
+    /* Анимированная рамка */
+    .timeline-event::before {
+        content: '';
+        position: absolute;
+        top: -2px; 
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, var(--primary-color), transparent, var(--accent-color), transparent, var(--secondary-color));
+        background-size: 400% 400%;
+        z-index: -1;
+        animation: gradientBorder 15s ease infinite;
+        border-radius: 15px;
+        clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
+    }
+
+    @keyframes gradientBorder {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .timeline-event.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        box-shadow: 0 0 30px rgba(0, 255, 170, 0.6);
+    }
+
+    .timeline-event h3 {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--secondary-color);
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        text-shadow: var(--gold-glow);
+        display: inline-block;
+    }
+
+    /* Подчеркивание заголовка */
+    .timeline-event h3::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background: var(--secondary-color);
+        transition: width 0.8s ease;
+        margin-top: 5px;
+        box-shadow: var(--gold-glow);
+    }
+
+    .timeline-event.active h3::after {
+        width: 100%;
+    }
+
+    .timeline-event p {
+        line-height: 1.8;
+        font-size: 1.1rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .timeline-event p::first-letter {
+        font-size: 1.5em;
+        color: var(--accent-color);
+    }
+
+    .holo-detail {
+        display: none;
+        margin-top: 15px;
+        padding: 15px;
+        background: linear-gradient(45deg, rgba(0, 255, 170, 0.2), rgba(65, 199, 255, 0.2));
+        border-radius: 8px;
+        font-family: 'Orbitron', sans-serif;
+        color: var(--accent-color);
+        text-shadow: var(--blue-glow);
+        font-size: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .holo-detail::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        animation: hologramScan 2s linear infinite;
+    }
+
+    @keyframes hologramScan {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    .timeline-event:hover .holo-detail {
+        display: block;
+        animation: fadeHolo 0.5s ease-in;
+    }
+
+    @keyframes fadeHolo {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .timeline-event:nth-child(odd) {
+        margin-left: 0;
+        margin-right: auto;
+        transform: translateX(-100px) translateY(100px) scale(0.8);
+    }
+
+    .timeline-event:nth-child(even) {
+        margin-left: auto;
+        margin-right: 0;
+        transform: translateX(100px) translateY(100px) scale(0.8);
+    }
+
+    .timeline-event:nth-child(odd).active {
+        transform: translateX(0) translateY(0) scale(1);
+    }
+
+    .timeline-event:nth-child(even).active {
+        transform: translateX(0) translateY(0) scale(1);
+    }
+
+    /* Добавляем год в виде голографических чисел */
+    .year-badge {
+        position: absolute;
+        top: -15px;
+        right: 20px;
+        background: rgba(0, 255, 170, 0.2);
+        padding: 5px 15px;
+        border-radius: 15px;
+        font-family: 'Orbitron', sans-serif;
+        color: var(--primary-color);
+        font-size: 0.9rem;
+        box-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.5s ease 0.3s;
+    }
+
+    .timeline-event.active .year-badge {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    /* Добавляем иконки */
+    .event-icon {
+        position: absolute;
+        top: 25px;
+        left: -20px;
+        width: 40px;
+        height: 40px;
+        background: var(--darker-bg);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 15px rgba(0, 255, 170, 0.7);
+        opacity: 0;
+        transition: all 0.5s ease 0.6s;
+    }
+
+    .timeline-event:nth-child(even) .event-icon {
+        left: auto;
+        right: -20px;
+    }
+
+    .timeline-event.active .event-icon {
+        opacity: 1;
+    }
+
+    .event-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: var(--primary-color);
+    }
+
+    /* Добавляем медиа-запросы для адаптивности */
+    @media (max-width: 1024px) {
+        .title {
+            font-size: 4rem;
+        }
+        
+        .subtitle {
+            font-size: 1.6rem;
+        }
+        
+        .timeline-event {
+            max-width: 450px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .title {
+            font-size: 3rem;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+        }
+        
+        .timeline-event h3 {
+            font-size: 1.5rem;
+        }
+        
+        .timeline-event:nth-child(odd),
+        .timeline-event:nth-child(even) {
+            margin-left: auto;
+            margin-right: auto;
+            transform: translateY(100px) scale(0.8);
+        }
+        
+        .timeline-event:nth-child(odd).active,
+        .timeline-event:nth-child(even).active {
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .title {
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+        }
+        
+        .timeline-event {
+            padding: 20px;
+        }
+        
+        .timeline-event h3 {
+            font-size: 1.3rem;
+        }
+    }
+    </style>
+</head>
+<body>
+    <section id="my-history">
+        <div class="bio-bg"></div>
+        <div class="grid-overlay"></div>
+        <header>
+            <h1 class="title" data-text="Моя История">Моя История</h1>
+            <p class="subtitle">Эволюция через время и технологии</p>
+        </header>
+        <div class="history-container">
+            <svg class="dna-timeline" viewBox="0 0 300 1200">
+                <!-- Соединительные линии ДНК -->
+                <g class="dna-connectors">
+                    <line x1="130" y1="70" x2="170" y2="130" stroke="var(--primary-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="170" x2="170" y2="230" stroke="var(--accent-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="270" x2="170" y2="330" stroke="var(--primary-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="370" x2="170" y2="430" stroke="var(--accent-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="470" x2="170" y2="530" stroke="var(--primary-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="570" x2="170" y2="630" stroke="var(--accent-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="670" x2="170" y2="730" stroke="var(--primary-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="770" x2="170" y2="830" stroke="var(--accent-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="870" x2="170" y2="930" stroke="var(--primary-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="970" x2="170" y2="1030" stroke="var(--accent-color)" stroke-width="1.5"/>
+                    <line x1="130" y1="1070" x2="170" y2="1130" stroke="var(--primary-color)" stroke-width="1.5"/>
+                </g>
+                <path class="dna-strand-1" d="M150 0 Q200 100 150 200 Q100 300 150 400 Q200 500 150 600 Q100 700 150 800 Q200 900 150 1000 Q100 1100 150 1200" stroke="var(--primary-color)" stroke-width="3" fill="none"/>
+                <path class="dna-strand-2" d="M150 0 Q100 100 150 200 Q200 300 150 400 Q100 500 150 600 Q200 700 150 800 Q100 900 150 1000 Q200 1100 150 1200" stroke="var(--accent-color)" stroke-width="3" fill="none"/>
+                <g class="dna-nodes">
+                    <circle cx="150" cy="150" r="12" fill="var(--primary-color)" class="dna-node" data-index="0"/>
+                    <circle cx="150" cy="350" r="12" fill="var(--secondary-color)" class="dna-node" data-index="1"/>
+                    <circle cx="150" cy="550" r="12" fill="var(--accent-color)" class="dna-node" data-index="2"/>
+                    <circle cx="150" cy="750" r="12" fill="var(--primary-color)" class="dna-node" data-index="3"/>
+                    <circle cx="150" cy="950" r="12" fill="var(--secondary-color)" class="dna-node" data-index="4"/>
+                </g>
+                <path class="energy-pulse" d="M150 0 L150 1200" stroke="rgba(0, 255, 170, 0.5)" stroke-width="6" fill="none"/>
+            </svg>
+            <div class="timeline-content">
+                <div class="timeline-event" data-position="150">
+                    <div class="year-badge">2020</div>
+                    <div class="event-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+                        </svg>
+                    </div>
+                    <h3>Начало пути</h3>
+                    <p>Я увлекся идеей объединить технологии и обучение, заложив основу для будущего проекта, который изменит подход к образованию.</p>
+                    <div class="holo-detail">Первый шаг к мечте • Идея: Персонализированное обучение</div>
+                </div>
+                <div class="timeline-event" data-position="350">
+                    <div class="year-badge">2021</div>
+                    <div class="event-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+                        </svg>
+                    </div>
+                    <h3>Цели</h3>
+                    <p>Решил создать платформу, которая изменит подход к изучению языков с помощью ИИ, делая обучение более доступным и эффективным для всех.</p>
+                    <div class="holo-detail">Миссия: 1000 учеников • Рост: 50% ежемесячно</div>
+                </div>
+                <div class="timeline-event" data-position="550">
+                    <div class="year-badge">2022</div>
+                    <div class="event-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M10.01 21.01c0 1.1.89 1.99 1.99 1.99s1.99-.89 1.99-1.99h-3.98zm8.87-4.19V11c0-3.25-2.25-5.97-5.29-6.69v-.72C13.59 2.71 12.88 2 12 2s-1.59.71-1.59 1.59v.72C7.37 5.03 5.12 7.75 5.12 11v5.82L3 18.94V20h18v-1.06l-2.12-2.12zM16 13.01h-3v3h-2v-3H8V11h3V8h2v3h3v2.01z"/>
+                        </svg>
+                    </div>
+                    <h3>Возможности</h3>
+                    <p>Получил доступ к инструментам разработки и сообществу единомышленников, что открыло новые перспективы для реализации проекта.</p>
+                    <div class="holo-detail">Технологии: Firebase, AI • Команда: 5 разработчиков</div>
+                </div>
+                <div class="timeline-event" data-position="750">
+                    <div class="year-badge">2023</div>
+                    <div class="event-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM7 10.82C5.84 10.4 5 9.3 5 8V7h2v3.82zM19 8c0 1.3-.84 2.4-2 2.82V7h2v1z"/>
+                        </svg>
+                    </div>
+                    <h3>Достижения</h3>
+                    <p>Запустил первую версию сайта, обучил 50+ учеников и получил положительные отзывы, подтверждающие эффективность выбранного подхода.</p>
+                    <div class="holo-detail">Награда: Лучший стартап • Рейтинг: 4.8/5.0</div>
+                </div>
+                <div class="timeline-event" data-position="950">
+                    <div class="year-badge">2025</div>
+                    <div class="event-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
+                        </svg>
+                    </div>
+                    <h3>Будущее</h3>
+                    <p>Планирую интегрировать VR-обучение и расширить курсы до 10 языков, создавая полностью иммерсивную образовательную среду следующего поколения.</p>
+                    <div class="holo-detail">Глобальная цель: 1M пользователей • Инвестиции: $5M</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+    // Функция для анимации при загрузке страницы
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            // Активируем первый элемент сразу
+            document.querySelectorAll('.dna-node')[0].classList.add('active');
+            document.querySelectorAll('.timeline-event')[0].classList.add('active');
+        }, 1000);
+    });
+
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY + window.innerHeight / 1.5;
+        const nodes = document.querySelectorAll('.dna-node');
+        const events = document.querySelectorAll('.timeline-event');
+
+        nodes.forEach((node, index) => {
+            const nodePosition = 150 + index * 200;
+            if (scrollPosition > nodePosition) {
+                node.classList.add('active');
+            }
+        });
+
+        events.forEach(event => {
+            const eventPosition = parseInt(event.getAttribute('data-position'));
+            if (scrollPosition > eventPosition) {
+                event.classList.add('active');
+            }
+        });
+    });
+
+    document.querySelectorAll('.dna-node').forEach(node => {
+        node.addEventListener('mouseover', () => {
+            const index = node.getAttribute('data-index');
+            const event = document.querySelectorAll('.timeline-event')[index];
+            event.style.transform = 'scale(1.05)';
+            event.style.boxShadow = '0 0 40px var(--primary-color)';
+        });
+
+        node.addEventListener('mouseout', () => {
+            const index = node.getAttribute('data-index');
+            const event = document.querySelectorAll('.timeline-event')[index];
+            // Проверяем, есть ли класс active, чтобы вернуть правильное состояние
+            if (event.classList.contains('active')) {
+                event.style.transform = 'scale(1)';
+                event.style.boxShadow = '0 0 30px rgba(0, 255, 170, 0.6)';
+            } else {
+                // Если не активен, возвращаем исходное состояние
+                if (parseInt(index) % 2 === 0) {
+                    event.style.transform = 'translateX(-100px) translateY(100px) scale(0.8)';
+                } else {
+                    event.style.transform = 'translateX(100px) translateY(100px) scale(0.8)';
+                }
+                event.style.boxShadow = '0 0 20px rgba(0, 255, 170, 0.3)';
+            }
+        });
+
+        // Добавляем клик для взаимодействия
+        node.addEventListener('click', () => {
+            const index = node.getAttribute('data-index');
+            const event = document.querySelectorAll('.timeline-event')[index];
+            
+            // Сначала деактивируем все события
+            document.querySelectorAll('.timeline-event').forEach(e => {
+                e.classList.remove('active');
+                if (parseInt(e.getAttribute('data-position')) % 400 === 150) {
+                    e.style.transform = 'translateX(-100px) translateY(100px) scale(0.8)';
+                } else {
+                    e.style.transform = 'translateX(100px) translateY(100px) scale(0.8)';
+                }
+            });
+            
+            // Активируем выбранное событие
+            event.classList.add('active');
+            event.style.transform = 'scale(1)';
+            event.style.boxShadow = '0 0 30px rgba(0, 255, 170, 0.6)';
+            
+            // Плавная прокрутка к событию
+            const offset = event.getAttribute('data-position') - window.innerHeight / 3;
+            window.scrollTo({
+                top: offset,
+                behavior: 'smooth'
+            });
+        });
+    });
+    </script>
+</body>
+</html>
