@@ -574,6 +574,37 @@
             transform: scale(1.05);
         }
 
+        .schedule-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 46, 43, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 30px var(--primary-color);
+            z-index: 1000;
+            color: var(--light-text);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
+        }
+
+        .schedule-modal.active {
+            display: block;
+            animation: modalFade 0.5s ease-in;
+        }
+
+        .schedule-modal h3 {
+            color: var(--primary-color);
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 20px;
+        }
+
         .contact-form {
             max-width: 600px;
             margin: 0 auto;
@@ -587,7 +618,8 @@
         .contact-form input, 
         .contact-form textarea,
         .auth-modal input,
-        .auth-modal select {
+        .auth-modal select,
+        .schedule-modal select {
             width: 100%;
             padding: 15px;
             background: rgba(255, 255, 255, 0.08);
@@ -600,7 +632,8 @@
         }
 
         .contact-form label,
-        .auth-modal label {
+        .auth-modal label,
+        .schedule-modal label {
             position: absolute;
             top: 15px;
             left: 15px;
@@ -616,7 +649,9 @@
         .auth-modal input:focus ~ label,
         .auth-modal select:focus ~ label,
         .auth-modal input:not(:placeholder-shown) ~ label,
-        .auth-modal select:not(:placeholder-shown) ~ label {
+        .auth-modal select:not(:placeholder-shown) ~ label,
+        .schedule-modal select:focus ~ label,
+        .schedule-modal select:not(:placeholder-shown) ~ label {
             top: -25px;
             left: 5px;
             font-size: 0.9rem;
@@ -626,7 +661,8 @@
         .contact-form input:focus, 
         .contact-form textarea:focus,
         .auth-modal input:focus,
-        .auth-modal select:focus {
+        .auth-modal select:focus,
+        .schedule-modal select:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 15px var(--primary-color);
             outline: none;
@@ -636,12 +672,14 @@
         .contact-form input::placeholder, 
         .contact-form textarea::placeholder,
         .auth-modal input::placeholder,
-        .auth-modal select::placeholder {
+        .auth-modal select::placeholder,
+        .schedule-modal select::placeholder {
             color: transparent;
         }
 
         .contact-form button,
-        .auth-modal button {
+        .auth-modal button,
+        .schedule-modal button {
             width: 100%;
             padding: 15px;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
@@ -661,7 +699,8 @@
         }
 
         .contact-form button::before,
-        .auth-modal button::before {
+        .auth-modal button::before,
+        .schedule-modal button::before {
             content: '';
             position: absolute;
             top: -100%;
@@ -674,7 +713,8 @@
         }
 
         .contact-form button:hover::before,
-        .auth-modal button:hover::before {
+        .auth-modal button:hover::before,
+        .schedule-modal button:hover::before {
             animation: shineEffect 1.5s;
         }
 
@@ -684,7 +724,8 @@
         }
 
         .contact-form button:hover,
-        .auth-modal button:hover {
+        .auth-modal button:hover,
+        .schedule-modal button:hover {
             box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color);
             transform: translateY(-5px);
         }
@@ -946,48 +987,47 @@
         }
 
         .bio-btn {
-    display: inline-block;
-    padding: 12px 25px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.2rem;
-    color: var(--primary-color);
-    background: rgba(10, 46, 43, 0.7);
-    border: 2px solid transparent;
-    border-radius: 8px;
-    text-decoration: none;
-    text-transform: uppercase;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
+            display: inline-block;
+            padding: 12px 25px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            background: rgba(10, 46, 43, 0.7);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            text-decoration: none;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
 
-.bio-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 2px solid var(--primary-color);
-    animation: impulseBorder 3s infinite linear;
-    opacity: 0.5;
-}
+        .bio-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--primary-color);
+            animation: impulseBorder 3s infinite linear;
+            opacity: 0.5;
+        }
 
-.bio-btn:hover {
-    color: var(--light-text);
-    background: rgba(0, 255, 170, 0.3);
-    box-shadow: var(--glow-shadow);
-    transform: translateY(-3px);
-}
+        .bio-btn:hover {
+            color: var(--light-text);
+            background: rgba(0, 255, 170, 0.3);
+            box-shadow: var(--glow-shadow);
+            transform: translateY(-3px);
+        }
 
-@keyframes impulseBorder {
-    0% { clip-path: inset(0 100% 0 0); opacity: 0.5; }
-    25% { clip-path: inset(0 0 0 0); opacity: 1; }
-    50% { clip-path: inset(100% 0 0 0); opacity: 0.5; }
-    75% { clip-path: inset(0 0 0 100%); opacity: 1; }
-    100% { clip-path: inset(0 100% 0 0); opacity: 0.5; }
-}
-        
+        @keyframes impulseBorder {
+            0% { clip-path: inset(0 100% 0 0); opacity: 0.5; }
+            25% { clip-path: inset(0 0 0 0); opacity: 1; }
+            50% { clip-path: inset(100% 0 0 0); opacity: 0.5; }
+            75% { clip-path: inset(0 0 0 100%); opacity: 1; }
+            100% { clip-path: inset(0 100% 0 0); opacity: 0.5; }
+        }
     </style>
 </head>
 <body>
@@ -1143,6 +1183,29 @@
         <p id="success-message">Спасибо за обращение. Мы свяжемся с вами в ближайшее время.</p>
     </div>
 
+    <div class="schedule-modal" id="schedule-modal">
+        <span class="popup-close">×</span>
+        <h3>Выбор расписания</h3>
+        <form id="schedule-form">
+            <div class="form-group">
+                <select id="course-select" required>
+                    <option value="">Выберите курс</option>
+                    <option value="Курс английского">Курс английского</option>
+                    <option value="Курс русского">Курс русского</option>
+                    <option value="Курс математики">Курс математики</option>
+                </select>
+                <label for="course-select">Курс</label>
+            </div>
+            <div class="form-group">
+                <select id="time-select" required>
+                    <option value="">Выберите время</option>
+                </select>
+                <label for="time-select">Время</label>
+            </div>
+            <button type="submit">Подтвердить запись</button>
+        </form>
+    </div>
+
     <footer>
         <div class="footer-content">
             <div class="footer-logo">
@@ -1162,7 +1225,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-qRTFlszcMafJv1eesYg-PUxsxYoo28U",
@@ -1185,6 +1248,18 @@
             console.error("Ошибка инициализации Firebase:", e);
             alert("Не удалось инициализировать Firebase: " + e.message);
         }
+
+        // Расписание курсов
+        const courseSchedule = {
+            'Курс английского': ['Понедельник, 16:00', 'Среда, 16:00', 'Пятница, 10:00', 'Пятница, 19:00', 'Суббота, 10:00', 'Суббота, 19:00', 'Воскресенье, 10:00', 'Воскресенье, 15:00'],
+            'Курс русского': ['Понедельник, 17:00', 'Среда, 17:00', 'Пятница, 11:00', 'Пятница, 14:00', 'Пятница, 15:00', 'Суббота, 11:00', 'Суббота, 14:00', 'Суббота, 15:00'],
+            'Курс математики': ['Понедельник, 18:00', 'Среда, 18:00', 'Пятница, 17:00', 'Суббота, 17:00', 'Воскресенье, 11:00', 'Воскресенье, 14:00', 'Воскресенье, 17:00', 'Воскресенье, 19:00']
+        };
+
+        // Токен Telegram-бота
+        const telegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
+        // Замените на ваш chat_id (см. инструкцию ниже)
+        const teacherChatId = 'YOUR_CHAT_ID';
 
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
@@ -1275,6 +1350,11 @@
                 });
             });
 
+            let currentUser = null;
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+            });
+
             const registerForm = document.getElementById('register-form');
             if (!registerForm) {
                 console.error("Форма регистрации (#register-form) не найдена!");
@@ -1295,6 +1375,8 @@
                     try {
                         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                         const user = userCredential.user;
+
+                        await updateProfile(user, { displayName: name });
 
                         await addDoc(collection(db, "users"), {
                             uid: user.uid,
@@ -1421,8 +1503,91 @@
                 });
             });
 
-            document.querySelector('.popup-close').addEventListener('click', function() {
+            document.querySelector('#course-popup .popup-close').addEventListener('click', function() {
                 document.getElementById('course-popup').classList.remove('active');
+            });
+
+            const coursePopup = document.getElementById('course-popup');
+            const scheduleModal = document.getElementById('schedule-modal');
+            const courseSelect = document.getElementById('course-select');
+            const timeSelect = document.getElementById('time-select');
+
+            coursePopup.querySelector('button').addEventListener('click', function() {
+                if (!currentUser) {
+                    alert('Пожалуйста, войдите в систему для записи на курс');
+                    coursePopup.classList.remove('active');
+                    document.getElementById('auth-modal').classList.add('active');
+                    return;
+                }
+                coursePopup.classList.remove('active');
+                scheduleModal.classList.add('active');
+            });
+
+            document.querySelector('#schedule-modal .popup-close').addEventListener('click', function() {
+                scheduleModal.classList.remove('active');
+            });
+
+            courseSelect.addEventListener('change', function() {
+                const selectedCourse = this.value;
+                timeSelect.innerHTML = '<option value="">Выберите время</option>';
+                
+                if (courseSchedule[selectedCourse]) {
+                    courseSchedule[selectedCourse].forEach(time => {
+                        const option = document.createElement('option');
+                        option.value = time;
+                        option.textContent = time;
+                        timeSelect.appendChild(option);
+                    });
+                }
+            });
+
+            document.getElementById('schedule-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const course = courseSelect.value;
+                const time = timeSelect.value;
+                
+                if (!course || !time) {
+                    alert('Пожалуйста, выберите курс и время');
+                    return;
+                }
+
+                try {
+                    const enrollment = {
+                        userId: currentUser.uid,
+                        userEmail: currentUser.email,
+                        userName: currentUser.displayName || currentUser.email.split('@')[0],
+                        course: course,
+                        time: time,
+                        enrolledAt: new Date().toISOString(),
+                        status: 'pending'
+                    };
+
+                    await addDoc(collection(db, "enrollments"), enrollment);
+
+                    const message = `Новая запись на курс:\nИмя: ${enrollment.userName}\nEmail: ${enrollment.userEmail}\nКурс: ${enrollment.course}\nВремя: ${enrollment.time}`;
+                    const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(message)}`;
+
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error('Ошибка отправки в Telegram');
+                    }
+
+                    document.getElementById('success-title').textContent = 'Запись подтверждена!';
+                    document.getElementById('success-message').textContent = `Вы записаны на ${course} в ${time}. Учитель уведомлён через Telegram.`;
+                    document.getElementById('success-modal').classList.add('active');
+                    
+                    scheduleModal.classList.remove('active');
+                    
+                    setTimeout(() => {
+                        document.getElementById('success-modal').classList.remove('active');
+                    }, 3000);
+                    
+                    this.reset();
+                } catch (e) {
+                    console.error("Ошибка: ", e);
+                    alert("Ошибка при записи: " + e.message);
+                }
             });
 
             document.getElementById('contact-form').addEventListener('submit', async function(e) {
