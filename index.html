@@ -967,8 +967,10 @@
     <div class="auth-modal" id="auth-modal">
         <div class="auth-tabs">
             <div class="auth-tab active" data-tab="register">Регистрация</div>
-            <div class="auth-tab" data-tab="login">Вход</div>
+            <div class="auth-tab" data-tab="login">Вход ученика</div>
+            <div class="auth-tab" data-tab="teacher">Вход учителя</div>
         </div>
+        
         <div class="auth-content active" id="register-content">
             <form id="register-form">
                 <div class="form-group">
@@ -983,17 +985,10 @@
                     <input type="password" id="reg-password" placeholder=" " required>
                     <label for="reg-password">Пароль</label>
                 </div>
-                <div class="form-group">
-                    <select id="reg-role" required>
-                        <option value="" disabled selected></option>
-                        <option value="student">Ученик</option>
-                        <option value="teacher">Преподаватель</option>
-                    </select>
-                    <label for="reg-role">Роль</label>
-                </div>
                 <button type="submit">ЗАРЕГИСТРИРОВАТЬСЯ</button>
             </form>
         </div>
+        
         <div class="auth-content" id="login-content">
             <form id="login-form">
                 <div class="form-group">
@@ -1005,6 +1000,20 @@
                     <label for="login-password">Пароль</label>
                 </div>
                 <button type="submit">ВОЙТИ</button>
+            </form>
+        </div>
+        
+        <div class="auth-content" id="teacher-content">
+            <form id="teacher-form">
+                <div class="form-group">
+                    <input type="email" id="teacher-email" placeholder=" " required>
+                    <label for="teacher-email">Электронная почта учителя</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="teacher-password" placeholder=" " required>
+                    <label for="teacher-password">Пароль</label>
+                </div>
+                <button type="submit">ВОЙТИ КАК УЧИТЕЛЬ</button>
             </form>
         </div>
     </div>
@@ -1061,6 +1070,9 @@
         <section id="contact">
             <h2>Связаться с Нами</h2>
             <div class="hex-panel">
+                <div class="contact-info" style="margin-bottom: 20px; text-align: center;">
+                    <p>Наша почта: <a href="mailto:languageweblab@gmail.com" style="color: var(--primary-color); text-decoration: none;">languageweblab@gmail.com</a></p>
+                </div>
                 <form class="contact-form" id="contact-form">
                     <div class="form-group">
                         <input type="text" id="name" placeholder=" ">
@@ -1110,6 +1122,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyA-qRTFlszcMafJv1eesYg-PUxsxYoo28U",
             authDomain: "misha-and-anna-48e4c.firebaseapp.com",
+            databaseURL: "https://misha-and-anna-48e4c-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "misha-and-anna-48e4c",
             storageBucket: "misha-and-anna-48e4c.firebasestorage.app",
             messagingSenderId: "822036073579",
@@ -1117,9 +1130,16 @@
             measurementId: "G-XR86X6PXMX"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+        let app, db, auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            console.log("Firebase успешно инициализирован:", app);
+        } catch (e) {
+            console.error("Ошибка инициализации Firebase:", e);
+            alert("Не удалось инициализировать Firebase: " + e.message);
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
@@ -1200,7 +1220,6 @@
                 }, 800);
             });
 
-            // Переключение вкладок
             document.querySelectorAll('.auth-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -1211,73 +1230,125 @@
                 });
             });
 
-            // Обработка регистрации
-            document.getElementById('register-form').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const name = document.getElementById('reg-name').value;
-                const email = document.getElementById('reg-email').value;
-                const password = document.getElementById('reg-password').value;
-                const role = document.getElementById('reg-role').value;
+            const registerForm = document.getElementById('register-form');
+            if (!registerForm) {
+                console.error("Форма регистрации (#register-form) не найдена!");
+            } else {
+                registerForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log("Форма регистрации отправлена");
 
-                try {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
+                    const name = document.getElementById('reg-name').value;
+                    const email = document.getElementById('reg-email').value;
+                    const password = document.getElementById('reg-password').value;
 
-                    await addDoc(collection(db, "users"), {
-                        uid: user.uid,
-                        name: name,
-                        email: email,
-                        role: role,
-                        createdAt: new Date().toISOString()
-                    });
+                    if (!name || !email || !password) {
+                        alert("Пожалуйста, заполните все поля.");
+                        return;
+                    }
 
-                    document.getElementById('success-title').textContent = 'Регистрация успешна!';
-                    document.getElementById('success-message').textContent = role === 'student' 
-                        ? 'Добро пожаловать, ученик! Теперь вы можете записаться на курсы.' 
-                        : 'Добро пожаловать, преподаватель! Вы получите доступ к управлению курсами.';
-                    document.getElementById('success-modal').classList.add('active');
-                    
-                    setTimeout(function() {
-                        document.getElementById('success-modal').classList.remove('active');
-                        document.getElementById('auth-modal').classList.remove('active');
-                        document.getElementById('main-content').classList.add('active');
-                    }, 2000);
-                } catch (e) {
-                    console.error("Ошибка при регистрации: ", e);
-                    alert("Ошибка: " + e.message);
-                }
+                    try {
+                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
 
-                this.reset();
-            });
+                        await addDoc(collection(db, "users"), {
+                            uid: user.uid,
+                            name: name,
+                            email: email,
+                            role: "student",
+                            createdAt: new Date().toISOString()
+                        });
 
-            // Обработка входа
-            document.getElementById('login-form').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
+                        document.getElementById('success-title').textContent = 'Регистрация успешна!';
+                        document.getElementById('success-message').textContent = 'Добро пожаловать, ученик! Теперь вы можете записаться на курсы.';
+                        document.getElementById('success-modal').classList.add('active');
+                        
+                        setTimeout(function() {
+                            document.getElementById('success-modal').classList.remove('active');
+                            document.getElementById('auth-modal').classList.remove('active');
+                            document.getElementById('main-content').classList.add('active');
+                        }, 2000);
+                    } catch (e) {
+                        console.error("Ошибка при регистрации: ", e);
+                        alert("Ошибка регистрации: " + e.message);
+                    }
 
-                try {
-                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
+                    this.reset();
+                });
+            }
 
-                    document.getElementById('success-title').textContent = 'Вход выполнен!';
-                    document.getElementById('success-message').textContent = 'Добро пожаловать обратно! Вы успешно вошли в систему.';
-                    document.getElementById('success-modal').classList.add('active');
-                    
-                    setTimeout(function() {
-                        document.getElementById('success-modal').classList.remove('active');
-                        document.getElementById('auth-modal').classList.remove('active');
-                        document.getElementById('main-content').classList.add('active');
-                    }, 2000);
-                } catch (e) {
-                    console.error("Ошибка при входе: ", e);
-                    alert("Ошибка: " + e.message);
-                }
+            const loginForm = document.getElementById('login-form');
+            if (!loginForm) {
+                console.error("Форма входа (#login-form) не найдена!");
+            } else {
+                loginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log("Форма входа отправлена");
 
-                this.reset();
-            });
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+
+                    try {
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
+                        console.log("Вход успешен:", user.uid);
+
+                        document.getElementById('success-title').textContent = 'Вход выполнен!';
+                        document.getElementById('success-message').textContent = 'Добро пожаловать обратно! Вы успешно вошли в систему как ученик.';
+                        document.getElementById('success-modal').classList.add('active');
+                        
+                        setTimeout(function() {
+                            document.getElementById('success-modal').classList.remove('active');
+                            document.getElementById('auth-modal').classList.remove('active');
+                            document.getElementById('main-content').classList.add('active');
+                        }, 2000);
+                    } catch (e) {
+                        console.error("Ошибка при входе: ", e);
+                        alert("Ошибка входа: " + e.message);
+                    }
+
+                    this.reset();
+                });
+            }
+
+            const teacherForm = document.getElementById('teacher-form');
+            if (!teacherForm) {
+                console.error("Форма входа учителя (#teacher-form) не найдена!");
+            } else {
+                teacherForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log("Форма входа учителя отправлена");
+
+                    const email = document.getElementById('teacher-email').value;
+                    const password = document.getElementById('teacher-password').value;
+                    const teacherEmail = "languageweblab@gmail.com";
+
+                    if (email !== teacherEmail) {
+                        alert("Неверный email учителя!");
+                        return;
+                    }
+
+                    try {
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
+                        
+                        document.getElementById('success-title').textContent = 'Вход выполнен!';
+                        document.getElementById('success-message').textContent = 'Добро пожаловать, учитель! Вы получили доступ к управлению курсами.';
+                        document.getElementById('success-modal').classList.add('active');
+                        
+                        setTimeout(function() {
+                            document.getElementById('success-modal').classList.remove('active');
+                            document.getElementById('auth-modal').classList.remove('active');
+                            document.getElementById('main-content').classList.add('active');
+                        }, 2000);
+                    } catch (e) {
+                        console.error("Ошибка при входе учителя: ", e);
+                        alert("Ошибка входа: " + e.message);
+                    }
+
+                    this.reset();
+                });
+            }
 
             const courseData = {
                 russian: {
@@ -1286,11 +1357,11 @@
                 },
                 english: {
                     title: 'Английский язык',
-                    description: 'Наши курсы английского языка разработаны для всех уровней владения языком. От базовой грамматики до свободного общения на профессиональные темы. Включает разговорную практику с носителями языка.'
+                    description: 'Наши курсы английского языка разработаны для всех уровней владения языком. От базовой грамматики до свободного общения на профессиональные темы.'
                 },
                 math: {
                     title: 'Математика',
-                    description: 'Курс математики включает алгебру, геометрию и основы анализа. Мы используем интерактивные методы для развития логического мышления и решения задач.'
+                    description: 'Курс математики включает алгебру, геометрию и основы анализа. Мы используем интерактивные методы для развития логического мышления.'
                 }
             };
 
@@ -1336,7 +1407,7 @@
                     }, 3000);
                 } catch (e) {
                     console.error("Ошибка при отправке сообщения: ", e);
-                    alert("Произошла ошибка при отправке сообщения. Попробуйте снова.");
+                    alert("Ошибка: " + e.message);
                 }
             });
         });
