@@ -1628,6 +1628,15 @@
 
                 try {
                     await addDoc(collection(db, "messages"), newMessage);
+
+                    const telegramMessage = `Новое сообщение из формы "Связаться с Нами":\nИмя: ${name}\nEmail: ${email}\nСообщение: ${message}`;
+                    const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(telegramMessage)}`;
+
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error('Ошибка отправки в Telegram');
+                    }
+
                     document.getElementById('success-title').textContent = 'Сообщение отправлено!';
                     document.getElementById('success-message').textContent = 'Спасибо за обращение. Мы свяжемся с вами в ближайшее время.';
                     document.getElementById('success-modal').classList.add('active');
