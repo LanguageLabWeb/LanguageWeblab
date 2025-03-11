@@ -6,7 +6,7 @@
     <title>Языковая лаборатория</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-   :root {
+:root {
     --marble-white: #F5F1E9; /* Мраморный белый */
     --gold-accent: #D4A017; /* Золотой Зевса */
     --olive-green: #4A7043; /* Лавры Аполлона */
@@ -21,6 +21,7 @@
     --blue-aura: 0 0 15px rgba(26, 60, 107, 0.5);
     --wine-glow: 0 0 15px rgba(107, 26, 60, 0.5);
     --thunder-glow: 0 0 15px rgba(75, 46, 107, 0.7);
+    --temple-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -40,18 +41,88 @@ body {
     transition: background 0.5s ease;
 }
 
+/* Многослойный фон храма */
+
+/* Слой 1: Горизонт и дымка */
 body::before {
     content: '';
     position: fixed;
-    top: 0;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 400px;
+    background: linear-gradient(to top, rgba(42, 42, 42, 0.8) 0%, rgba(26, 60, 107, 0.3) 50%, transparent 100%);
+    z-index: -4;
+    animation: olympusMist 15s infinite ease-in-out;
+}
+
+/* Слой 2: Основание храма с колоннами */
+body::after {
+    content: '';
+    position: fixed;
+    bottom: 50px;
+    left: 0;
+    width: 100%;
+    height: 250px;
     background: 
-        linear-gradient(90deg, rgba(245, 241, 233, 0.05) 0%, transparent 5%, rgba(245, 241, 233, 0.05) 10%, transparent 15%, rgba(245, 241, 233, 0.05) 20%, transparent 25%, transparent 75%, rgba(245, 241, 233, 0.05) 80%, transparent 85%, rgba(245, 241, 233, 0.05) 90%, transparent 95%, rgba(245, 241, 233, 0.05) 100%);
+        /* Основание */
+        linear-gradient(to bottom, transparent 0%, rgba(245, 241, 233, 0.6) 50%, rgba(245, 241, 233, 0.8) 100%),
+        /* Колонны */
+        repeating-linear-gradient(90deg, rgba(245, 241, 233, 0.9) 0px, rgba(245, 241, 233, 0.9) 15px, rgba(245, 241, 233, 0.2) 15px, rgba(245, 241, 233, 0.2) 40px);
+    box-shadow: var(--temple-shadow);
     z-index: -3;
-    opacity: 0.6;
-    animation: columnsShift 25s infinite linear;
+    clip-path: polygon(0% 100%, 0% 30%, 5% 25%, 10% 30%, 15% 25%, 20% 30%, 25% 25%, 30% 30%, 35% 25%, 40% 30%, 45% 25%, 50% 30%, 55% 25%, 60% 30%, 65% 25%, 70% 30%, 75% 25%, 80% 30%, 85% 25%, 90% 30%, 95% 25%, 100% 30%, 100% 100%);
+    animation: templePulse 12s infinite ease-in-out;
+}
+
+/* Слой 3: Фронтон и крыша храма */
+.temple-roof {
+    position: fixed;
+    bottom: 250px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 0;
+    border-left: 300px solid transparent;
+    border-right: 300px solid transparent;
+    border-bottom: 100px solid rgba(245, 241, 233, 0.7);
+    z-index: -3;
+    box-shadow: var(--temple-shadow);
+    animation: templeGlow 8s infinite ease-in-out;
+}
+
+/* Слой 4: Свет Олимпа над храмом */
+.temple-light {
+    position: fixed;
+    bottom: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(212, 160, 23, 0.3) 0%, transparent 70%);
+    z-index: -2;
+    animation: olympusBeam 10s infinite ease-in-out;
+}
+
+/* Анимации для эпичности */
+@keyframes olympusMist {
+    0%, 100% { opacity: 0.8; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-20px); }
+}
+
+@keyframes templePulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.02); opacity: 1; }
+}
+
+@keyframes templeGlow {
+    0%, 100% { opacity: 0.7; transform: translateX(-50%) scale(1); filter: brightness(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.03); filter: brightness(1.2); }
+}
+
+@keyframes olympusBeam {
+    0%, 100% { opacity: 0.3; transform: translateX(-50%) scale(1); }
+    50% { opacity: 0.5; transform: translateX(-50%) scale(1.1); }
 }
 
 .bio-bg {
@@ -108,16 +179,6 @@ body::before {
 @keyframes scrollFates {
     0% { background-position: 0 0; }
     100% { background-position: 40px 40px; }
-}
-
-@keyframes olympusMist {
-    0%, 100% { opacity: 0.4; transform: scale(1); filter: blur(5px); }
-    50% { opacity: 0.7; transform: scale(1.05); filter: blur(2px); }
-}
-
-@keyframes columnsShift {
-    0% { background-position: 0 0; }
-    100% { background-position: 100px 0; }
 }
 
 .cursor {
@@ -915,6 +976,22 @@ footer {
     .hex-panel {
         padding: 20px;
     }
+
+    .temple-roof {
+        width: 400px;
+        border-left: 200px solid transparent;
+        border-right: 200px solid transparent;
+        border-bottom: 80px solid rgba(245, 241, 233, 0.7);
+    }
+
+    .temple-light {
+        width: 300px;
+        height: 150px;
+    }
+
+    body::after {
+        height: 200px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -929,6 +1006,22 @@ footer {
     .bio-btn {
         padding: 12px 25px;
         font-size: 1rem;
+    }
+
+    .temple-roof {
+        width: 300px;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-bottom: 60px solid rgba(245, 241, 233, 0.7);
+    }
+
+    .temple-light {
+        width: 200px;
+        height: 100px;
+    }
+
+    body::after {
+        height: 150px;
     }
 }
 
