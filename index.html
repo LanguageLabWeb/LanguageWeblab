@@ -6,17 +6,21 @@
     <title>Языковая лаборатория</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-       :root {
+     :root {
     --marble-white: #F5F1E9; /* Мраморный белый */
-    --gold-accent: #D4A017; /* Золотой акцент */
-    --olive-green: #4A7043; /* Оливковый зеленый */
-    --deep-blue: #1A3C6B; /* Глубокий синий (море) */
-    --dark-stone: #2A2A2A; /* Темный камень */
-    --darker-stone: #1F1F1F; /* Еще темнее */
-    --light-parchment: #FDF6E3; /* Светлый пергамент */
+    --gold-accent: #D4A017; /* Золотой Зевса */
+    --olive-green: #4A7043; /* Лавры Аполлона */
+    --deep-blue: #1A3C6B; /* Море Посейдона */
+    --dark-stone: #2A2A2A; /* Хаос */
+    --darker-stone: #1F1F1F; /* Тартар */
+    --light-parchment: #FDF6E3; /* Пергамент Гомера */
+    --wine-red: #6B1A3C; /* Вино Диониса */
+    --thunder-purple: #4B2E6B; /* Молнии Зевса */
     --golden-glow: 0 0 15px rgba(212, 160, 23, 0.7);
     --olive-shadow: 0 0 15px rgba(74, 112, 67, 0.5);
     --blue-aura: 0 0 15px rgba(26, 60, 107, 0.5);
+    --wine-glow: 0 0 15px rgba(107, 26, 60, 0.5);
+    --thunder-glow: 0 0 15px rgba(75, 46, 107, 0.7);
 }
 
 * {
@@ -27,7 +31,7 @@
 
 body {
     margin: 0;
-    font-family: 'Cinzel', serif; /* Античный шрифт */
+    font-family: 'Cinzel', serif;
     background: var(--dark-stone);
     color: var(--light-parchment);
     overflow-x: hidden;
@@ -42,9 +46,9 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 50% 50%, rgba(212, 160, 23, 0.1), transparent 50%);
+    background: radial-gradient(circle at 50% 50%, rgba(212, 160, 23, 0.15), rgba(26, 60, 107, 0.1), transparent 60%);
     z-index: -2;
-    animation: templeGlow 10s infinite ease-in-out;
+    animation: olympusMist 12s infinite ease-in-out;
     transition: background 0.3s ease;
 }
 
@@ -55,11 +59,11 @@ body {
     width: 100%;
     height: 100%;
     background: 
-        repeating-linear-gradient(60deg, rgba(212, 160, 23, 0.03) 0px, rgba(212, 160, 23, 0.03) 2px, transparent 2px, transparent 40px),
-        repeating-linear-gradient(-60deg, rgba(212, 160, 23, 0.03) 0px, rgba(212, 160, 23, 0.03) 2px, transparent 2px, transparent 40px),
-        repeating-linear-gradient(120deg, rgba(26, 60, 107, 0.02) 0px, rgba(26, 60, 107, 0.02) 1px, transparent 1px, transparent 60px);
+        repeating-linear-gradient(60deg, rgba(212, 160, 23, 0.05) 0px, rgba(212, 160, 23, 0.05) 2px, transparent 2px, transparent 40px),
+        repeating-linear-gradient(-60deg, rgba(74, 112, 67, 0.03) 0px, rgba(74, 112, 67, 0.03) 2px, transparent 2px, transparent 40px),
+        repeating-linear-gradient(120deg, rgba(107, 26, 60, 0.02) 0px, rgba(107, 26, 60, 0.02) 1px, transparent 1px, transparent 60px);
     z-index: -1;
-    animation: scrollFresco 30s infinite linear;
+    animation: scrollFates 30s infinite linear;
 }
 
 .particles-container {
@@ -74,20 +78,27 @@ body {
 
 .particle {
     position: absolute;
-    background: var(--gold-accent);
+    background: var(--thunder-purple);
     border-radius: 50%;
     opacity: 0.3;
     pointer-events: none;
+    animation: icarusFlight 5s infinite ease-in-out;
 }
 
-@keyframes scrollFresco {
+@keyframes icarusFlight {
+    0% { transform: translateY(100vh) scale(0.5); opacity: 0.3; }
+    50% { transform: translateY(0) scale(1); opacity: 0.7; }
+    100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+}
+
+@keyframes scrollFates {
     0% { background-position: 0 0; }
     100% { background-position: 40px 40px; }
 }
 
-@keyframes templeGlow {
-    0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.05); }
+@keyframes olympusMist {
+    0%, 100% { opacity: 0.4; transform: scale(1); filter: blur(5px); }
+    50% { opacity: 0.7; transform: scale(1.05); filter: blur(2px); }
 }
 
 .cursor {
@@ -106,23 +117,23 @@ body {
 .cursor.hover {
     width: 30px;
     height: 30px;
-    background: radial-gradient(circle, rgba(26, 60, 107, 0.7), transparent 70%);
-    border-color: rgba(26, 60, 107, 0.3);
+    background: radial-gradient(circle, rgba(75, 46, 107, 0.7), transparent 70%);
+    border-color: rgba(75, 46, 107, 0.3);
 }
 
 .cursor-trail {
     position: fixed;
     width: 12px;
     height: 12px;
-    background: rgba(212, 160, 23, 0.3);
+    background: rgba(107, 26, 60, 0.3);
     border-radius: 50%;
     pointer-events: none;
     z-index: 999;
     mix-blend-mode: screen;
-    animation: fadeOracle 0.6s ease-out forwards;
+    animation: dionysusEcho 0.6s ease-out forwards;
 }
 
-@keyframes fadeOracle {
+@keyframes dionysusEcho {
     0% { opacity: 0.3; transform: scale(1); }
     100% { opacity: 0; transform: scale(0.5); }
 }
@@ -136,10 +147,10 @@ header {
 }
 
 .title, h2 {
-    font-family: 'Cinzel Decorative', serif; /* Эпичный античный шрифт */
+    font-family: 'Cinzel Decorative', serif;
     font-size: 3.5rem;
     color: var(--gold-accent);
-    text-shadow: var(--golden-glow), 0 0 25px rgba(26, 60, 107, 0.5);
+    text-shadow: var(--golden-glow), var(--thunder-glow);
     text-transform: uppercase;
     letter-spacing: 4px;
     position: relative;
@@ -155,13 +166,13 @@ header {
     transform: translateX(-50%);
     width: 60%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold-accent), var(--olive-green), transparent);
-    animation: laurelPulse 3s infinite ease-in-out;
+    background: linear-gradient(90deg, transparent, var(--thunder-purple), var(--gold-accent), transparent);
+    animation: zeusBolt 3s infinite ease-in-out;
 }
 
-@keyframes laurelPulse {
+@keyframes zeusBolt {
     0%, 100% { width: 60%; opacity: 0.7; }
-    50% { width: 80%; opacity: 1; }
+    50% { width: 80%; opacity: 1; filter: brightness(1.5); }
 }
 
 h2 {
@@ -178,18 +189,19 @@ h2::after {
     transform: translateX(-50%);
     width: 40%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--deep-blue), transparent);
+    background: linear-gradient(90deg, transparent, var(--deep-blue), var(--wine-red), transparent);
 }
 
 h3 {
     font-family: 'Cinzel', serif;
-    color: var(--olive-green);
+    color: var(--wine-red);
     margin-bottom: 1rem;
+    text-shadow: var(--wine-glow);
 }
 
 @keyframes riseOlympus {
-    0% { transform: scale(0.5); opacity: 0; filter: blur(10px); }
-    100% { transform: scale(1); opacity: 1; filter: blur(0); }
+    0% { transform: scale(0.5) translateY(50px); opacity: 0; filter: blur(10px); }
+    100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
 }
 
 .subtitle {
@@ -210,7 +222,7 @@ h3 {
     padding: 15px 30px;
     font-size: 1.2rem;
     font-family: 'Cinzel', serif;
-    background: linear-gradient(45deg, var(--gold-accent), var(--olive-green));
+    background: linear-gradient(45deg, var(--gold-accent), var(--wine-red));
     border: none;
     color: var(--dark-stone);
     font-weight: bold;
@@ -218,7 +230,7 @@ h3 {
     border-radius: 25px;
     transition: all 0.3s ease;
     box-shadow: var(--golden-glow);
-    animation: divinePulse 3s infinite ease-in-out;
+    animation: ambrosiaPulse 3s infinite ease-in-out;
     position: relative;
     overflow: hidden;
     z-index: 1;
@@ -231,8 +243,8 @@ h3 {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: conic-gradient(transparent, rgba(255, 255, 255, 0.5), transparent 20%);
-    animation: olympianSpin 10s linear infinite;
+    background: conic-gradient(transparent, rgba(255, 255, 255, 0.3), transparent 20%);
+    animation: fatesSpin 10s linear infinite;
     z-index: -1;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -243,19 +255,19 @@ h3 {
 }
 
 .bio-btn:hover {
-    box-shadow: 0 0 25px var(--gold-accent), 0 0 40px var(--olive-green);
+    box-shadow: 0 0 25px var(--gold-accent), 0 0 40px var(--thunder-purple);
     transform: scale(1.05) translateY(-5px);
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes olympianSpin {
+@keyframes fatesSpin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-@keyframes divinePulse {
+@keyframes ambrosiaPulse {
     0%, 100% { box-shadow: var(--golden-glow); }
-    50% { box-shadow: 0 0 25px rgba(212, 160, 23, 1); }
+    50% { box-shadow: 0 0 25px rgba(212, 160, 23, 1), var(--wine-glow); }
 }
 
 .content {
@@ -273,10 +285,10 @@ h3 {
 .bio-divider {
     width: 80%;
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold-accent), var(--olive-green), var(--deep-blue), transparent);
+    background: linear-gradient(90deg, transparent, var(--gold-accent), var(--olive-green), var(--deep-blue), var(--wine-red), transparent);
     margin: 60px auto;
-    box-shadow: var(--golden-glow);
-    animation: marbleFlow 4s infinite ease-in-out;
+    box-shadow: var(--thunder-glow);
+    animation: poseidonWave 4s infinite ease-in-out;
     position: relative;
 }
 
@@ -290,7 +302,7 @@ h3 {
     background: var(--gold-accent);
     border-radius: 50%;
     box-shadow: var(--golden-glow);
-    animation: oliveDance 4s infinite alternate ease-in-out;
+    animation: apolloChariot 4s infinite alternate ease-in-out;
 }
 
 .bio-divider::after {
@@ -300,30 +312,30 @@ h3 {
     right: 25%;
     width: 10px;
     height: 10px;
-    background: var(--olive-green);
+    background: var(--wine-red);
     border-radius: 50%;
-    box-shadow: var(--olive-shadow);
-    animation: oliveDance 4s infinite alternate-reverse ease-in-out;
+    box-shadow: var(--wine-glow);
+    animation: apolloChariot 4s infinite alternate-reverse ease-in-out;
 }
 
-@keyframes oliveDance {
-    0% { transform: translateX(-30px); }
-    100% { transform: translateX(30px); }
+@keyframes apolloChariot {
+    0% { transform: translateX(-30px) rotate(0deg); }
+    100% { transform: translateX(30px) rotate(360deg); }
 }
 
-@keyframes marbleFlow {
-    0%, 100% { transform: scaleX(0.8); opacity: 0.5; }
-    50% { transform: scaleX(1); opacity: 1; }
+@keyframes poseidonWave {
+    0%, 100% { transform: scaleX(0.8) translateY(2px); opacity: 0.5; }
+    50% { transform: scaleX(1) translateY(-2px); opacity: 1; }
 }
 
 .hex-panel {
     max-width: 1200px;
     margin: 0 auto 60px;
-    background: rgba(245, 241, 233, 0.3); /* Мраморная текстура */
+    background: rgba(245, 241, 233, 0.3);
     backdrop-filter: blur(10px);
     border-radius: 15px;
-    border: 1px solid var(--gold-accent);
-    box-shadow: 0 0 20px rgba(212, 160, 23, 0.3), inset 0 0 10px rgba(26, 60, 107, 0.2);
+    border: 1px solid var(--thunder-purple);
+    box-shadow: 0 0 20px rgba(75, 46, 107, 0.3), inset 0 0 10px rgba(212, 160, 23, 0.2);
     padding: 40px;
     position: relative;
     clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
@@ -332,7 +344,7 @@ h3 {
 
 .hex-panel:hover {
     transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 0 30px rgba(212, 160, 23, 0.5), inset 0 0 15px rgba(26, 60, 107, 0.3);
+    box-shadow: 0 0 30px rgba(75, 46, 107, 0.5), inset 0 0 15px rgba(212, 160, 23, 0.3);
 }
 
 .hex-panel::before {
@@ -342,10 +354,10 @@ h3 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, rgba(212, 160, 23, 0.1), rgba(74, 112, 67, 0.1), rgba(26, 60, 107, 0.1));
+    background: linear-gradient(45deg, rgba(212, 160, 23, 0.1), rgba(74, 112, 67, 0.1), rgba(107, 26, 60, 0.1));
     opacity: 0.3;
     z-index: -1;
-    animation: templePulse 5s infinite ease-in-out;
+    animation: ambrosiaFlow 5s infinite ease-in-out;
 }
 
 .hex-panel::after {
@@ -359,18 +371,18 @@ h3 {
     z-index: -2;
     clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
     border: 2px solid transparent;
-    border-image: linear-gradient(45deg, var(--gold-accent), var(--olive-green), var(--deep-blue)) 1;
+    border-image: linear-gradient(45deg, var(--gold-accent), var(--thunder-purple), var(--wine-red)) 1;
     animation: godGlow 3s infinite alternate ease-in-out;
 }
 
 @keyframes godGlow {
     0% { opacity: 0.5; }
-    100% { opacity: 1; }
+    100% { opacity: 1; filter: brightness(1.2); }
 }
 
-@keyframes templePulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.6; }
+@keyframes ambrosiaFlow {
+    0%, 100% { opacity: 0.3; transform: translateY(5px); }
+    50% { opacity: 0.6; transform: translateY(-5px); }
 }
 
 .about-content {
@@ -391,8 +403,8 @@ h3 {
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    filter: drop-shadow(var(--golden-glow));
-    animation: godFloat 3s ease-in-out infinite;
+    filter: drop-shadow(var(--thunder-glow));
+    animation: hermesWings 3s ease-in-out infinite;
     border: 2px solid var(--gold-accent);
     position: relative;
     transition: transform 0.3s ease;
@@ -413,23 +425,23 @@ h3 {
     right: -10px;
     bottom: -10px;
     border-radius: 50%;
-    border: 2px solid var(--deep-blue);
+    border: 2px dashed var(--olive-green);
     opacity: 0.5;
-    animation: auraPulse 3s infinite alternate ease-in-out;
+    animation: oracleRing 3s infinite alternate ease-in-out;
 }
 
 .holo-img:hover {
     transform: scale(1.1) rotate(5deg);
 }
 
-@keyframes auraPulse {
-    0% { transform: scale(1); opacity: 0.5; }
-    100% { transform: scale(1.1); opacity: 0.8; }
+@keyframes oracleRing {
+    0% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+    100% { transform: scale(1.1) rotate(360deg); opacity: 0.8; }
 }
 
-@keyframes godFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+@keyframes hermesWings {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
 }
 
 .course-grid {
@@ -441,13 +453,13 @@ h3 {
 }
 
 .course-card {
-    background: rgba(245, 241, 233, 0.5); /* Мраморный фон */
+    background: rgba(245, 241, 233, 0.5);
     backdrop-filter: blur(10px);
     padding: 30px 20px;
     border-radius: 10px;
-    border: 1px solid var(--gold-accent);
+    border: 1px solid var(--wine-red);
     transition: all 0.5s ease;
-    box-shadow: var(--golden-glow);
+    box-shadow: var(--wine-glow);
     position: relative;
     overflow: hidden;
     cursor: pointer;
@@ -466,8 +478,8 @@ h3 {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: conic-gradient(transparent, rgba(212, 160, 23, 0.1), transparent 30%);
-    animation: olympianSpin 10s linear infinite;
+    background: conic-gradient(transparent, rgba(107, 26, 60, 0.1), transparent 30%);
+    animation: fatesSpin 10s linear infinite;
     z-index: -1;
 }
 
@@ -481,7 +493,7 @@ h3 {
 
 .course-card:hover {
     transform: scale(1.05) translateY(-10px) rotateY(10deg);
-    box-shadow: 0 0 20px var(--gold-accent), 0 0 30px var(--olive-green);
+    box-shadow: 0 0 20px var(--wine-red), 0 0 30px var(--gold-accent);
 }
 
 .course-icon {
@@ -492,7 +504,7 @@ h3 {
 
 .course-card:hover .course-icon {
     transform: scale(1.2);
-    color: var(--olive-green);
+    color: var(--thunder-purple);
 }
 
 .course-title {
@@ -509,12 +521,12 @@ h3 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(245, 241, 233, 0.9); /* Мрамор */
+    background: rgba(245, 241, 233, 0.9);
     backdrop-filter: blur(15px);
     padding: 40px;
     border-radius: 15px;
-    border: 1px solid var(--gold-accent);
-    box-shadow: var(--golden-glow);
+    border: 1px solid var(--thunder-purple);
+    box-shadow: var(--thunder-glow);
     z-index: 1000;
     color: var(--dark-stone);
     text-align: center;
@@ -552,26 +564,26 @@ h3 {
 }
 
 @keyframes oracleFade {
-    from { opacity: 0; transform: translate(-50%, -60%); }
-    to { opacity: 1; transform: translate(-50%, -50%); }
+    from { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
 .course-popup button {
     margin-top: 20px;
     padding: 12px 25px;
-    background: linear-gradient(45deg, var(--gold-accent), var(--olive-green));
+    background: linear-gradient(45deg, var(--thunder-purple), var(--gold-accent));
     border: none;
     color: var(--dark-stone);
     border-radius: 25px;
     cursor: pointer;
-    box-shadow: var(--golden-glow);
+    box-shadow: var(--thunder-glow);
     font-family: 'Cinzel', serif;
     font-weight: bold;
     transition: all 0.3s ease;
 }
 
 .course-popup button:hover {
-    box-shadow: 0 0 20px var(--gold-accent), 0 0 30px var(--olive-green);
+    box-shadow: 0 0 20px var(--thunder-purple), 0 0 30px var(--gold-accent);
     transform: scale(1.05);
 }
 
@@ -585,8 +597,8 @@ h3 {
     backdrop-filter: blur(15px);
     padding: 40px;
     border-radius: 15px;
-    border: 1px solid var(--gold-accent);
-    box-shadow: var(--golden-glow);
+    border: 1px solid var(--deep-blue);
+    box-shadow: var(--blue-aura);
     z-index: 1000;
     color: var(--dark-stone);
     text-align: center;
@@ -604,6 +616,7 @@ h3 {
     color: var(--gold-accent);
     font-family: 'Cinzel', serif;
     margin-bottom: 20px;
+    text-shadow: var(--golden-glow);
 }
 
 .contact-form {
@@ -656,7 +669,7 @@ h3 {
     top: -25px;
     left: 5px;
     font-size: 0.9rem;
-    color: var(--gold-accent);
+    color: var(--thunder-purple);
 }
 
 .contact-form input:focus, 
@@ -664,8 +677,8 @@ h3 {
 .auth-modal input:focus,
 .auth-modal select:focus,
 .schedule-modal select:focus {
-    border-color: var(--gold-accent);
-    box-shadow: var(--golden-glow);
+    border-color: var(--thunder-purple);
+    box-shadow: var(--thunder-glow);
     outline: none;
     background: rgba(245, 241, 233, 1);
 }
@@ -688,14 +701,14 @@ h3 {
 .schedule-modal button {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(45deg, var(--gold-accent), var(--olive-green));
+    background: linear-gradient(45deg, var(--gold-accent), var(--wine-red));
     border: none;
     color: var(--dark-stone);
     cursor: pointer;
     border-radius: 25px;
     transition: all 0.3s ease;
     box-shadow: var(--golden-glow);
-    animation: divinePulse 3s infinite ease-in-out;
+    animation: ambrosiaPulse 3s infinite ease-in-out;
     font-family: 'Cinzel', serif;
     font-weight: bold;
     font-size: 1.1rem;
@@ -721,18 +734,19 @@ h3 {
 .contact-form button:hover::before,
 .auth-modal button:hover::before,
 .schedule-modal button:hover::before {
-    animation: shineOracle 1.5s;
+    animation: thunderFlash 1.5s;
 }
 
-@keyframes shineOracle {
-    0% { left: -100%; }
-    100% { left: 100%; }
+@keyframes thunderFlash {
+    0% { left: -100%; opacity: 0; }
+    50% { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
 }
 
 .contact-form button:hover,
 .auth-modal button:hover,
 .schedule-modal button:hover {
-    box-shadow: 0 0 25px var(--gold-accent), 0 0 40px var(--olive-green);
+    box-shadow: 0 0 25px var(--gold-accent), 0 0 40px var(--thunder-purple);
     transform: translateY(-5px);
 }
 
@@ -765,7 +779,7 @@ footer {
 }
 
 .footer-logo span {
-    background: linear-gradient(45deg, var(--gold-accent), var(--olive-green), var(--deep-blue));
+    background: linear-gradient(45deg, var(--gold-accent), var(--thunder-purple), var(--wine-red));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -781,19 +795,19 @@ footer {
     height: 40px;
     border-radius: 50%;
     background: rgba(212, 160, 23, 0.1);
-    border: 1px solid var(--gold-accent);
+    border: 1px solid var(--thunder-purple);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--gold-accent);
+    color: var(--thunder-purple);
     transition: all 0.3s ease;
 }
 
 .social-link:hover {
-    background: var(--gold-accent);
-    color: var(--dark-stone);
+    background: var(--thunder-purple);
+    color: var(--marble-white);
     transform: scale(1.1) translateY(-5px);
-    box-shadow: var(--golden-glow);
+    box-shadow: var(--thunder-glow);
 }
 
 .copyright {
@@ -863,8 +877,8 @@ footer {
     border-radius: 50%;
     border: 5px solid transparent;
     border-top-color: var(--gold-accent);
-    border-bottom-color: var(--olive-green);
-    animation: spinChariot 1.5s linear infinite;
+    border-bottom-color: var(--thunder-purple);
+    animation: fatesWheel 1.5s linear infinite;
 }
 
 .loading-spinner::before {
@@ -876,9 +890,9 @@ footer {
     bottom: 5px;
     border-radius: 50%;
     border: 5px solid transparent;
-    border-left-color: var(--deep-blue);
-    border-right-color: var(--gold-accent);
-    animation: spinChariot 1s linear infinite reverse;
+    border-left-color: var(--wine-red);
+    border-right-color: var(--deep-blue);
+    animation: fatesWheel 1s linear infinite reverse;
 }
 
 .loading-text {
@@ -889,14 +903,14 @@ footer {
     animation: oraclePulse 1.5s infinite alternate ease-in-out;
 }
 
-@keyframes spinChariot {
+@keyframes fatesWheel {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
 @keyframes oraclePulse {
-    0% { opacity: 0.5; }
-    100% { opacity: 1; }
+    0% { opacity: 0.5; text-shadow: var(--golden-glow); }
+    100% { opacity: 1; text-shadow: var(--thunder-glow); }
 }
 
 .auth-modal {
@@ -909,8 +923,8 @@ footer {
     backdrop-filter: blur(15px);
     padding: 40px;
     border-radius: 15px;
-    border: 1px solid var(--gold-accent);
-    box-shadow: var(--golden-glow);
+    border: 1px solid var(--wine-red);
+    box-shadow: var(--wine-glow);
     z-index: 1000;
     color: var(--dark-stone);
     text-align: center;
@@ -949,14 +963,20 @@ footer {
 }
 
 @keyframes oracleFade {
-    from { opacity: 0; transform: translate(-50%, -60%); }
-    to { opacity: 1; transform: translate(-50%, -50%); }
+    from { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
 .success-icon {
     font-size: 3rem;
     color: var(--gold-accent);
     margin-bottom: 15px;
+    animation: victoryLaurel 2s infinite ease-in-out;
+}
+
+@keyframes victoryLaurel {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }
 
 .auth-tabs {
@@ -981,7 +1001,7 @@ footer {
 }
 
 .auth-tab:hover {
-    color: var(--gold-accent);
+    color: var(--thunder-purple);
 }
 
 .auth-content {
@@ -1015,15 +1035,15 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    border: 2px solid var(--gold-accent);
+    border: 2px solid var(--thunder-purple);
     animation: templeBorder 3s infinite linear;
     opacity: 0.5;
 }
 
 .bio-btn:hover {
     color: var(--dark-stone);
-    background: rgba(212, 160, 23, 0.3);
-    box-shadow: var(--golden-glow);
+    background: rgba(75, 46, 107, 0.3);
+    box-shadow: var(--thunder-glow);
     transform: translateY(-3px);
 }
 
