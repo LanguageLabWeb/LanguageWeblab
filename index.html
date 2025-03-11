@@ -6,7 +6,7 @@
     <title>Языковая лаборатория</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-     :root {
+   :root {
     --marble-white: #F5F1E9; /* Мраморный белый */
     --gold-accent: #D4A017; /* Золотой Зевса */
     --olive-green: #4A7043; /* Лавры Аполлона */
@@ -38,6 +38,20 @@ body {
     position: relative;
     cursor: none;
     transition: background 0.5s ease;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(90deg, rgba(245, 241, 233, 0.05) 0%, transparent 5%, rgba(245, 241, 233, 0.05) 10%, transparent 15%, rgba(245, 241, 233, 0.05) 20%, transparent 25%, transparent 75%, rgba(245, 241, 233, 0.05) 80%, transparent 85%, rgba(245, 241, 233, 0.05) 90%, transparent 95%, rgba(245, 241, 233, 0.05) 100%);
+    z-index: -3;
+    opacity: 0.6;
+    animation: columnsShift 25s infinite linear;
 }
 
 .bio-bg {
@@ -101,6 +115,11 @@ body {
     50% { opacity: 0.7; transform: scale(1.05); filter: blur(2px); }
 }
 
+@keyframes columnsShift {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 0; }
+}
+
 .cursor {
     position: fixed;
     width: 24px;
@@ -146,7 +165,7 @@ header {
     z-index: 1;
 }
 
-.title, h2 {
+.title {
     font-family: 'Cinzel Decorative', serif;
     font-size: 3.5rem;
     color: var(--gold-accent);
@@ -156,6 +175,18 @@ header {
     position: relative;
     animation: riseOlympus 2s ease-out forwards;
     margin-bottom: 1rem;
+}
+
+.title::before {
+    content: '⚡';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    color: var(--thunder-purple);
+    text-shadow: var(--thunder-glow);
+    animation: zeusStrike 4s infinite ease-in-out;
 }
 
 .title::after {
@@ -170,15 +201,27 @@ header {
     animation: zeusBolt 3s infinite ease-in-out;
 }
 
-@keyframes zeusBolt {
-    0%, 100% { width: 60%; opacity: 0.7; }
-    50% { width: 80%; opacity: 1; filter: brightness(1.5); }
-}
-
 h2 {
+    font-family: 'Cinzel Decorative', serif;
     font-size: 2.5rem;
+    color: var(--gold-accent);
+    text-shadow: var(--golden-glow), var(--thunder-glow);
+    text-transform: uppercase;
+    letter-spacing: 4px;
     position: relative;
     margin-bottom: 2rem;
+}
+
+h2::before {
+    content: '♆';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    color: var(--deep-blue);
+    text-shadow: var(--blue-aura);
+    animation: poseidonRipple 3s infinite ease-in-out;
 }
 
 h2::after {
@@ -202,6 +245,21 @@ h3 {
 @keyframes riseOlympus {
     0% { transform: scale(0.5) translateY(50px); opacity: 0; filter: blur(10px); }
     100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); }
+}
+
+@keyframes zeusStrike {
+    0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.2); }
+}
+
+@keyframes zeusBolt {
+    0%, 100% { width: 60%; opacity: 0.7; }
+    50% { width: 80%; opacity: 1; filter: brightness(1.5); }
+}
+
+@keyframes poseidonRipple {
+    0%, 100% { opacity: 0.7; transform: translateX(-50%) translateY(0); }
+    50% { opacity: 1; transform: translateX(-50%) translateY(-5px); }
 }
 
 .subtitle {
@@ -250,6 +308,17 @@ h3 {
     transition: opacity 0.3s ease;
 }
 
+.bio-btn::after {
+    content: '♫';
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    font-size: 1.2rem;
+    color: var(--gold-accent);
+    text-shadow: var(--golden-glow);
+    animation: apolloStrum 2s infinite ease-in-out;
+}
+
 .bio-btn:hover::before {
     opacity: 1;
 }
@@ -268,6 +337,11 @@ h3 {
 @keyframes ambrosiaPulse {
     0%, 100% { box-shadow: var(--golden-glow); }
     50% { box-shadow: 0 0 25px rgba(212, 160, 23, 1), var(--wine-glow); }
+}
+
+@keyframes apolloStrum {
+    0%, 100% { transform: rotate(0deg); opacity: 0.6; }
+    50% { transform: rotate(10deg); opacity: 1; }
 }
 
 .content {
@@ -293,28 +367,30 @@ h3 {
 }
 
 .bio-divider::before {
-    content: '';
+    content: '⚡';
     position: absolute;
-    top: -5px;
+    top: -15px;
     left: 25%;
-    width: 10px;
-    height: 10px;
-    background: var(--gold-accent);
-    border-radius: 50%;
-    box-shadow: var(--golden-glow);
+    width: auto;
+    height: auto;
+    background: none;
+    font-size: 1.5rem;
+    color: var(--thunder-purple);
+    text-shadow: var(--thunder-glow);
     animation: apolloChariot 4s infinite alternate ease-in-out;
 }
 
 .bio-divider::after {
-    content: '';
+    content: '♆';
     position: absolute;
-    top: -5px;
+    top: -15px;
     right: 25%;
-    width: 10px;
-    height: 10px;
-    background: var(--wine-red);
-    border-radius: 50%;
-    box-shadow: var(--wine-glow);
+    width: auto;
+    height: auto;
+    background: none;
+    font-size: 1.5rem;
+    color: var(--deep-blue);
+    text-shadow: var(--blue-aura);
     animation: apolloChariot 4s infinite alternate-reverse ease-in-out;
 }
 
