@@ -93,7 +93,7 @@ body {
 }
 
 /* Unique Feature: Family Crest Generator */
-.crest-container {
+.heraldry-container {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -108,62 +108,86 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.crest-container:hover {
+.heraldry-container:hover {
     transform: scale(1.05) translateY(-5px);
     box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color);
 }
 
-.crest-shield {
+.heraldry-lion {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 120px;
-    height: 150px;
+    width: 100px;
+    height: 120px;
     background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-    clip-path: polygon(50% 0%, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
-    animation: crestPulse 6s infinite ease-in-out;
+    clip-path: polygon(50% 0%, 70% 20%, 100% 40%, 90% 70%, 60% 100%, 40% 100%, 10% 70%, 0% 40%, 30% 20%);
+    animation: lionPulse 6s infinite ease-in-out;
 }
 
-.crest-shield::before {
-    content: '⚜'; /* Fleur-de-lis symbol */
+.heraldry-lion::before {
+    content: '♔'; /* Символ короны */
     position: absolute;
-    top: 20px;
+    top: -10px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: var(--secondary-color);
     text-shadow: var(--gold-glow);
-    animation: crestSymbol 4s infinite alternate ease-in-out;
+    animation: crownFloat 4s infinite ease-in-out;
 }
 
-.crest-shield::after {
+.heraldry-swords {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140px;
+    height: 140px;
+    opacity: 0.8;
+}
+
+.heraldry-swords::before {
     content: '';
     position: absolute;
-    bottom: 10px;
+    top: 0;
     left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    height: 2px;
+    width: 2px;
+    height: 100%;
     background: var(--secondary-color);
+    transform: rotate(45deg) translateX(-50%);
     box-shadow: var(--gold-glow);
-    animation: crestLine 5s infinite ease-in-out;
+    animation: swordSway 5s infinite ease-in-out;
 }
 
-.crest-flourish {
+.heraldry-swords::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 100%;
+    background: var(--secondary-color);
+    transform: rotate(-45deg) translateX(-50%);
+    box-shadow: var(--gold-glow);
+    animation: swordSway 5s infinite ease-in-out reverse;
+}
+
+.heraldry-vines {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: transparent;
-    border: 2px dashed var(--accent-color);
+    border: 2px solid var(--accent-color);
     border-radius: 10px;
     opacity: 0.5;
-    animation: flourishRotate 12s infinite linear;
+    animation: vineTwist 10s infinite linear;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 20%, 80% 40%, 100% 60%, 100% 100%, 0% 100%, 0% 60%, 20% 40%, 0% 20%);
 }
 
-.crest-motto {
+.heraldry-motto {
     position: absolute;
     bottom: 10px;
     left: 50%;
@@ -177,30 +201,45 @@ body {
     animation: mottoFade 8s infinite ease-in-out;
 }
 
-@keyframes crestPulse {
+@keyframes lionPulse {
     0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
     50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
 }
 
-@keyframes crestSymbol {
-    0% { transform: translateX(-50%) scale(1); }
-    100% { transform: translateX(-50%) scale(1.1); }
+@keyframes crownFloat {
+    0% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-5px); }
+    100% { transform: translateX(-50%) translateY(0); }
 }
 
-@keyframes crestLine {
-    0%, 100% { width: 80%; opacity: 0.7; }
-    50% { width: 90%; opacity: 1; }
+@keyframes swordSway {
+    0%, 100% { transform: rotate(45deg) translateX(-50%) scaleY(1); }
+    50% { transform: rotate(45deg) translateX(-50%) scaleY(1.1); }
 }
 
-@keyframes flourishRotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+@keyframes vineTwist {
+    0% { transform: rotate(0deg); opacity: 0.5; }
+    50% { transform: rotate(180deg); opacity: 0.7; }
+    100% { transform: rotate(360deg); opacity: 0.5; }
 }
 
 @keyframes mottoFade {
     0%, 100% { opacity: 0.6; }
     50% { opacity: 1; }
 }
+
+@media (max-width: 768px) {
+    .heraldry-container { width: 150px; height: 200px; }
+    .heraldry-lion { width: 80px; height: 100px; }
+    .heraldry-swords { width: 100px; height: 100px; }
+}
+
+@media (max-width: 480px) {
+    .heraldry-container { width: 120px; height: 160px; }
+    .heraldry-lion { width: 60px; height: 80px; }
+    .heraldry-swords { width: 80px; height: 80px; }
+}
+
 
 .cursor {
     position: fixed;
@@ -1269,10 +1308,11 @@ footer {
 
         <div class="bio-divider"></div>
         
-        <div class="crest-container">
-    <div class="crest-shield"></div>
-    <div class="crest-flourish"></div>
-    <div class="crest-motto">Virtus et Honor</div>
+      <div class="heraldry-container">
+    <div class="heraldry-swords"></div>
+    <div class="heraldry-lion"></div>
+    <div class="heraldry-vines"></div>
+    <div class="heraldry-motto">Fortis et Fidelis</div>
 </div>
 
         <section id="contact">
