@@ -7,15 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
      :root {
-    --primary-color: #4A2C2A; /* Aged claret, evoking old wine and nobility */
-    --secondary-color: #B8860B; /* Darkened gold, like tarnished heirlooms */
-    --accent-color: #355E3B; /* Forest green, reminiscent of estate gardens */
-    --dark-bg: #1C2526; /* Deep charcoal, like aged oak or soot-stained walls */
-    --darker-bg: #0F1419; /* Midnight ink, for depth and mystery */
-    --light-text: #E8D8C4; /* Parchment beige, suggesting old manuscripts */
-    --glow-shadow: 0 0 15px rgba(74, 44, 42, 0.6); /* Subtle claret glow */
-    --gold-glow: 0 0 15px rgba(184, 134, 11, 0.5); /* Warm, aged gold glow */
-    --green-glow: 0 0 15px rgba(53, 94, 59, 0.5); /* Forest green glow */
+    --primary-color: #4A2C2A; /* Aged claret */
+    --secondary-color: #B8860B; /* Darkened gold */
+    --accent-color: #355E3B; /* Forest green */
+    --dark-bg: #1C2526; /* Deep charcoal */
+    --darker-bg: #0F1419; /* Midnight ink */
+    --light-text: #E8D8C4; /* Parchment beige */
+    --glow-shadow: 0 0 15px rgba(74, 44, 42, 0.6);
+    --gold-glow: 0 0 15px rgba(184, 134, 11, 0.5);
+    --green-glow: 0 0 15px rgba(53, 94, 59, 0.5);
 }
 
 * {
@@ -26,7 +26,7 @@
 
 body {
     margin: 0;
-    font-family: 'Cinzel', serif; /* Regal, Roman-inspired typeface for antiquity */
+    font-family: 'Cinzel', serif;
     background: var(--dark-bg);
     color: var(--light-text);
     overflow-x: hidden;
@@ -42,7 +42,7 @@ body {
     width: 100%;
     height: 100%;
     background: radial-gradient(circle at 50% 50%, rgba(74, 44, 42, 0.2), transparent 50%),
-                url('https://www.transparenttextures.com/patterns/brocade.png') repeat; /* Brocade texture for aristocratic upholstery */
+                url('https://www.transparenttextures.com/patterns/brocade.png') repeat;
     z-index: -2;
     animation: pulseBG 10s infinite ease-in-out;
     transition: background 0.3s ease;
@@ -61,7 +61,7 @@ body {
         repeating-linear-gradient(120deg, rgba(53, 94, 59, 0.04) 0px, rgba(53, 94, 59, 0.04) 1px, transparent 1px, transparent 60px);
     z-index: -1;
     animation: shiftGrid 30s infinite linear;
-    opacity: 0.3; /* Subtle filigree-like pattern */
+    opacity: 0.3;
 }
 
 .particles-container {
@@ -76,7 +76,7 @@ body {
 
 .particle {
     position: absolute;
-    background: var(--secondary-color); /* Gold flecks, like candlelight reflections */
+    background: var(--secondary-color);
     border-radius: 50%;
     opacity: 0.3;
     pointer-events: none;
@@ -89,7 +89,117 @@ body {
 
 @keyframes pulseBG {
     0%, 100% { opacity: 0.85; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.03); } /* Gentle breathing of an old estate */
+    50% { opacity: 1; transform: scale(1.03); }
+}
+
+/* Unique Feature: Family Crest Generator */
+.crest-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 200px;
+    height: 250px;
+    background: rgba(15, 20, 25, 0.9);
+    border: 3px solid var(--secondary-color);
+    border-radius: 10px;
+    box-shadow: var(--gold-glow), inset 0 0 10px rgba(74, 44, 42, 0.3);
+    z-index: 10;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.crest-container:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color);
+}
+
+.crest-shield {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 150px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    clip-path: polygon(50% 0%, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
+    animation: crestPulse 6s infinite ease-in-out;
+}
+
+.crest-shield::before {
+    content: '⚜'; /* Fleur-de-lis symbol */
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    color: var(--secondary-color);
+    text-shadow: var(--gold-glow);
+    animation: crestSymbol 4s infinite alternate ease-in-out;
+}
+
+.crest-shield::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 2px;
+    background: var(--secondary-color);
+    box-shadow: var(--gold-glow);
+    animation: crestLine 5s infinite ease-in-out;
+}
+
+.crest-flourish {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 2px dashed var(--accent-color);
+    border-radius: 10px;
+    opacity: 0.5;
+    animation: flourishRotate 12s infinite linear;
+}
+
+.crest-motto {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: var(--light-text);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: var(--glow-shadow);
+    animation: mottoFade 8s infinite ease-in-out;
+}
+
+@keyframes crestPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+}
+
+@keyframes crestSymbol {
+    0% { transform: translateX(-50%) scale(1); }
+    100% { transform: translateX(-50%) scale(1.1); }
+}
+
+@keyframes crestLine {
+    0%, 100% { width: 80%; opacity: 0.7; }
+    50% { width: 90%; opacity: 1; }
+}
+
+@keyframes flourishRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes mottoFade {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }
 
 .cursor {
@@ -140,7 +250,7 @@ header {
 }
 
 .title, h2 {
-    font-family: 'Cinzel', serif; /* Stately, imperial typography */
+    font-family: 'Cinzel', serif;
     font-size: 3.5rem;
     color: var(--secondary-color);
     text-shadow: 0 0 15px rgba(184, 134, 11, 0.7), 0 0 25px rgba(74, 44, 42, 0.5);
@@ -206,7 +316,7 @@ h3 {
     text-shadow: 0 0 10px rgba(184, 134, 11, 0.5);
     animation: fadeIn 2s ease-out 0.5s forwards;
     opacity: 0;
-    font-family: 'Crimson Text', serif; /* Elegant, bookish feel */
+    font-family: 'Crimson Text', serif;
 }
 
 @keyframes fadeIn {
@@ -292,7 +402,7 @@ h3 {
 }
 
 .bio-divider::before {
-    content: '❖'; /* Ornate diamond symbol for heraldry */
+    content: '❖';
     position: absolute;
     top: -15px;
     left: 25%;
@@ -324,7 +434,7 @@ h3 {
 .hex-panel {
     max-width: 1200px;
     margin: 0 auto 60px;
-    background: rgba(15, 20, 25, 0.7); /* Darkened ink with transparency */
+    background: rgba(15, 20, 25, 0.7);
     backdrop-filter: blur(10px);
     border-radius: 15px;
     border: 2px solid var(--secondary-color);
@@ -449,7 +559,7 @@ h3 {
 }
 
 .course-card {
-    background: rgba(28, 37, 38, 0.6); /* Charcoal with a velvet feel */
+    background: rgba(28, 37, 38, 0.6);
     backdrop-filter: blur(10px);
     padding: 30px 20px;
     border-radius: 10px;
@@ -828,12 +938,16 @@ footer {
     .subtitle { font-size: 1.2rem; }
     .about-content { flex-direction: column; gap: 20px; }
     .hex-panel { padding: 20px; }
+    .crest-container { width: 150px; height: 200px; }
+    .crest-shield { width: 90px; height: 120px; }
 }
 
 @media (max-width: 480px) {
     .title { font-size: 2rem; }
     h2 { font-size: 1.5rem; }
     .bio-btn { padding: 12px 25px; font-size: 1rem; }
+    .crest-container { width: 120px; height: 160px; }
+    .crest-shield { width: 70px; height: 90px; }
 }
 
 .loading-screen {
@@ -1154,6 +1268,12 @@ footer {
         </section>
 
         <div class="bio-divider"></div>
+        
+        <div class="crest-container">
+    <div class="crest-shield"></div>
+    <div class="crest-flourish"></div>
+    <div class="crest-motto">Virtus et Honor</div>
+</div>
 
         <section id="contact">
             <h2>Связаться с Нами</h2>
