@@ -4,797 +4,865 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Моя История</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
     <style>
-    :root {
-    --primary-color: #00FFAA;
-    --secondary-color: #FFD700;
-    --accent-color: #41C7FF;
-    --dark-bg: #081C1A;
-    --darker-bg: #051514;
-    --light-text: #E0F7FA;
-    --glow-shadow: 0 0 20px rgba(0, 255, 170, 0.8), 0 0 40px rgba(0, 255, 170, 0.4);
-    --gold-glow: 0 0 20px rgba(255, 215, 0, 0.7);
-    --blue-glow: 0 0 20px rgba(65, 199, 255, 0.7);
-    --neon-pink: #FF0099;
-    --neon-purple: #9D00FF;
-    --electric-blue: #00A3FF;
-}
-
-body {
-    margin: 0;
-    font-family: 'Raleway', sans-serif;
-    background: var(--dark-bg);
-    color: var(--light-text);
-    overflow-x: hidden;
-    position: relative;
-    min-height: 100vh;
-    perspective: 1000px;
-}
-
-/* Enhanced background effects */
-.bio-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 30% 30%, rgba(0, 255, 170, 0.15), transparent 40%),
-        radial-gradient(circle at 70% 60%, rgba(65, 199, 255, 0.12), transparent 50%),
-        radial-gradient(circle at 50% 90%, rgba(255, 215, 0, 0.1), transparent 45%);
-    z-index: -1;
-    animation: pulseBG 20s infinite ease-in-out;
-}
-
-/* Improved stars in background */
-.bio-bg::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        radial-gradient(circle, white 1px, transparent 1px),
-        radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
-    background-size: 70px 70px, 150px 150px;
-    opacity: 0.4;
-    animation: twinkling 8s infinite linear;
-}
-
-@keyframes twinkling {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.6; }
-}
-
-/* Enhanced grid overlay with animated lines */
-.grid-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200%;
-    height: 200%;
-    background-image: 
-        linear-gradient(to right, rgba(0, 255, 170, 0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(0, 255, 170, 0.05) 1px, transparent 1px);
-    background-size: 50px 50px;
-    z-index: -1;
-    opacity: 0.4;
-    animation: gridMove 60s infinite linear;
-    transform-origin: center;
-    transform: translate(-25%, -25%) rotateX(60deg) scale(2);
-}
-
-/* Moving data streams in background */
-.data-streams {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.15;
-    pointer-events: none;
-}
-
-.data-stream {
-    position: absolute;
-    width: 1px;
-    height: 100px;
-    background: var(--primary-color);
-    box-shadow: 0 0 8px var(--primary-color);
-    animation: fallStream 5s linear infinite;
-}
-
-@keyframes fallStream {
-    0% { transform: translateY(-100px); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translateY(100vh); opacity: 0; }
-}
-
-/* Generate 20 data streams with different positions and delays */
-.data-stream:nth-child(1) { left: 5%; animation-duration: 4s; }
-.data-stream:nth-child(2) { left: 10%; animation-duration: 6s; animation-delay: 0.5s; }
-.data-stream:nth-child(3) { left: 15%; animation-duration: 5s; animation-delay: 1s; }
-.data-stream:nth-child(4) { left: 20%; animation-duration: 7s; animation-delay: 0.3s; }
-.data-stream:nth-child(5) { left: 25%; animation-duration: 4.5s; animation-delay: 0.7s; }
-.data-stream:nth-child(6) { left: 30%; animation-duration: 6.5s; animation-delay: 1.2s; }
-.data-stream:nth-child(7) { left: 35%; animation-duration: 5.5s; animation-delay: 0.2s; }
-.data-stream:nth-child(8) { left: 40%; animation-duration: 7.2s; animation-delay: 0.9s; }
-.data-stream:nth-child(9) { left: 45%; animation-duration: 4.8s; animation-delay: 1.5s; }
-.data-stream:nth-child(10) { left: 50%; animation-duration: 6.2s; animation-delay: 0.4s; }
-.data-stream:nth-child(11) { left: 55%; animation-duration: 5.1s; animation-delay: 1.1s; }
-.data-stream:nth-child(12) { left: 60%; animation-duration: 7.5s; animation-delay: 0.6s; }
-.data-stream:nth-child(13) { left: 65%; animation-duration: 4.3s; animation-delay: 1.3s; }
-.data-stream:nth-child(14) { left: 70%; animation-duration: 6.7s; animation-delay: 0.8s; }
-.data-stream:nth-child(15) { left: 75%; animation-duration: 5.3s; animation-delay: 0.1s; }
-.data-stream:nth-child(16) { left: 80%; animation-duration: 7.8s; animation-delay: 0.7s; }
-.data-stream:nth-child(17) { left: 85%; animation-duration: 4.6s; animation-delay: 1.4s; }
-.data-stream:nth-child(18) { left: 90%; animation-duration: 6.3s; animation-delay: 0.5s; }
-.data-stream:nth-child(19) { left: 95%; animation-duration: 5.7s; animation-delay: 1.2s; }
-.data-stream:nth-child(20) { left: 98%; animation-duration: 7.1s; animation-delay: 0.3s; }
-
-@keyframes gridMove {
-    0% { transform: translate(-25%, -25%) rotateX(60deg) scale(2); }
-    100% { transform: translate(-75%, -75%) rotateX(60deg) scale(2); }
-}
-
-@keyframes pulseBG {
-    0%, 100% { opacity: 0.6; transform: scale(1); }
-    50% { opacity: 0.9; transform: scale(1.08); }
-}
-
-#my-history {
-    padding: 140px 20px 120px;
-    position: relative;
-    min-height: 100vh;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 100px;
-    position: relative;
-    z-index: 2;
-    transform-style: preserve-3d;
-}
-
-/* Enhanced title with 3D effect and glitch animation */
-.title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 5.5rem;
-    font-weight: 800;
-    color: var(--primary-color);
-    text-shadow: var(--glow-shadow);
-    animation: growText 2.5s ease-out forwards, floatTitle 6s ease-in-out infinite;
-    position: relative;
-    letter-spacing: 4px;
-    transform: translateZ(30px);
-}
-
-.title::before, .title::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.title::before {
-    color: var(--accent-color);
-    filter: blur(15px);
-    opacity: 0.5;
-    animation: glitchTitle 5s infinite;
-}
-
-.title::after {
-    color: var(--secondary-color);
-    opacity: 0.3;
-    filter: blur(10px);
-    animation: glitchTitle2 4s infinite 0.5s;
-    transform: translateZ(-10px);
-}
-
-@keyframes floatTitle {
-    0%, 100% { transform: translateZ(30px) translateY(0); }
-    50% { transform: translateZ(30px) translateY(-15px); }
-}
-
-@keyframes glitchTitle {
-    0%, 91%, 94%, 100% { transform: translate(0, 0) skew(0deg); }
-    92% { transform: translate(-5px, 3px) skew(2deg); }
-    93% { transform: translate(5px, -3px) skew(-2deg); }
-}
-
-@keyframes glitchTitle2 {
-    0%, 89%, 93%, 100% { transform: translate(0, 0) skew(0deg); }
-    90% { transform: translate(6px, -2px) skew(-1deg); }
-    92% { transform: translate(-7px, 1px) skew(3deg); }
-}
-
-/* Enhanced title underline with gradient and animation */
-.title::after {
-    content: '';
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70%;
-    height: 4px;
-    background: linear-gradient(90deg, 
-        transparent, 
-        var(--primary-color), 
-        var(--secondary-color), 
-        var(--accent-color), 
-        var(--secondary-color), 
-        var(--primary-color), 
-        transparent);
-    animation: pulseWidth 4s infinite ease-in-out, colorShift 10s infinite alternate;
-    box-shadow: 0 0 15px rgba(0, 255, 170, 0.6);
-}
-
-@keyframes colorShift {
-    0% { background-position: 0% 50%; filter: hue-rotate(0deg); }
-    100% { background-position: 100% 50%; filter: hue-rotate(60deg); }
-}
-
-@keyframes pulseWidth {
-    0%, 100% { width: 70%; opacity: 0.8; }
-    50% { width: 90%; opacity: 1; }
-}
-
-.subtitle {
-    font-size: 2.2rem;
-    color: var(--secondary-color);
-    text-shadow: var(--gold-glow);
-    animation: fadeIn 2.5s ease-out 0.7s forwards, floatSubtitle 8s ease-in-out 3s infinite;
-    opacity: 0;
-    letter-spacing: 2px;
-    margin-top: 30px;
-    font-weight: 600;
-    position: relative;
-}
-
-@keyframes floatSubtitle {
-    0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
-    50% { transform: translateY(-10px) scale(1.05); filter: brightness(1.2); }
-}
-
-@keyframes growText {
-    0% { transform: scale(0.4); opacity: 0; filter: blur(15px); }
-    100% { transform: scale(1); opacity: 1; filter: blur(0); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(25px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Improved DNA timeline */
-.history-container {
-    position: relative;
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    height: 1200px;
-    perspective: 1000px;
-}
-
-.dna-timeline {
-    width: 300px;
-    height: 1200px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
-}
-
-.dna-strand-1, .dna-strand-2 {
-    stroke-dasharray: 2400;
-    stroke-dashoffset: 2400;
-    animation: drawDNA 6s ease-out forwards;
-    filter: drop-shadow(0 0 8px var(--primary-color));
-}
-
-.dna-strand-2 {
-    animation-delay: 0.3s;
-}
-
-@keyframes drawDNA {
-    to { stroke-dashoffset: 0; }
-}
-
-.dna-node {
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.6s ease-out;
-    cursor: pointer;
-    filter: drop-shadow(0 0 12px var(--primary-color));
-}
-
-.dna-node.active {
-    opacity: 1;
-    transform: scale(1);
-    box-shadow: var(--glow-shadow);
-    animation: pulseNode 3s infinite ease-in-out;
-}
-
-.dna-node:hover {
-    transform: scale(1.4);
-    filter: drop-shadow(0 0 20px var(--primary-color));
-}
-
-@keyframes pulseNode {
-    0%, 100% { transform: scale(1); filter: brightness(1); }
-    50% { transform: scale(1.15); filter: brightness(1.3); }
-}
-
-.energy-pulse {
-    stroke-dasharray: 50 1150;
-    stroke-dashoffset: 0;
-    animation: energyFlow 4s infinite linear;
-    filter: drop-shadow(0 0 5px var(--primary-color));
-}
-
-/* Enhanced DNA connectors with flowing effect */
-.dna-connectors {
-    opacity: 0.7;
-    stroke-dasharray: 10 15;
-    animation: flowConnectors 12s infinite linear;
-    filter: drop-shadow(0 0 2px var(--accent-color));
-}
-
-@keyframes flowConnectors {
-    to { stroke-dashoffset: -500; }
-}
-
-@keyframes energyFlow {
-    0% { stroke-dashoffset: 1200; opacity: 0.3; }
-    50% { opacity: 1; }
-    100% { stroke-dashoffset: 0; opacity: 0.3; }
-}
-
-.timeline-content {
-    position: relative;
-    width: 100%;
-    z-index: 2;
-}
-
-/* Enhanced timeline events with 3D effect and glass morphism */
-.timeline-event {
-    max-width: 600px;
-    background: rgba(10, 46, 43, 0.5);
-    backdrop-filter: blur(12px);
-    padding: 40px;
-    border-radius: 15px;
-    margin: 40px auto;
-    opacity: 0;
-    transform: translateY(100px) scale(0.8) rotateX(10deg);
-    transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative;
-    clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 255, 170, 0.3);
-    border: 1px solid rgba(0, 255, 170, 0.1);
-    background-clip: padding-box;
-    transform-style: preserve-3d;
-}
-
-/* Enhanced animated border with gradient and scanner effect */
-.timeline-event::before {
-    content: '';
-    position: absolute;
-    top: -2px; 
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, 
-        var(--primary-color), 
-        transparent, 
-        var(--accent-color), 
-        transparent, 
-        var(--secondary-color),
-        transparent,
-        var(--neon-pink),
-        transparent,
-        var(--electric-blue));
-    background-size: 400% 400%;
-    z-index: -1;
-    animation: gradientBorder 15s ease infinite;
-    border-radius: 15px;
-    clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
-    opacity: 0.8;
-}
-
-/* Scanner line effect on timeline events */
-.timeline-event::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 70%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(0, 255, 170, 0.1), 
-        rgba(65, 199, 255, 0.1), 
-        transparent);
-    z-index: 1;
-    animation: scannerEffect 5s infinite ease-in-out;
-    pointer-events: none;
-}
-
-@keyframes scannerEffect {
-    0% { left: -70%; opacity: 0; }
-    30% { opacity: 1; }
-    70% { opacity: 1; }
-    100% { left: 100%; opacity: 0; }
-}
-
-@keyframes gradientBorder {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.timeline-event.active {
-    opacity: 1;
-    transform: translateY(0) scale(1) rotateX(0deg);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 30px rgba(0, 255, 170, 0.6);
-    transition-delay: calc(var(--index) * 0.2s);
-}
-
-.timeline-event h3 {
-    font-family: 'Orbitron', sans-serif;
-    color: var(--secondary-color);
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-shadow: var(--gold-glow);
-    display: inline-block;
-    position: relative;
-    z-index: 2;
-    transform: translateZ(20px);
-}
-
-/* Enhanced underline effect for heading */
-.timeline-event h3::after {
-    content: '';
-    display: block;
-    width: 0;
-    height: 3px;
-    background: linear-gradient(90deg, 
-        var(--secondary-color), 
-        var(--accent-color), 
-        var(--secondary-color));
-    transition: width 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-    margin-top: 8px;
-    box-shadow: var(--gold-glow);
-}
-
-.timeline-event.active h3::after {
-    width: 100%;
-}
-
-.timeline-event p {
-    line-height: 1.9;
-    font-size: 1.15rem;
-    position: relative;
-    z-index: 2;
-    transform: translateZ(10px);
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-}
-
-.timeline-event p::first-letter {
-    font-size: 1.8em;
-    color: var(--accent-color);
-    text-shadow: var(--blue-glow);
-    padding-right: 2px;
-}
-
-/* Enhanced holographic details with interactive elements */
-.holo-detail {
-    display: none;
-    margin-top: 25px;
-    padding: 20px;
-    background: linear-gradient(135deg, 
-        rgba(0, 255, 170, 0.15), 
-        rgba(65, 199, 255, 0.15),
-        rgba(65, 199, 255, 0.05));
-    border-radius: 12px;
-    font-family: 'Orbitron', sans-serif;
-    color: var(--accent-color);
-    text-shadow: var(--blue-glow);
-    font-size: 0.95rem;
-    position: relative;
-    overflow: hidden;
-    transform: translateZ(5px);
-    border: 1px solid rgba(65, 199, 255, 0.3);
-    box-shadow: 0 0 15px rgba(65, 199, 255, 0.2) inset;
-}
-
-.holo-detail::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.1), 
-        rgba(255, 255, 255, 0.2), 
-        rgba(255, 255, 255, 0.1), 
-        transparent);
-    animation: hologramScan 3s linear infinite;
-    transform: skewX(-25deg);
-}
-
-@keyframes hologramScan {
-    0% { left: -150%; }
-    100% { left: 150%; }
-}
-
-.timeline-event:hover .holo-detail {
-    display: block;
-    animation: fadeHolo 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-@keyframes fadeHolo {
-    from { opacity: 0; transform: translateY(10px) translateZ(5px); }
-    to { opacity: 1; transform: translateY(0) translateZ(5px); }
-}
-
-/* Enhanced offset positioning of events */
-.timeline-event:nth-child(odd) {
-    margin-left: 0;
-    margin-right: auto;
-    transform: translateX(-120px) translateY(100px) scale(0.8) rotateY(-5deg);
-}
-
-.timeline-event:nth-child(even) {
-    margin-left: auto;
-    margin-right: 0;
-    transform: translateX(120px) translateY(100px) scale(0.8) rotateY(5deg);
-}
-
-.timeline-event:nth-child(odd).active {
-    transform: translateX(0) translateY(0) scale(1) rotateY(0);
-}
-
-.timeline-event:nth-child(even).active {
-    transform: translateX(0) translateY(0) scale(1) rotateY(0);
-}
-
-/* Enhanced year badge with holographic effect */
-.year-badge {
-    position: absolute;
-    top: -18px;
-    right: 25px;
-    background: linear-gradient(135deg, rgba(0, 255, 170, 0.3), rgba(65, 199, 255, 0.2));
-    padding: 7px 18px;
-    border-radius: 20px;
-    font-family: 'Orbitron', sans-serif;
-    color: var(--primary-color);
-    font-size: 1rem;
-    box-shadow: 0 0 15px rgba(0, 255, 170, 0.6), 0 0 30px rgba(0, 255, 170, 0.3) inset;
-    opacity: 0;
-    transform: translateY(-15px);
-    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.5s;
-    border: 1px solid rgba(0, 255, 170, 0.3);
-    backdrop-filter: blur(5px);
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px var(--primary-color);
-    z-index: 5;
-}
-
-.timeline-event.active .year-badge {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Enhanced event icons with pulsing effect */
-.event-icon {
-    position: absolute;
-    top: 25px;
-    left: -25px;
-    width: 50px;
-    height: 50px;
-    background: var(--darker-bg);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 20px rgba(0, 255, 170, 0.8), 0 0 10px rgba(0, 255, 170, 0.5) inset;
-    opacity: 0;
-    transition: all 0.8s ease 0.8s;
-    border: 2px solid var(--primary-color);
-    z-index: 10;
-}
-
-.timeline-event:nth-child(even) .event-icon {
-    left: auto;
-    right: -25px;
-}
-
-.timeline-event.active .event-icon {
-    opacity: 1;
-    animation: pulseIcon 3s infinite ease-in-out;
-}
-
-@keyframes pulseIcon {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 170, 0.8), 0 0 10px rgba(0, 255, 170, 0.5) inset; }
-    50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(0, 255, 170, 0.9), 0 0 15px rgba(0, 255, 170, 0.6) inset; }
-}
-
-.event-icon svg {
-    width: 25px;
-    height: 25px;
-    fill: var(--primary-color);
-    filter: drop-shadow(0 0 5px var(--primary-color));
-    animation: rotateSvg 10s linear infinite;
-}
-
-@keyframes rotateSvg {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* Enhanced bio button with holographic effects */
-.bio-btn {
-    display: inline-block;
-    padding: 15px 30px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    background: rgba(10, 46, 43, 0.7);
-    border: 2px solid transparent;
-    border-radius: 12px;
-    text-decoration: none;
-    text-transform: uppercase;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-    margin-top: 30px;
-    letter-spacing: 2px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    transform-style: preserve-3d;
-    transform: translateZ(10px);
-}
-
-.bio-btn::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg, 
-        var(--primary-color), 
-        var(--accent-color), 
-        var(--secondary-color), 
-        var(--neon-pink), 
-        var(--electric-blue));
-    background-size: 400% 400%;
-    z-index: -1;
-    animation: impulseBorder 3s infinite linear, gradientMove 8s infinite linear;
-    opacity: 0.7;
-    border-radius: 12px;
-}
-
-.bio-btn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 70%;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.2), 
-        transparent);
-    transition: 0.5s;
-    animation: scanBtn 3s infinite ease-in-out;
-    transform: skewX(-25deg);
-}
-
-@keyframes scanBtn {
-    0% { left: -100%; opacity: 0; }
-    40% { opacity: 0.8; }
-    60% { opacity: 0.8; }
-    100% { left: 150%; opacity: 0; }
-}
-
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.bio-btn:hover {
-    color: var(--light-text);
-    background: rgba(0, 255, 170, 0.3);
-    box-shadow: var(--glow-shadow), 0 8px 25px rgba(0, 0, 0, 0.3);
-    transform: translateY(-5px) translateZ(10px);
-    letter-spacing: 3px;
-}
-
-.bio-btn:hover::before {
-    animation-duration: 1.5s;
-    opacity: 1;
-}
-
-@keyframes impulseBorder {
-    0% { clip-path: inset(0 100% 0 0); }
-    25% { clip-path: inset(0 0 0 0); }
-    50% { clip-path: inset(100% 0 0 0); }
-    75% { clip-path: inset(0 0 0 100%); }
-    100% { clip-path: inset(0 100% 0 0); }
-}
-
-/* Enhanced return button with more interactive effects */
-.return-btn-container {
-    position: fixed;
-    top: 25px;
-    right: 25px;
-    z-index: 100;
-}
-
-.return-btn {
-    display: inline-block;
-    padding: 14px 28px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    background: rgba(10, 46, 43, 0.7);
-    border: 2px solid var(--primary-color);
-    border-radius: 10px;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-    position: relative;
+        :root {
+            --bronze: #8C5523; /* Бронза для паровых механизмов */
+            --emerald: #2E8B57; /* Изумруд для имперской роскоши */
+            --burgundy: #5C1726; /* Бордовый для величия */
+            --gold: #D4A017; /* Золото для Российской Империи */
+            --dark-steel: #2A2A2A; /* Темная сталь для индустриальности */
+            --parchment: #F2E8D5; /* Пергамент для текста */
+            --rust: #A0522D; /* Ржавчина для стімпанка */
+            --bronze-glow: 0 0 15px rgba(140, 85, 35, 0.7);
+            --emerald-glow: 0 0 15px rgba(46, 139, 87, 0.6);
+            --gold-glow: 0 0 15px rgba(212, 160, 23, 0.8);
+            --steam-gray: #4B4B4B; /* Серый пар для фона */
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto Mono', monospace;
+            background: var(--dark-steel);
+            color: var(--parchment);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            perspective: 1200px;
+        }
+
+        /* Steampunk background with gears and smoke */
+        .bio-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(140, 85, 35, 0.2), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(46, 139, 87, 0.15), transparent 50%),
+                radial-gradient(circle at 50% 90%, rgba(212, 160, 23, 0.1), transparent 45%),
+                url('https://www.transparenttextures.com/patterns/metal.png') repeat;
+            z-index: -1;
+            animation: pulseBG 25s infinite ease-in-out;
+        }
+
+        .bio-bg::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle, var(--gold) 2px, transparent 2px),
+                radial-gradient(circle, var(--bronze) 1px, transparent 1px),
+                radial-gradient(circle, var(--rust) 1px, transparent 1px);
+            background-size: 80px 80px, 120px 120px, 150px 150px;
+            opacity: 0.3;
+            animation: gearTwinkle 10s infinite linear;
+        }
+
+        @keyframes gearTwinkle {
+            0%, 100% { opacity: 0.3; transform: rotate(0deg); }
+            50% { opacity: 0.5; transform: rotate(15deg); }
+        }
+
+        /* Mechanical grid with rivets */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(to right, rgba(140, 85, 35, 0.1) 2px, transparent 2px),
+                linear-gradient(to bottom, rgba(140, 85, 35, 0.1) 2px, transparent 2px),
+                radial-gradient(circle, var(--rust) 2px, transparent 3px);
+            background-size: 60px 60px, 60px 60px, 100px 100px;
+            z-index: -1;
+            opacity: 0.5;
+            animation: gridShift 80s infinite linear;
+            transform-origin: center;
+            transform: translate(-25%, -25%) rotateX(45deg) scale(1.8);
+        }
+
+        @keyframes gridShift {
+            0% { transform: translate(-25%, -25%) rotateX(45deg) scale(1.8); }
+            100% { transform: translate(-75%, -75%) rotateX(45deg) scale(1.8); }
+        }
+
+        /* Steam pipes effect */
+        .data-streams {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        .data-stream {
+            position: absolute;
+            width: 3px;
+            height: 120px;
+            background: linear-gradient(to bottom, var(--steam-gray), transparent);
+            box-shadow: var(--emerald-glow);
+            animation: steamRise 6s linear infinite;
+            border-radius: 2px;
+        }
+
+        @keyframes steamRise {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+        }
+
+        /* Expanded steam pipes for more detail */
+        .data-stream:nth-child(1) { left: 5%; animation-duration: 5s; }
+        .data-stream:nth-child(2) { left: 8%; animation-duration: 7s; animation-delay: 0.5s; }
+        .data-stream:nth-child(3) { left: 12%; animation-duration: 6s; animation-delay: 1s; }
+        .data-stream:nth-child(4) { left: 16%; animation-duration: 8s; animation-delay: 0.3s; }
+        .data-stream:nth-child(5) { left: 20%; animation-duration: 5.5s; animation-delay: 0.7s; }
+        .data-stream:nth-child(6) { left: 25%; animation-duration: 7.5s; animation-delay: 1.2s; }
+        .data-stream:nth-child(7) { left: 30%; animation-duration: 6.5s; animation-delay: 0.2s; }
+        .data-stream:nth-child(8) { left: 35%; animation-duration: 8.2s; animation-delay: 0.9s; }
+        .data-stream:nth-child(9) { left: 40%; animation-duration: 5.8s; animation-delay: 1.5s; }
+        .data-stream:nth-child(10) { left: 45%; animation-duration: 7.2s; animation-delay: 0.4s; }
+        .data-stream:nth-child(11) { left: 50%; animation-duration: 6.1s; animation-delay: 1.1s; }
+        .data-stream:nth-child(12) { left: 55%; animation-duration: 8.5s; animation-delay: 0.6s; }
+        .data-stream:nth-child(13) { left: 60%; animation-duration: 5.3s; animation-delay: 1.3s; }
+        .data-stream:nth-child(14) { left: 65%; animation-duration: 7.7s; animation-delay: 0.8s; }
+        .data-stream:nth-child(15) { left: 70%; animation-duration: 6.3s; animation-delay: 0.1s; }
+        .data-stream:nth-child(16) { left: 75%; animation-duration: 8.8s; animation-delay: 0.7s; }
+        .data-stream:nth-child(17) { left: 80%; animation-duration: 5.6s; animation-delay: 1.4s; }
+        .data-stream:nth-child(18) { left: 85%; animation-duration: 7.3s; animation-delay: 0.5s; }
+        .data-stream:nth-child(19) { left: 90%; animation-duration: 6.7s; animation-delay: 1.2s; }
+        .data-stream:nth-child(20) { left: 95%; animation-duration: 8.1s; animation-delay: 0.3s; }
+        .data-stream:nth-child(21) { left: 3%; animation-duration: 6.9s; animation-delay: 0.9s; }
+        .data-stream:nth-child(22) { left: 15%; animation-duration: 7.4s; animation-delay: 1.6s; }
+        .data-stream:nth-child(23) { left: 88%; animation-duration: 5.4s; animation-delay: 0.4s; }
+        .data-stream:nth-child(24) { left: 92%; animation-duration: 8.3s; animation-delay: 1.1s; }
+        .data-stream:nth-child(25) { left: 98%; animation-duration: 6.6s; animation-delay: 0.2s; }
+
+        @keyframes pulseBG {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        #my-history {
+            padding: 150px 25px 130px;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 120px;
+            position: relative;
+            z-index: 2;
+            transform-style: preserve-3d;
+        }
+
+        /* Steampunk title with mechanical elegance */
+        .title {
+            font-family: 'Playfair Display', serif;
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-shadow: var(--gold-glow);
+            animation: growText 3s ease-out forwards, steamFloat 7s ease-in-out infinite;
+            position: relative;
+            letter-spacing: 5px;
+            transform: translateZ(40px);
+            text-transform: uppercase;
+        }
+
+        .title::before, .title::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .title::before {
+            color: var(--bronze);
+            filter: blur(10px);
+            opacity: 0.6;
+            animation: gearShift 6s infinite;
+        }
+
+        .title::after {
+            color: var(--burgundy);
+            opacity: 0.4;
+            filter: blur(15px);
+            animation: gearShift2 5s infinite 0.5s;
+            transform: translateZ(-15px);
+        }
+
+        @keyframes steamFloat {
+            0%, 100% { transform: translateZ(40px) translateY(0); }
+            50% { transform: translateZ(40px) translateY(-20px); }
+        }
+
+        @keyframes gearShift {
+            0%, 90%, 95%, 100% { transform: translate(0, 0) skew(0deg); }
+            92% { transform: translate(-6px, 4px) skew(3deg); }
+            93% { transform: translate(6px, -4px) skew(-3deg); }
+        }
+
+        @keyframes gearShift2 {
+            0%, 88%, 94%, 100% { transform: translate(0, 0) skew(0deg); }
+            90% { transform: translate(8px, -3px) skew(-2deg); }
+            92% { transform: translate(-8px, 2px) skew(4deg); }
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 5px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--bronze), 
+                var(--gold), 
+                var(--emerald), 
+                var(--gold), 
+                var(--bronze), 
+                transparent);
+            animation: pulseWidth 5s infinite ease-in-out, metalShine 12s infinite alternate;
+            box-shadow: var(--gold-glow);
+        }
+
+        @keyframes metalShine {
+            0% { background-position: 0% 50%; filter: brightness(1); }
+            100% { background-position: 100% 50%; filter: brightness(1.2); }
+        }
+
+        @keyframes pulseWidth {
+            0%, 100% { width: 80%; opacity: 0.7; }
+            50% { width: 95%; opacity: 1; }
+        }
+
+        .subtitle {
+            font-size: 2.5rem;
+            color: var(--emerald);
+            text-shadow: var(--emerald-glow);
+            animation: fadeIn 3s ease-out 0.8s forwards, steamSubtitle 9s ease-in-out 3s infinite;
+            opacity: 0;
+            letter-spacing: 3px;
+            margin-top: 35px;
+            font-weight: 400;
+            position: relative;
+        }
+
+        @keyframes steamSubtitle {
+            0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+            50% { transform: translateY(-15px) scale(1.05); filter: brightness(1.3); }
+        }
+
+        @keyframes growText {
+            0% { transform: scale(0.3); opacity: 0; filter: blur(20px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mechanical timeline with steam pipes */
+        .history-container {
+            position: relative;
+            max-width: 1500px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 1400px;
+            perspective: 1200px;
+        }
+
+        .dna-timeline {
+            width: 350px;
+            height: 1400px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .dna-strand-1, .dna-strand-2 {
+            stroke-dasharray: 2800;
+            stroke-dashoffset: 2800;
+            animation: drawPipe 7s ease-out forwards;
+            filter: drop-shadow(var(--bronze-glow));
+        }
+
+        .dna-strand-1 {
+            stroke: var(--bronze);
+            stroke-width: 4;
+            fill: none;
+        }
+
+        .dna-strand-2 {
+            stroke: var(--emerald);
+            stroke-width: 4;
+            fill: none;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes drawPipe {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .dna-node {
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.7s ease-out;
+            cursor: pointer;
+            filter: drop-shadow(var(--gold-glow));
+        }
+
+        .dna-node.active {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: var(--gold-glow);
+            animation: gearPulse 4s infinite ease-in-out;
+        }
+
+        .dna-node:hover {
+            transform: scale(1.5);
+            filter: drop-shadow(0 0 25px var(--gold));
+        }
+
+        @keyframes gearPulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.2); filter: brightness(1.4); }
+        }
+
+        .energy-pulse {
+            stroke-dasharray: 60 1350;
+            stroke-dashoffset: 0;
+            animation: steamFlow 5s infinite linear;
+            filter: drop-shadow(var(--emerald-glow));
+            stroke: rgba(212, 160, 23, 0.5);
+            stroke-width: 8;
+            fill: none;
+        }
+
+        .dna-connectors {
+            opacity: 0.8;
+            stroke-dasharray: 12 18;
+            animation: pipeFlow 15s infinite linear;
+            filter: drop-shadow(var(--bronze-glow));
+            stroke: var(--burgundy);
+            stroke-width: 2;
+        }
+
+        @keyframes pipeFlow {
+            to { stroke-dashoffset: -600; }
+        }
+
+        @keyframes steamFlow {
+            0% { stroke-dashoffset: 1400; opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 0.4; }
+        }
+
+        .timeline-content {
+            position: relative;
+            width: 100%;
+            z-index: 2;
+        }
+
+        /* Timeline events with brass and leather */
+        .timeline-event {
+            max-width: 650px;
+            background: rgba(42, 42, 42, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 45px;
+            border-radius: 20px;
+            margin: 50px auto;
+            opacity: 0;
+            transform: translateY(120px) scale(0.7) rotateX(15deg);
+            transition: all 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            clip-path: polygon(8% 0%, 92% 0%, 100% 8%, 100% 92%, 92% 100%, 8% 100%, 0% 92%, 0% 8%);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 35px rgba(212, 160, 23, 0.3);
+            border: 3px solid var(--bronze);
+            background-clip: padding-box;
+            transform-style: preserve-3d;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, 
+                var(--bronze), 
+                transparent, 
+                var(--emerald), 
+                transparent, 
+                var(--gold), 
+                transparent, 
+                var(--burgundy), 
+                transparent);
+            background-size: 500% 500%;
+            z-index: -1;
+            animation: brassGlow 18s ease infinite;
+            border-radius: 20px;
+            clip-path: polygon(8% 0%, 92% 0%, 100% 8%, 100% 92%, 92% 100%, 8% 100%, 0% 92%, 0% 8%);
+            opacity: 0.7;
+        }
+
+        .timeline-event::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(212, 160, 23, 0.15), 
+                rgba(46, 139, 87, 0.15), 
+                transparent);
+            z-index: 1;
+            animation: steamScan 6s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes steamScan {
+            0% { left: -80%; opacity: 0; }
+            30% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        @keyframes brassGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .timeline-event.active {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotateX(0deg);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(212, 160, 23, 0.6);
+            transition-delay: calc(var(--index) * 0.25s);
+        }
+
+        .timeline-event h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            text-shadow: var(--gold-glow);
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+            transform: translateZ(25px);
+            text-transform: uppercase;
+        }
+
+        .timeline-event h3::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--gold), 
+                var(--emerald), 
+                var(--gold));
+            transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+            margin-top: 10px;
+            box-shadow: var(--gold-glow);
+        }
+
+        .timeline-event.active h3::after {
+            width: 100%;
+        }
+
+        .timeline-event p {
+            line-height: 2;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 2;
+            transform: translateZ(15px);
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .timeline-event p::first-letter {
+            font-size: 2em;
+            color: var(--emerald);
+            text-shadow: var(--emerald-glow);
+            padding-right: 3px;
+        }
+
+        /* Mechanical detail panel */
+        .holo-detail {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, 
+                rgba(140, 85, 35, 0.2), 
+                rgba(46, 139, 87, 0.15), 
+                rgba(92, 23, 38, 0.1));
+            border-radius: 15px;
+            font-family: 'Roboto Mono', monospace;
+            color: var(--parchment);
+            text-shadow: var(--bronze-glow);
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(10px);
+            border: 2px solid var(--bronze);
+            box-shadow: 0 0 20px rgba(140, 85, 35, 0.3) inset;
+        }
+
+        .holo-detail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(242, 232, 213, 0.15), 
+                rgba(242, 232, 213, 0.25), 
+                transparent);
+            animation: gearScan 4s linear infinite;
+            transform: skewX(-20deg);
+        }
+
+        @keyframes gearScan {
+            0% { left: -150%; }
+            100% { left: 150%; }
+        }
+
+        .timeline-event:hover .holo-detail {
+            display: block;
+            animation: fadeGear 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        @keyframes fadeGear {
+            from { opacity: 0; transform: translateY(15px) translateZ(10px); }
+            to { opacity: 1; transform: translateY(0) translateZ(10px); }
+        }
+
+        .timeline-event:nth-child(odd) {
+            margin-left: 0;
+            margin-right: auto;
+            transform: translateX(-150px) translateY(120px) scale(0.7) rotateY(-8deg);
+        }
+
+        .timeline-event:nth-child(even) {
+            margin-left: auto;
+            margin-right: 0;
+            transform: translateX(150px) translateY(120px) scale(0.7) rotateY(8deg);
+        }
+
+        .timeline-event:nth-child(odd).active {
+            transform: translateX(0) translateY(0) scale(1) rotateY(0);
+        }
+
+        .timeline-event:nth-child(even).active {
+            transform: translateX(0) translateY(0) scale(1) rotateY(0);
+        }
+
+        /* Year badge with steampunk gauge */
+        .year-badge {
+            position: absolute;
+            top: -20px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--bronze), var(--burgundy));
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-family: 'Playfair Display', serif;
+            color: var(--parchment);
+            font-size: 1.1rem;
+            box-shadow: var(--bronze-glow), 0 0 12px rgba(140, 85, 35, 0.4) inset;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 1s cubic-bezier(0.19, 1, 0.22, 1) 0.6s;
+            border: 2px solid var(--gold);
+            backdrop-filter: blur(6px);
+            letter-spacing: 2px;
+            text-shadow: var(--gold-glow);
+            z-index: 5;
+        }
+
+        .timeline-event.active .year-badge {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Gear-like event icons */
+        .event-icon {
+            position: absolute;
+            top: 30px;
+            left: -30px;
+            width: 60px;
+            height: 60px;
+            background: var(--dark-steel);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: var(--bronze-glow), 0 0 12px rgba(140, 85, 35, 0.5) inset;
+            opacity: 0;
+            transition: all 1s ease 0.9s;
+            border: 3px solid var(--bronze);
+            z-index: 10;
+        }
+
+        .timeline-event:nth-child(even) .event-icon {
+            left: auto;
+            right: -30px;
+        }
+
+        .timeline-event.active .event-icon {
+            opacity: 1;
+            animation: gearSpin 4s infinite ease-in-out;
+        }
+
+        @keyframes gearSpin {
+            0%, 100% { transform: scale(1); box-shadow: var(--bronze-glow), 0 0 12px rgba(140, 85, 35, 0.5) inset; }
+            50% { transform: scale(1.15); box-shadow: 0 0 35px rgba(140, 85, 35, 0.9), 0 0 18px rgba(140, 85, 35, 0.6) inset; }
+        }
+
+        .event-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--gold);
+            filter: drop-shadow(var(--gold-glow));
+            animation: rotateGear 12s linear infinite;
+        }
+
+        @keyframes rotateGear {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Steampunk button with rivets */
+        .bio-btn {
+            display: inline-block;
+            padding: 18px 35px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gold);
+            background: rgba(42, 42, 42, 0.8);
+            border: 3px solid var(--bronze);
+            border-radius: 15px;
+            text-decoration: none;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            margin-top: 35px;
+            letter-spacing: 3px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            transform-style: preserve-3d;
+            transform: translateZ(15px);
+        }
+
+        .bio-btn::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, 
+                var(--bronze), 
+                var(--emerald), 
+                var(--gold), 
+                var(--burgundy));
+            background-size: 500% 500%;
+            z-index: -1;
+            animation: steamBorder 4s infinite linear, brassMove 10s infinite linear;
+            opacity: 0.6;
+            border-radius: 15px;
+        }
+
+        .bio-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(242, 232, 213, 0.25), 
+                transparent);
+            transition: 0.6s;
+            animation: steamBtn 4s infinite ease-in-out;
+            transform: skewX(-20deg);
+        }
+
+        @keyframes steamBtn {
+            0% { left: -100%; opacity: 0; }
+            40% { opacity: 0.9; }
+            60% { opacity: 0.9; }
+            100% { left: 150%; opacity: 0; }
+        }
+
+        @keyframes brassMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .bio-btn:hover {
+            color: var(--parchment);
+            background: rgba(212, 160, 23, 0.3);
+            box-shadow: var(--gold-glow), 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(-6px) translateZ(15px);
+            letter-spacing: 4px;
+        }
+
+        .bio-btn:hover::before {
+            animation-duration: 2s;
+            opacity: 1;
+        }
+
+        @keyframes steamBorder {
+            0% { clip-path: inset(0 100% 0 0); }
+            25% { clip-path: inset(0 0 0 0); }
+            50% { clip-path: inset(100% 0 0 0); }
+            75% { clip-path: inset(0 0 0 100%); }
+            100% { clip-path: inset(0 100% 0 0); }
+        }
+
+        /* Return button with mechanical flair */
+        .return-btn-container {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+
+        .return-btn {
+            display: inline-block;
+            padding: 16px 32px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold);
+            background: rgba(42, 42, 42, 0.8);
+            border: 3px solid var(--bronze);
+            border-radius: 12px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--bronze-glow);
+        }
+
+        .return-btn::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, 
+                var(--bronze), 
+                var(--emerald), 
+                var(--gold));
+            z-index: -1;
+            animation: steamBorder 4s infinite linear;
+            opacity: 0.6;
+            border-radius: 12px;
+        }
+
+        .return-btn:hover {
+            color: var(--parchment);
+            background: rgba(212, 160, 23, 0.3);
+            transform: translateY(-6px);
+            box-shadow: 0 0 25px var(--gold);
+        }
     </style>
 </head>
 <body>
     <section id="my-history">
         <div class="bio-bg"></div>
         <div class="grid-overlay"></div>
+        <div class="data-streams">
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+            <div class="data-stream"></div>
+        </div>
         <header>
             <h1 class="title" data-text="Моя История">Моя История</h1>
             <p class="subtitle">Эволюция через время и технологии</p>
         </header>
         <div class="history-container">
-            <svg class="dna-timeline" viewBox="0 0 300 1200">
-                <!-- Соединительные линии ДНК -->
+            <svg class="dna-timeline" viewBox="0 0 350 1400">
                 <g class="dna-connectors">
-                    <line x1="130" y1="70" x2="170" y2="130" stroke="var(--primary-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="170" x2="170" y2="230" stroke="var(--accent-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="270" x2="170" y2="330" stroke="var(--primary-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="370" x2="170" y2="430" stroke="var(--accent-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="470" x2="170" y2="530" stroke="var(--primary-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="570" x2="170" y2="630" stroke="var(--accent-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="670" x2="170" y2="730" stroke="var(--primary-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="770" x2="170" y2="830" stroke="var(--accent-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="870" x2="170" y2="930" stroke="var(--primary-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="970" x2="170" y2="1030" stroke="var(--accent-color)" stroke-width="1.5"/>
-                    <line x1="130" y1="1070" x2="170" y2="1130" stroke="var(--primary-color)" stroke-width="1.5"/>
+                    <line x1="155" y1="80" x2="195" y2="140" stroke="var(--burgundy)" stroke-width="2"/>
+                    <line x1="155" y1="180" x2="195" y2="240" stroke="var(--emerald)" stroke-width="2"/>
+                    <line x1="155" y1="280" x2="195" y2="340" stroke="var(--burgundy)" stroke-width="2"/>
+                    <line x1="155" y1="380" x2="195" y2="440" stroke="var(--emerald)" stroke-width="2"/>
+                    <line x1="155" y1="480" x2="195" y2="540" stroke="var(--burgundy)" stroke-width="2"/>
+                    <line x1="155" y1="580" x2="195" y2="640" stroke="var(--emerald)" stroke-width="2"/>
+                    <line x1="155" y1="680" x2="195" y2="740" stroke="var(--burgundy)" stroke-width="2"/>
+                    <line x1="155" y1="780" x2="195" y2="840" stroke="var(--emerald)" stroke-width="2"/>
+                    <line x1="155" y1="880" x2="195" y2="940" stroke="var(--burgundy)" stroke-width="2"/>
+                    <line x1="155" y1="980" x2="195" y2="1040" stroke="var(--emerald)" stroke-width="2"/>
+                    <line x1="155" y1="1080" x2="195" y2="1140" stroke="var(--burgundy)" stroke-width="2"/>
+                    <line x1="155" y1="1180" x2="195" y2="1240" stroke="var(--emerald)" stroke-width="2"/>
                 </g>
-                <path class="dna-strand-1" d="M150 0 Q200 100 150 200 Q100 300 150 400 Q200 500 150 600 Q100 700 150 800 Q200 900 150 1000 Q100 1100 150 1200" stroke="var(--primary-color)" stroke-width="3" fill="none"/>
-                <path class="dna-strand-2" d="M150 0 Q100 100 150 200 Q200 300 150 400 Q100 500 150 600 Q200 700 150 800 Q100 900 150 1000 Q200 1100 150 1200" stroke="var(--accent-color)" stroke-width="3" fill="none"/>
+                <path class="dna-strand-1" d="M175 0 Q225 120 175 240 Q125 360 175 480 Q225 600 175 720 Q125 840 175 960 Q225 1080 175 1200 Q125 1320 175 1400" stroke="var(--bronze)" stroke-width="4" fill="none"/>
+                <path class="dna-strand-2" d="M175 0 Q125 120 175 240 Q225 360 175 480 Q125 600 175 720 Q225 840 175 960 Q125 1080 175 1200 Q225 1320 175 1400" stroke="var(--emerald)" stroke-width="4" fill="none"/>
                 <g class="dna-nodes">
-                    <circle cx="150" cy="150" r="12" fill="var(--primary-color)" class="dna-node" data-index="0"/>
-                    <circle cx="150" cy="350" r="12" fill="var(--secondary-color)" class="dna-node" data-index="1"/>
-                    <circle cx="150" cy="550" r="12" fill="var(--accent-color)" class="dna-node" data-index="2"/>
-                    <circle cx="150" cy="750" r="12" fill="var(--primary-color)" class="dna-node" data-index="3"/>
-                    <circle cx="150" cy="950" r="12" fill="var(--secondary-color)" class="dna-node" data-index="4"/>
+                    <circle cx="175" cy="175" r="15" fill="var(--gold)" class="dna-node" data-index="0"/>
+                    <circle cx="175" cy="400" r="15" fill="var(--bronze)" class="dna-node" data-index="1"/>
+                    <circle cx="175" cy="625" r="15" fill="var(--emerald)" class="dna-node" data-index="2"/>
+                    <circle cx="175" cy="850" r="15" fill="var(--burgundy)" class="dna-node" data-index="3"/>
+                    <circle cx="175" cy="1075" r="15" fill="var(--gold)" class="dna-node" data-index="4"/>
                 </g>
-                <path class="energy-pulse" d="M150 0 L150 1200" stroke="rgba(0, 255, 170, 0.5)" stroke-width="6" fill="none"/>
+                <path class="energy-pulse" d="M175 0 L175 1400" stroke="rgba(212, 160, 23, 0.5)" stroke-width="8" fill="none"/>
             </svg>
             <div class="timeline-content">
-                <div class="timeline-event" data-position="150">
+                <div class="timeline-event" data-position="175">
                     <div class="year-badge">2023</div>
                     <div class="event-icon">
                         <svg viewBox="0 0 24 24">
@@ -802,12 +870,10 @@ header {
                         </svg>
                     </div>
                     <h3>Начало пути</h3>
-                    <p> Я увлекся целью поступления заграницу ещё во время обучения в старшей школе. 
-                        Одним из вариантов, который я сделал своим приоритетом на будущее, был Sungkyunkwan University. Данный университет занимает 102 позицию в мире,
-                        а также входит в Топ-20 высших заведений во всей Азии! Туда я, в итоге, и поступил. .</p>
+                    <p>Я увлекся целью поступления заграницу ещё во время обучения в старшей школе. Одним из вариантов, который я сделал своим приоритетом на будущее, был Sungkyunkwan University. Данный университет занимает 102 позицию в мире, а также входит в Топ-20 высших заведений во всей Азии! Туда я, в итоге, и поступил.</p>
                     <div class="holo-detail">Первый шаг к мечте • Идея: Персонализированное обучение</div>
                 </div>
-                <div class="timeline-event" data-position="350">
+                <div class="timeline-event" data-position="400">
                     <div class="year-badge">2024</div>
                     <div class="event-icon">
                         <svg viewBox="0 0 24 24">
@@ -815,10 +881,10 @@ header {
                         </svg>
                     </div>
                     <h3>Цели</h3>
-                    <p>После выпуска, я планирую работать по своей специальности, а именно - Программное обеспечение, однако также хочу продолжать себя в роли преподователя нескольких предметов.</p>
-                    <div class="holo-detail">Миссия: 1 ученик для начала. </div>
+                    <p>После выпуска, я планирую работать по своей специальности, а именно - Программное обеспечение, однако также хочу продолжать себя в роли преподавателя нескольких предметов.</p>
+                    <div class="holo-detail">Миссия: 1 ученик для начала.</div>
                 </div>
-                <div class="timeline-event" data-position="550">
+                <div class="timeline-event" data-position="625">
                     <div class="year-badge">2024</div>
                     <div class="event-icon">
                         <svg viewBox="0 0 24 24">
@@ -826,10 +892,10 @@ header {
                         </svg>
                     </div>
                     <h3>Возможности</h3>
-                    <p>Получил доступ к инструментам разработки и соездал сайт-проект для облегчения ведения обучения.</p>
+                    <p>Получил доступ к инструментам разработки и создал сайт-проект для облегчения ведения обучения.</p>
                     <div class="holo-detail">Технологии: Firebase(для хранения данных), Команда: 1 разработчик</div>
                 </div>
-                <div class="timeline-event" data-position="750">
+                <div class="timeline-event" data-position="850">
                     <div class="year-badge">2025</div>
                     <div class="event-icon">
                         <svg viewBox="0 0 24 24">
@@ -837,11 +903,10 @@ header {
                         </svg>
                     </div>
                     <h3>Достижения</h3>
-                    <p>Поступил в престижный университет, завершил школу с отличием, также поступил в Высшую школу экономики, куда сдавал экзамены по математике и английскому языку. Сдал IELTS, прямо сейчас активно готовлюсь
-                    и ежедневно практикую свои навыки программирования и разработки</p>
-                    <div class="holo-detail">Цель: поучавствовать на Хакатоне </div>
+                    <p>Поступил в престижный университет, завершил школу с отличием, также поступил в Высшую школу экономики, куда сдавал экзамены по математике и английскому языку. Сдал IELTS, прямо сейчас активно готовлюсь и ежедневно практикую свои навыки программирования и разработки.</p>
+                    <div class="holo-detail">Цель: участвовать на Хакатоне</div>
                 </div>
-                <div class="timeline-event" data-position="950">
+                <div class="timeline-event" data-position="1075">
                     <div class="year-badge">2025</div>
                     <div class="event-icon">
                         <svg viewBox="0 0 24 24">
@@ -850,98 +915,90 @@ header {
                     </div>
                     <h3>Будущее</h3>
                     <p>Планирую интегрировать удаленное полноценное изучение предметов, создавая полностью иммерсивную образовательную среду следующего поколения.</p>
-                    <div class="holo-detail">Глобальная цель: получения признания и доказательств способности ввести обучение предметам другим людям!</div>
+                    <div class="holo-detail">Глобальная цель: получение признания и доказательств способности вести обучение предметам другим людям!</div>
                 </div>
                 <div class="return-btn-container">
-            <a href="index.html" class="return-btn">На Главную</a>
-        </div>
+                    <a href="index.html" class="return-btn">На Главную</a>
+                </div>
             </div>
         </div>
     </section>
     <script>
-    // Функция для анимации при загрузке страницы
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            // Активируем первый элемент сразу
-            document.querySelectorAll('.dna-node')[0].classList.add('active');
-            document.querySelectorAll('.timeline-event')[0].classList.add('active');
-        }, 1000);
-    });
-
-    window.addEventListener('scroll', () => {
-        const scrollPosition = window.scrollY + window.innerHeight / 1.5;
-        const nodes = document.querySelectorAll('.dna-node');
-        const events = document.querySelectorAll('.timeline-event');
-
-        nodes.forEach((node, index) => {
-            const nodePosition = 150 + index * 200;
-            if (scrollPosition > nodePosition) {
-                node.classList.add('active');
-            }
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelectorAll('.dna-node')[0].classList.add('active');
+                document.querySelectorAll('.timeline-event')[0].classList.add('active');
+            }, 1200);
         });
 
-        events.forEach(event => {
-            const eventPosition = parseInt(event.getAttribute('data-position'));
-            if (scrollPosition > eventPosition) {
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY + window.innerHeight / 1.5;
+            const nodes = document.querySelectorAll('.dna-node');
+            const events = document.querySelectorAll('.timeline-event');
+
+            nodes.forEach((node, index) => {
+                const nodePosition = 175 + index * 225;
+                if (scrollPosition > nodePosition) {
+                    node.classList.add('active');
+                }
+            });
+
+            events.forEach(event => {
+                const eventPosition = parseInt(event.getAttribute('data-position'));
+                if (scrollPosition > eventPosition) {
+                    event.classList.add('active');
+                }
+            });
+        });
+
+        document.querySelectorAll('.dna-node').forEach(node => {
+            node.addEventListener('mouseover', () => {
+                const index = node.getAttribute('data-index');
+                const event = document.querySelectorAll('.timeline-event')[index];
+                event.style.transform = 'scale(1.05)';
+                event.style.boxShadow = '0 0 50px var(--gold)';
+            });
+
+            node.addEventListener('mouseout', () => {
+                const index = node.getAttribute('data-index');
+                const event = document.querySelectorAll('.timeline-event')[index];
+                if (event.classList.contains('active')) {
+                    event.style.transform = 'scale(1)';
+                    event.style.boxShadow = '0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(212, 160, 23, 0.6)';
+                } else {
+                    if (parseInt(index) % 2 === 0) {
+                        event.style.transform = 'translateX(-150px) translateY(120px) scale(0.7) rotateY(-8deg)';
+                    } else {
+                        event.style.transform = 'translateX(150px) translateY(120px) scale(0.7) rotateY(8deg)';
+                    }
+                    event.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.4), 0 0 35px rgba(212, 160, 23, 0.3)';
+                }
+            });
+
+            node.addEventListener('click', () => {
+                const index = node.getAttribute('data-index');
+                const event = document.querySelectorAll('.timeline-event')[index];
+                
+                document.querySelectorAll('.timeline-event').forEach(e => {
+                    e.classList.remove('active');
+                    if (parseInt(e.getAttribute('data-position')) % 450 === 175) {
+                        e.style.transform = 'translateX(-150px) translateY(120px) scale(0.7) rotateY(-8deg)';
+                    } else {
+                        e.style.transform = 'translateX(150px) translateY(120px) scale(0.7) rotateY(8deg)';
+                    }
+                });
+                
                 event.classList.add('active');
-            }
-        });
-    });
-
-    document.querySelectorAll('.dna-node').forEach(node => {
-        node.addEventListener('mouseover', () => {
-            const index = node.getAttribute('data-index');
-            const event = document.querySelectorAll('.timeline-event')[index];
-            event.style.transform = 'scale(1.05)';
-            event.style.boxShadow = '0 0 40px var(--primary-color)';
-        });
-
-        node.addEventListener('mouseout', () => {
-            const index = node.getAttribute('data-index');
-            const event = document.querySelectorAll('.timeline-event')[index];
-            // Проверяем, есть ли класс active, чтобы вернуть правильное состояние
-            if (event.classList.contains('active')) {
                 event.style.transform = 'scale(1)';
-                event.style.boxShadow = '0 0 30px rgba(0, 255, 170, 0.6)';
-            } else {
-                // Если не активен, возвращаем исходное состояние
-                if (parseInt(index) % 2 === 0) {
-                    event.style.transform = 'translateX(-100px) translateY(100px) scale(0.8)';
-                } else {
-                    event.style.transform = 'translateX(100px) translateY(100px) scale(0.8)';
-                }
-                event.style.boxShadow = '0 0 20px rgba(0, 255, 170, 0.3)';
-            }
-        });
-
-        // Добавляем клик для взаимодействия
-        node.addEventListener('click', () => {
-            const index = node.getAttribute('data-index');
-            const event = document.querySelectorAll('.timeline-event')[index];
-            
-            // Сначала деактивируем все события
-            document.querySelectorAll('.timeline-event').forEach(e => {
-                e.classList.remove('active');
-                if (parseInt(e.getAttribute('data-position')) % 400 === 150) {
-                    e.style.transform = 'translateX(-100px) translateY(100px) scale(0.8)';
-                } else {
-                    e.style.transform = 'translateX(100px) translateY(100px) scale(0.8)';
-                }
-            });
-            
-            // Активируем выбранное событие
-            event.classList.add('active');
-            event.style.transform = 'scale(1)';
-            event.style.boxShadow = '0 0 30px rgba(0, 255, 170, 0.6)';
-            
-            // Плавная прокрутка к событию
-            const offset = event.getAttribute('data-position') - window.innerHeight / 3;
-            window.scrollTo({
-                top: offset,
-                behavior: 'smooth'
+                event.style.boxShadow = '0 20px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(212, 160, 23, 0.6)';
+                
+                const offset = event.getAttribute('data-position') - window.innerHeight / 3;
+                window.scrollTo({
+                    top: offset,
+                    behavior: 'smooth'
+                });
             });
         });
-    });
     </script>
 </body>
 </html>
