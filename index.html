@@ -6,6 +6,7 @@
     <title>Языковая лаборатория</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* Оставляем CSS без изменений, так как проблема была в JS */
         :root {
             --primary-color: #4A2C2A; /* Aged claret */
             --secondary-color: #B8860B; /* Darkened gold */
@@ -92,7 +93,6 @@
             50% { opacity: 1; transform: scale(1.03); }
         }
 
-        /* Unique Feature: Family Crest Generator */
         .crest-container {
             position: absolute;
             top: 20px;
@@ -1378,6 +1378,7 @@
             alert("Не удалось инициализировать Firebase: " + e.message);
         }
 
+        // Список доступных временных слотов для каждого курса
         const courseSchedule = {
             'Курс английского': ['Понедельник, 16:00', 'Среда, 16:00', 'Пятница, 10:00', 'Пятница, 19:00', 'Суббота, 10:00', 'Суббота, 19:00', 'Воскресенье, 10:00', 'Воскресенье, 15:00'],
             'Курс русского': ['Понедельник, 17:00', 'Среда, 17:00', 'Пятница, 11:00', 'Пятница, 14:00', 'Пятница, 15:00', 'Суббота, 11:00', 'Суббота, 14:00', 'Суббота, 15:00'],
@@ -1388,11 +1389,13 @@
         const teacherChatId = '1042168412';
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Скрытие загрузочного экрана
             setTimeout(function() {
                 document.querySelector('.loading-screen').style.opacity = '0';
                 document.querySelector('.loading-screen').style.visibility = 'hidden';
             }, 2000);
 
+            // Кастомный курсор
             const cursor = document.querySelector('.cursor');
             document.addEventListener('mousemove', function(e) {
                 cursor.style.left = e.clientX + 'px';
@@ -1418,6 +1421,7 @@
                 });
             });
 
+            // Анимация частиц
             const particlesContainer = document.querySelector('.particles-container');
             function createParticle() {
                 const particle = document.createElement('div');
@@ -1450,12 +1454,14 @@
             
             setInterval(createParticle, 300);
 
+            // Интерактивный фон
             document.addEventListener('mousemove', function(e) {
                 const x = e.clientX / window.innerWidth;
                 const y = e.clientY / window.innerHeight;
                 document.querySelector('.bio-bg').style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(0, 255, 153, 0.15), transparent 50%)`;
             });
 
+            // Переход к авторизации
             document.getElementById('explore-btn').addEventListener('click', function() {
                 document.querySelector('header').style.opacity = '0';
                 document.querySelector('header').style.transform = 'translateY(-50px)';
@@ -1466,6 +1472,7 @@
                 }, 800);
             });
 
+            // Переключение вкладок авторизации
             document.querySelectorAll('.auth-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -1481,14 +1488,11 @@
                 currentUser = user;
             });
 
+            // Регистрация
             const registerForm = document.getElementById('register-form');
-            if (!registerForm) {
-                console.error("Форма регистрации (#register-form) не найдена!");
-            } else {
+            if (registerForm) {
                 registerForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
-                    console.log("Форма регистрации отправлена");
-
                     const name = document.getElementById('reg-name').value;
                     const email = document.getElementById('reg-email').value;
                     const password = document.getElementById('reg-password').value;
@@ -1530,14 +1534,11 @@
                 });
             }
 
+            // Вход ученика
             const loginForm = document.getElementById('login-form');
-            if (!loginForm) {
-                console.error("Форма входа (#login-form) не найдена!");
-            } else {
+            if (loginForm) {
                 loginForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
-                    console.log("Форма входа отправлена");
-
                     const email = document.getElementById('login-email').value;
                     const password = document.getElementById('login-password').value;
 
@@ -1564,14 +1565,11 @@
                 });
             }
 
+            // Вход учителя
             const teacherForm = document.getElementById('teacher-form');
-            if (!teacherForm) {
-                console.error("Форма входа учителя (#teacher-form) не найдена!");
-            } else {
+            if (teacherForm) {
                 teacherForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
-                    console.log("Форма входа учителя отправлена");
-
                     const email = document.getElementById('teacher-email').value;
                     const password = document.getElementById('teacher-password').value;
                     const teacherEmail = "languageweblab@gmail.com";
@@ -1603,6 +1601,7 @@
                 });
             }
 
+            // Данные курсов для попапа
             const courseData = {
                 russian: {
                     title: 'Русский язык',
@@ -1618,6 +1617,7 @@
                 }
             };
 
+            // Открытие попапа курса
             document.querySelectorAll('.course-card').forEach(card => {
                 card.addEventListener('click', function() {
                     const courseId = this.getAttribute('data-course');
@@ -1633,6 +1633,7 @@
                 document.getElementById('course-popup').classList.remove('active');
             });
 
+            // Переход к выбору расписания
             const coursePopup = document.getElementById('course-popup');
             const scheduleModal = document.getElementById('schedule-modal');
             const courseSelect = document.getElementById('course-select');
@@ -1654,7 +1655,7 @@
                 scheduleModal.classList.remove('active');
             });
 
-            // Функция для получения занятых временных слотов из Firestore
+            // Функция получения занятых временных слотов
             async function getTakenTimes(course) {
                 const q = query(collection(db, "enrollments"), where("course", "==", course));
                 const querySnapshot = await getDocs(q);
@@ -1675,32 +1676,33 @@
                 
                 if (courseSchedule[selectedCourse]) {
                     const takenTimes = await getTakenTimes(selectedCourse);
+                    console.log(`Занятые времена для ${selectedCourse}:`, takenTimes); // Отладка
                     const availableTimes = courseSchedule[selectedCourse].filter(time => !takenTimes.includes(time));
-
-                    availableTimes.forEach(time => {
-                        const option1 = document.createElement('option');
-                        option1.value = time;
-                        option1.textContent = time;
-                        timeSelect1.appendChild(option1);
-
-                        const option2 = document.createElement('option');
-                        option2.value = time;
-                        option2.textContent = time;
-                        timeSelect2.appendChild(option2);
-                    });
+                    console.log(`Доступные времена для ${selectedCourse}:`, availableTimes); // Отладка
 
                     if (availableTimes.length === 0) {
                         alert('На этот курс больше нет свободных временных слотов.');
                         timeSelect1.disabled = true;
                         timeSelect2.disabled = true;
                     } else {
+                        availableTimes.forEach(time => {
+                            const option1 = document.createElement('option');
+                            option1.value = time;
+                            option1.textContent = time;
+                            timeSelect1.appendChild(option1);
+
+                            const option2 = document.createElement('option');
+                            option2.value = time;
+                            option2.textContent = time;
+                            timeSelect2.appendChild(option2);
+                        });
                         timeSelect1.disabled = false;
                         timeSelect2.disabled = false;
                     }
                 }
             });
 
-            // Проверка, чтобы Занятие 1 и Занятие 2 не совпадали
+            // Предотвращение выбора одинакового времени
             timeSelect1.addEventListener('change', function() {
                 const selectedTime1 = this.value;
                 Array.from(timeSelect2.options).forEach(option => {
@@ -1723,6 +1725,7 @@
                 });
             });
 
+            // Подтверждение записи на курс
             document.getElementById('schedule-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
@@ -1785,6 +1788,7 @@
                 }
             });
 
+            // Отправка формы обратной связи
             document.getElementById('contact-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
