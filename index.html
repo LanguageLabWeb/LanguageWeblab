@@ -1100,6 +1100,86 @@
         .auth-content.active {
             display: block;
         }
+
+        .return-btn-container {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.return-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--light-text);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border: 2px solid var(--secondary-color);
+    border-radius: 25px;
+    text-decoration: none;
+    box-shadow: var(--gold-glow);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.return-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(transparent, rgba(232, 216, 196, 0.4), transparent 20%);
+    animation: rotateGradient 8s linear infinite;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.return-btn:hover::before {
+    opacity: 1;
+}
+
+.return-btn:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color);
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.return-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+/* Анимация дыхания для кнопки */
+@keyframes breatheBtn {
+    0%, 100% { box-shadow: var(--gold-glow); }
+    50% { box-shadow: 0 0 20px rgba(184, 134, 11, 0.9); }
+}
+
+.return-btn {
+    animation: breatheBtn 3s infinite ease-in-out;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .return-btn {
+        padding: 10px 25px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .return-btn {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -1180,6 +1260,11 @@
                 <button type="submit">ВОЙТИ</button>
             </form>
         </div>
+
+         <div class="return-btn-container">
+                    <a href="Presentation.html" class="return-btn">Информация о курсах</a>
+                </div>
+
         
         <div class="auth-content" id="teacher-content">
             <form id="teacher-form">
