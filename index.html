@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Языковая лаборатория</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4A2C2A; /* Aged claret */
-            --secondary-color: #B8860B; /* Darkened gold */
-            --accent-color: #355E3B; /* Forest green */
-            --dark-bg: #1C2526; /* Deep charcoal */
-            --darker-bg: #0F1419; /* Midnight ink */
-            --light-text: #E8D8C4; /* Parchment beige */
+            --primary-color: #4A2C2A;
+            --secondary-color: #B8860B;
+            --accent-color: #355E3B;
+            --dark-bg: #1C2526;
+            --darker-bg: #0F1419;
+            --light-text: #E8D8C4;
             --glow-shadow: 0 0 15px rgba(74, 44, 42, 0.6);
             --gold-glow: 0 0 15px rgba(184, 134, 11, 0.5);
             --green-glow: 0 0 15px rgba(53, 94, 59, 0.5);
@@ -125,7 +125,7 @@
         }
 
         .crest-shield::before {
-            content: '⚜'; /* Fleur-de-lis symbol */
+            content: '⚜';
             position: absolute;
             top: 20px;
             left: 50%;
@@ -1100,50 +1100,6 @@
         .auth-content.active {
             display: block;
         }
-
-        .bio-btn {
-            display: inline-block;
-            padding: 12px 25px;
-            font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            background: rgba(28, 37, 38, 0.7);
-            border: 2px solid transparent;
-            border-radius: 8px;
-            text-decoration: none;
-            text-transform: uppercase;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
-        }
-
-        .bio-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 2px solid var(--secondary-color);
-            animation: impulseBorder 3s infinite linear;
-            opacity: 0.5;
-        }
-
-        .bio-btn:hover {
-            color: var(--light-text);
-            background: rgba(184, 134, 11, 0.3);
-            box-shadow: var(--gold-glow);
-            transform: translateY(-3px);
-        }
-
-        @keyframes impulseBorder {
-            0% { clip-path: inset(0 100% 0 0); opacity: 0.5; }
-            25% { clip-path: inset(0 0 0 0); opacity: 1; }
-            50% { clip-path: inset(100% 0 0 0); opacity: 0.5; }
-            75% { clip-path: inset(0 0 0 100%); opacity: 1; }
-            100% { clip-path: inset(0 100% 0 0); opacity: 0.5; }
-        }
     </style>
 </head>
 <body>
@@ -1153,6 +1109,7 @@
     </div>
 
     <div class="cursor"></div>
+
     <div class="bio-bg"></div>
     <div class="hex-grid"></div>
     <div class="particles-container"></div>
@@ -1166,7 +1123,6 @@
     <div class="auth-modal" id="auth-modal">
         <div class="auth-tabs">
             <div class="auth-tab active" data-tab="register">Регистрация</div>
-            <div class="auth-tab" data-tab="telegram">Telegram</div>
             <div class="auth-tab" data-tab="login">Вход ученика</div>
             <div class="auth-tab" data-tab="teacher">Вход учителя</div>
         </div>
@@ -1174,39 +1130,40 @@
         <div class="auth-content active" id="register-content">
             <form id="register-form">
                 <div class="form-group">
-                    <input type="text" id="reg-name" name="reg-name" placeholder=" " required>
+                    <input type="text" id="reg-name" placeholder=" " required>
                     <label for="reg-name">Ваше имя</label>
                 </div>
                 <div class="form-group">
-                    <input type="email" id="reg-email" name="reg-email" placeholder=" " required>
+                    <select id="reg-type" required>
+                        <option value="email">Регистрация по email</option>
+                        <option value="telegram">Регистрация по Telegram</option>
+                    </select>
+                    <label for="reg-type">Тип регистрации</label>
+                </div>
+                <div class="form-group" id="email-field">
+                    <input type="email" id="reg-email" placeholder=" " required>
                     <label for="reg-email">Электронная почта</label>
                 </div>
+                <div class="form-group" id="telegram-field" style="display: none;">
+                    <input type="text" id="reg-telegram" placeholder=" " required>
+                    <label for="reg-telegram">Telegram Username (например, @username)</label>
+                </div>
                 <div class="form-group">
-                    <input type="password" id="reg-password" name="reg-password" placeholder=" " required>
+                    <input type="password" id="reg-password" placeholder=" " required>
                     <label for="reg-password">Пароль</label>
                 </div>
                 <button type="submit">ЗАРЕГИСТРИРОВАТЬСЯ</button>
             </form>
         </div>
         
-        <div class="auth-content" id="telegram-content">
-            <form id="telegram-form">
-                <div class="form-group">
-                    <input type="text" id="telegram-username" name="telegram-username" placeholder=" " required>
-                    <label for="telegram-username">@Username</label>
-                </div>
-                <button type="submit">ВОЙТИ ЧЕРЕЗ TELEGRAM</button>
-            </form>
-        </div>
-        
         <div class="auth-content" id="login-content">
             <form id="login-form">
                 <div class="form-group">
-                    <input type="email" id="login-email" name="login-email" placeholder=" " required>
+                    <input type="email" id="login-email" placeholder=" " required>
                     <label for="login-email">Электронная почта</label>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="login-password" name="login-password" placeholder=" " required>
+                    <input type="password" id="login-password" placeholder=" " required>
                     <label for="login-password">Пароль</label>
                 </div>
                 <button type="submit">ВОЙТИ</button>
@@ -1216,11 +1173,11 @@
         <div class="auth-content" id="teacher-content">
             <form id="teacher-form">
                 <div class="form-group">
-                    <input type="email" id="teacher-email" name="teacher-email" placeholder=" " required>
+                    <input type="email" id="teacher-email" placeholder=" " required>
                     <label for="teacher-email">Электронная почта учителя</label>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="teacher-password" name="teacher-password" placeholder=" " required>
+                    <input type="password" id="teacher-password" placeholder=" " required>
                     <label for="teacher-password">Пароль</label>
                 </div>
                 <button type="submit">ВОЙТИ КАК УЧИТЕЛЬ</button>
@@ -1238,14 +1195,14 @@
                     </div>
                     <div class="about-text">
                         <h3>Инновационный подход к обучению</h3>
-                        <p>Наша лаборатория использует передовые технологии и методики для эффективного освоения русского языка, английского языка и математики.</p>
+                        <p>Наша лаборатория использует передовые технологии и методики для эффективного освоения русского языка, английского языка и математики. Мы сочетаем традиционные методы с инновационными технологиями, создавая уникальную образовательную среду.</p>
+                        <p>Путешествуйте сквозь знания с помощью наших интерактивных программ, адаптивных систем обучения и опытных преподавателей, которые сделают ваш путь к успеху увлекательным и результативным.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <div class="bio-divider"></div>
-        <a href="achievement.html" class="bio-btn">Моя История</a>
 
         <section id="courses">
             <h2>Наши Курсы</h2>
@@ -1291,15 +1248,15 @@
                 </div>
                 <form class="contact-form" id="contact-form">
                     <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder=" ">
+                        <input type="text" id="name" placeholder=" ">
                         <label for="name">Ваше имя</label>
                     </div>
                     <div class="form-group">
-                        <input type="email" id="email" name="email" placeholder=" ">
+                        <input type="email" id="email" placeholder=" ">
                         <label for="email">Электронная почта</label>
                     </div>
                     <div class="form-group">
-                        <textarea id="message" name="message" rows="5" placeholder=" "></textarea>
+                        <textarea id="message" rows="5" placeholder=" "></textarea>
                         <label for="message">Ваше сообщение</label>
                     </div>
                     <button type="submit">ОТПРАВИТЬ</button>
@@ -1319,7 +1276,7 @@
         <h3>Выбор расписания</h3>
         <form id="schedule-form">
             <div class="form-group">
-                <select id="course-select" name="course-select" required>
+                <select id="course-select" required>
                     <option value="">Выберите курс</option>
                     <option value="Курс английского">Курс английского</option>
                     <option value="Курс русского">Курс русского</option>
@@ -1328,13 +1285,13 @@
                 <label for="course-select">Курс</label>
             </div>
             <div class="form-group">
-                <select id="time-select-1" name="time-select-1" required>
+                <select id="time-select-1" required>
                     <option value="">Выберите время</option>
                 </select>
                 <label for="time-select-1">Занятие 1</label>
             </div>
             <div class="form-group">
-                <select id="time-select-2" name="time-select-2">
+                <select id="time-select-2">
                     <option value="">Выберите время (опционально)</option>
                 </select>
                 <label for="time-select-2">Занятие 2</label>
@@ -1392,8 +1349,7 @@
             'Курс математики': ['Понедельник, 18:00', 'Среда, 18:00', 'Пятница, 17:00', 'Суббота, 17:00', 'Воскресенье, 11:00', 'Воскресенье, 14:00', 'Воскресенье, 17:00', 'Воскресенье, 19:00']
         };
 
-        // Токены Telegram для уведомлений учителя
-        const teacherTelegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
+        const telegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
         const teacherChatId = '1042168412';
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1406,17 +1362,25 @@
             document.addEventListener('mousemove', function(e) {
                 cursor.style.left = e.clientX + 'px';
                 cursor.style.top = e.clientY + 'px';
+                
                 const trail = document.createElement('div');
                 trail.className = 'cursor-trail';
                 trail.style.left = e.clientX + 'px';
                 trail.style.top = e.clientY + 'px';
                 document.body.appendChild(trail);
-                setTimeout(() => trail.remove(), 600);
+                
+                setTimeout(() => {
+                    trail.remove();
+                }, 600);
             });
 
             document.querySelectorAll('button, a, .course-card').forEach(item => {
-                item.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-                item.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+                item.addEventListener('mouseenter', function() {
+                    cursor.classList.add('hover');
+                });
+                item.addEventListener('mouseleave', function() {
+                    cursor.classList.remove('hover');
+                });
             });
 
             const particlesContainer = document.querySelector('.particles-container');
@@ -1428,10 +1392,13 @@
                 particle.style.height = size + 'px';
                 particle.style.left = Math.random() * window.innerWidth + 'px';
                 particle.style.top = Math.random() * window.innerHeight + 'px';
+                
                 particlesContainer.appendChild(particle);
+                
                 const animationDuration = Math.random() * 10 + 5;
                 const xMovement = Math.random() * 100 - 50;
                 const yMovement = Math.random() * 100 - 50;
+                
                 particle.animate([
                     { transform: 'translate(0, 0)', opacity: 0 },
                     { transform: `translate(${xMovement}px, ${yMovement}px)`, opacity: 0.8 },
@@ -1440,20 +1407,25 @@
                     duration: animationDuration * 1000,
                     easing: 'ease-in-out'
                 });
-                setTimeout(() => particle.remove(), animationDuration * 1000);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, animationDuration * 1000);
             }
+            
             setInterval(createParticle, 300);
 
             document.addEventListener('mousemove', function(e) {
                 const x = e.clientX / window.innerWidth;
                 const y = e.clientY / window.innerHeight;
-                document.querySelector('.bio-bg').style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(74, 44, 42, 0.2), transparent 50%), url('https://www.transparenttextures.com/patterns/brocade.png') repeat`;
+                document.querySelector('.bio-bg').style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(74, 44, 42, 0.15), transparent 50%), url('https://www.transparenttextures.com/patterns/brocade.png') repeat`;
             });
 
             document.getElementById('explore-btn').addEventListener('click', function() {
                 document.querySelector('header').style.opacity = '0';
                 document.querySelector('header').style.transform = 'translateY(-50px)';
-                setTimeout(() => {
+                
+                setTimeout(function() {
                     document.querySelector('header').style.display = 'none';
                     document.getElementById('auth-modal').classList.add('active');
                 }, 800);
@@ -1463,47 +1435,77 @@
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.auth-content').forEach(c => c.classList.remove('active'));
+                    
                     this.classList.add('active');
                     document.getElementById(this.getAttribute('data-tab') + '-content').classList.add('active');
                 });
             });
 
+            const regTypeSelect = document.getElementById('reg-type');
+            const emailField = document.getElementById('email-field');
+            const telegramField = document.getElementById('telegram-field');
+
+            regTypeSelect.addEventListener('change', function() {
+                if (this.value === 'email') {
+                    emailField.style.display = 'block';
+                    telegramField.style.display = 'none';
+                    document.getElementById('reg-email').setAttribute('required', '');
+                    document.getElementById('reg-telegram').removeAttribute('required');
+                } else if (this.value === 'telegram') {
+                    emailField.style.display = 'none';
+                    telegramField.style.display = 'block';
+                    document.getElementById('reg-email').removeAttribute('required');
+                    document.getElementById('reg-telegram').setAttribute('required', '');
+                }
+            });
+
             let currentUser = null;
             onAuthStateChanged(auth, (user) => {
                 currentUser = user;
-                console.log("Текущий пользователь:", currentUser ? currentUser.email : "Нет пользователя");
             });
 
-            // Регистрация по email
             const registerForm = document.getElementById('register-form');
             if (registerForm) {
                 registerForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
                     const name = document.getElementById('reg-name').value;
-                    const email = document.getElementById('reg-email').value;
+                    const regType = document.getElementById('reg-type').value;
+                    const email = regType === 'email' ? document.getElementById('reg-email').value : null;
+                    const telegram = regType === 'telegram' ? document.getElementById('reg-telegram').value : null;
                     const password = document.getElementById('reg-password').value;
 
-                    if (!name || !email || !password) {
-                        alert("Пожалуйста, заполните все поля.");
+                    if (!name || !password || (regType === 'email' && !email) || (regType === 'telegram' && !telegram)) {
+                        alert("Пожалуйста, заполните все необходимые поля.");
                         return;
                     }
 
                     try {
-                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                        let userCredential;
+                        if (regType === 'email') {
+                            userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                        } else {
+                            const tempEmail = `${telegram.replace('@', '')}@telegram.placeholder.com`;
+                            userCredential = await createUserWithEmailAndPassword(auth, tempEmail, password);
+                        }
                         const user = userCredential.user;
+
                         await updateProfile(user, { displayName: name });
+
                         await addDoc(collection(db, "users"), {
                             uid: user.uid,
                             name: name,
-                            email: email,
+                            email: regType === 'email' ? email : null,
+                            telegram: regType === 'telegram' ? telegram : null,
+                            regType: regType,
                             role: "student",
                             createdAt: new Date().toISOString()
                         });
 
                         document.getElementById('success-title').textContent = 'Регистрация успешна!';
-                        document.getElementById('success-message').textContent = 'Добро пожаловать, ученик!';
+                        document.getElementById('success-message').textContent = 'Добро пожаловать, ученик! Теперь вы можете записаться на курсы.';
                         document.getElementById('success-modal').classList.add('active');
-                        setTimeout(() => {
+                        
+                        setTimeout(function() {
                             document.getElementById('success-modal').classList.remove('active');
                             document.getElementById('auth-modal').classList.remove('active');
                             document.getElementById('main-content').classList.add('active');
@@ -1512,59 +1514,11 @@
                         console.error("Ошибка при регистрации: ", e);
                         alert("Ошибка регистрации: " + e.message);
                     }
+
                     this.reset();
                 });
             }
 
-            // Регистрация через Telegram (упрощённая)
-            const telegramForm = document.getElementById('telegram-form');
-            if (telegramForm) {
-                telegramForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    const username = document.getElementById('telegram-username').value.trim();
-
-                    console.log("Регистрация через Telegram. Username:", username);
-
-                    if (!username.startsWith('@')) {
-                        alert('Пожалуйста, введите корректный Telegram-username, начиная с @');
-                        console.log("Ошибка: некорректный username");
-                        return;
-                    }
-
-                    try {
-                        const email = `${username.replace('@', '')}@telegram.com`;
-                        const password = Math.random().toString(36).slice(-8); // Случайный пароль
-                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-
-                        await updateProfile(user, { displayName: username });
-                        await addDoc(collection(db, "users"), {
-                            uid: user.uid,
-                            name: username,
-                            email: email,
-                            telegramUsername: username,
-                            role: "student",
-                            createdAt: new Date().toISOString()
-                        });
-
-                        document.getElementById('success-title').textContent = 'Регистрация успешна!';
-                        document.getElementById('success-message').textContent = `Добро пожаловать, ${username}!`;
-                        document.getElementById('success-modal').classList.add('active');
-                        setTimeout(() => {
-                            document.getElementById('success-modal').classList.remove('active');
-                            document.getElementById('auth-modal').classList.remove('active');
-                            document.getElementById('main-content').classList.add('active');
-                        }, 2000);
-
-                        this.reset();
-                    } catch (e) {
-                        console.error("Ошибка при регистрации через Telegram: ", e);
-                        alert("Ошибка регистрации: " + e.message);
-                    }
-                });
-            }
-
-            // Вход ученика
             const loginForm = document.getElementById('login-form');
             if (loginForm) {
                 loginForm.addEventListener('submit', async function(e) {
@@ -1573,11 +1527,15 @@
                     const password = document.getElementById('login-password').value;
 
                     try {
-                        await signInWithEmailAndPassword(auth, email, password);
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
+                        console.log("Вход успешен:", user.uid);
+
                         document.getElementById('success-title').textContent = 'Вход выполнен!';
-                        document.getElementById('success-message').textContent = 'Добро пожаловать обратно!';
+                        document.getElementById('success-message').textContent = 'Добро пожаловать обратно! Вы успешно вошли в систему как ученик.';
                         document.getElementById('success-modal').classList.add('active');
-                        setTimeout(() => {
+                        
+                        setTimeout(function() {
                             document.getElementById('success-modal').classList.remove('active');
                             document.getElementById('auth-modal').classList.remove('active');
                             document.getElementById('main-content').classList.add('active');
@@ -1586,11 +1544,11 @@
                         console.error("Ошибка при входе: ", e);
                         alert("Ошибка входа: " + e.message);
                     }
+
                     this.reset();
                 });
             }
 
-            // Вход учителя
             const teacherForm = document.getElementById('teacher-form');
             if (teacherForm) {
                 teacherForm.addEventListener('submit', async function(e) {
@@ -1605,11 +1563,14 @@
                     }
 
                     try {
-                        await signInWithEmailAndPassword(auth, email, password);
+                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
+                        
                         document.getElementById('success-title').textContent = 'Вход выполнен!';
-                        document.getElementById('success-message').textContent = 'Добро пожаловать, учитель!';
+                        document.getElementById('success-message').textContent = 'Добро пожаловать, учитель! Вы получили доступ к управлению курсами.';
                         document.getElementById('success-modal').classList.add('active');
-                        setTimeout(() => {
+                        
+                        setTimeout(function() {
                             document.getElementById('success-modal').classList.remove('active');
                             document.getElementById('auth-modal').classList.remove('active');
                             document.getElementById('main-content').classList.add('active');
@@ -1618,27 +1579,38 @@
                         console.error("Ошибка при входе учителя: ", e);
                         alert("Ошибка входа: " + e.message);
                     }
+
                     this.reset();
                 });
             }
 
             const courseData = {
-                russian: { title: 'Русский язык', description: 'Курс русского языка.' },
-                english: { title: 'Английский язык', description: 'Курс английского языка.' },
-                math: { title: 'Математика', description: 'Курс математики.' }
+                russian: {
+                    title: 'Русский язык',
+                    description: 'Курс русского языка охватывает грамматику, орфографию и стилистику. Подходит как для начинающих, так и для тех, кто хочет улучшить свои навыки письма и общения.'
+                },
+                english: {
+                    title: 'Английский язык',
+                    description: 'Наши курсы английского языка разработаны для всех уровней владения языком. От базовой грамматики до свободного общения на профессиональные темы.'
+                },
+                math: {
+                    title: 'Математика',
+                    description: 'Курс математики включает алгебру, геометрию и основы анализа. Мы используем интерактивные методы для развития логического мышления.'
+                }
             };
 
             document.querySelectorAll('.course-card').forEach(card => {
                 card.addEventListener('click', function() {
                     const courseId = this.getAttribute('data-course');
                     const course = courseData[courseId];
+                    
                     document.getElementById('popup-title').textContent = course.title;
                     document.getElementById('popup-description').textContent = course.description;
                     document.getElementById('course-popup').classList.add('active');
                 });
             });
 
-            document.querySelector('#course-popup .popup-close').addEventListener('click', () => {
+            document.querySelector('#course-popup .popup-close').addEventListener('click', function() {
                 document.getElementById('course-popup').classList.remove('active');
             });
 
@@ -1659,7 +1631,7 @@
                 scheduleModal.classList.add('active');
             });
 
-            document.querySelector('#schedule-modal .popup-close').addEventListener('click', () => {
+            document.querySelector('#schedule-modal .popup-close').addEventListener('click', function() {
                 scheduleModal.classList.remove('active');
             });
 
@@ -1709,44 +1681,62 @@
             timeSelect1.addEventListener('change', function() {
                 const selectedTime1 = this.value;
                 Array.from(timeSelect2.options).forEach(option => {
-                    option.disabled = (option.value === selectedTime1 && option.value !== "");
+                    if (option.value === selectedTime1 && option.value !== "") {
+                        option.disabled = true;
+                    } else {
+                        option.disabled = false;
+                    }
                 });
             });
 
             timeSelect2.addEventListener('change', function() {
                 const selectedTime2 = this.value;
                 Array.from(timeSelect1.options).forEach(option => {
-                    option.disabled = (option.value === selectedTime2 && option.value !== "");
+                    if (option.value === selectedTime2 && option.value !== "") {
+                        option.disabled = true;
+                    } else {
+                        option.disabled = false;
+                    }
                 });
             });
 
             document.getElementById('schedule-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
+                
                 const course = courseSelect.value;
                 const time1 = timeSelect1.value;
                 const time2 = timeSelect2.value;
-
+                
                 if (!course || !time1) {
-                    alert('Пожалуйста, выберите курс и хотя бы одно время.');
+                    alert('Пожалуйста, выберите курс и хотя бы одно время для Занятия 1');
                     return;
                 }
 
                 if (time1 === time2 && time2 !== "") {
-                    alert('Пожалуйста, выберите разные времена.');
+                    alert('Пожалуйста, выберите разные времена для Занятия 1 и Занятия 2');
                     return;
                 }
 
                 try {
                     const takenTimes = await getTakenTimes(course);
                     if (takenTimes.includes(time1) || (time2 && takenTimes.includes(time2))) {
-                        alert('Выбранное время уже занято.');
+                        alert('Выбранное время уже занято другим пользователем. Пожалуйста, выберите другое время.');
                         return;
                     }
 
+                    const userQuery = query(collection(db, "users"), where("uid", "==", currentUser.uid));
+                    const userSnapshot = await getDocs(userQuery);
+                    let userData = null;
+                    userSnapshot.forEach(doc => {
+                        userData = doc.data();
+                    });
+
+                    const contact = userData.regType === 'telegram' ? userData.telegram : userData.email;
+
                     const enrollment = {
                         userId: currentUser.uid,
-                        userEmail: currentUser.email,
-                        userName: currentUser.displayName || currentUser.email.split('@')[0],
+                        userContact: contact,
+                        userName: currentUser.displayName || (userData.regType === 'telegram' ? contact.replace('@', '') : contact.split('@')[0]),
                         course: course,
                         time1: time1,
                         time2: time2 || null,
@@ -1756,32 +1746,34 @@
 
                     await addDoc(collection(db, "enrollments"), enrollment);
 
-                    const message = `Новая запись на курс:\nИмя: ${enrollment.userName}\nEmail: ${enrollment.userEmail}\nКурс: ${enrollment.course}\nЗанятие 1: ${enrollment.time1}${enrollment.time2 ? `\nЗанятие 2: ${enrollment.time2}` : ''}`;
-                    const url = `https://cors-anywhere.herokuapp.com/https://api.telegram.org/bot${teacherTelegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(message)}`;
+                    const message = `Новая запись на курс:\nИмя: ${enrollment.userName}\nКонтакт: ${enrollment.userContact}\nКурс: ${enrollment.course}\nЗанятие 1: ${enrollment.time1}${enrollment.time2 ? `\nЗанятие 2: ${enrollment.time2}` : ''}`;
+                    const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(message)}`;
 
-                    console.log("Отправка уведомления учителю:", url);
                     const response = await fetch(url);
-                    const data = await response.json();
-                    console.log("Ответ от Telegram для учителя:", data);
-
-                    if (!data.ok) {
-                        throw new Error(data.description || 'Ошибка отправки уведомления учителю');
+                    if (!response.ok) {
+                        throw new Error('Ошибка отправки в Telegram');
                     }
 
                     document.getElementById('success-title').textContent = 'Запись подтверждена!';
-                    document.getElementById('success-message').textContent = `Вы записаны на ${course}: Занятие 1 - ${time1}${time2 ? `, Занятие 2 - ${time2}` : ''}.`;
+                    document.getElementById('success-message').textContent = `Вы записаны на ${course}: Занятие 1 - ${time1}${time2 ? `, Занятие 2 - ${time2}` : ''}. Учитель уведомлён через Telegram.`;
                     document.getElementById('success-modal').classList.add('active');
+                    
                     scheduleModal.classList.remove('active');
-                    setTimeout(() => document.getElementById('success-modal').classList.remove('active'), 3000);
+                    
+                    setTimeout(() => {
+                        document.getElementById('success-modal').classList.remove('active');
+                    }, 3000);
+                    
                     this.reset();
                 } catch (e) {
-                    console.error("Ошибка при записи: ", e);
+                    console.error("Ошибка: ", e);
                     alert("Ошибка при записи: " + e.message);
                 }
             });
 
             document.getElementById('contact-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
+                
                 const name = document.getElementById('name').value;
                 const email = document.getElementById('email').value;
                 const message = document.getElementById('message').value;
@@ -1795,26 +1787,27 @@
 
                 try {
                     await addDoc(collection(db, "messages"), newMessage);
-                    const telegramMessage = `Новое сообщение:\nИмя: ${name}\nEmail: ${email}\nСообщение: ${message}`;
-                    const url = `https://cors-anywhere.herokuapp.com/https://api.telegram.org/bot${teacherTelegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(telegramMessage)}`;
 
-                    console.log("Отправка сообщения в Telegram:", url);
+                    const telegramMessage = `Новое сообщение из формы "Связаться с Нами":\nИмя: ${name}\nEmail: ${email}\nСообщение: ${message}`;
+                    const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(telegramMessage)}`;
+
                     const response = await fetch(url);
-                    const data = await response.json();
-                    console.log("Ответ от Telegram для контактов:", data);
-
-                    if (!data.ok) {
-                        throw new Error(data.description || 'Ошибка отправки в Telegram');
+                    if (!response.ok) {
+                        throw new Error('Ошибка отправки в Telegram');
                     }
 
                     document.getElementById('success-title').textContent = 'Сообщение отправлено!';
-                    document.getElementById('success-message').textContent = 'Спасибо за обращение.';
+                    document.getElementById('success-message').textContent = 'Спасибо за обращение. Мы свяжемся с вами в ближайшее время.';
                     document.getElementById('success-modal').classList.add('active');
+                    
+                    setTimeout(() => {
+                        document.getElementById('success-modal').classList.remove('active');
+                    }, 3000);
+                    
                     this.reset();
-                    setTimeout(() => document.getElementById('success-modal').classList.remove('active'), 3000);
                 } catch (e) {
-                    console.error("Ошибка при отправке сообщения: ", e);
-                    alert("Ошибка: " + e.message);
+                    console.error("Ошибка отправки сообщения: ", e);
+                    alert("Ошибка при отправке сообщения: " + e.message);
                 }
             });
         });
