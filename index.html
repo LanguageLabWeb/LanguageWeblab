@@ -1159,8 +1159,19 @@
         <div class="auth-content" id="login-content">
             <form id="login-form">
                 <div class="form-group">
+                    <select id="login-type" required>
+                        <option value="email">Вход по email</option>
+                        <option value="telegram">Вход по Telegram</option>
+                    </select>
+                    <label for="login-type">Тип входа</label>
+                </div>
+                <div class="form-group" id="login-email-field">
                     <input type="email" id="login-email" placeholder=" " required>
                     <label for="login-email">Электронная почта</label>
+                </div>
+                <div class="form-group" id="login-telegram-field" style="display: none;">
+                    <input type="text" id="login-telegram" placeholder=" " required>
+                    <label for="login-telegram">Telegram Username (например, @username)</label>
                 </div>
                 <div class="form-group">
                     <input type="password" id="login-password" placeholder=" " required>
@@ -1316,501 +1327,533 @@
         </div>
     </footer>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyA-qRTFlszcMafJv1eesYg-PUxsxYoo28U",
-            authDomain: "misha-and-anna-48e4c.firebaseapp.com",
-            databaseURL: "https://misha-and-anna-48e4c-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "misha-and-anna-48e4c",
-            storageBucket: "misha-and-anna-48e4c.firebasestorage.app",
-            messagingSenderId: "822036073579",
-            appId: "1:822036073579:web:cd59fd4f5362b5f0bb752e",
-            measurementId: "G-XR86X6PXMX"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyA-qRTFlszcMafJv1eesYg-PUxsxYoo28U",
+        authDomain: "misha-and-anna-48e4c.firebaseapp.com",
+        databaseURL: "https://misha-and-anna-48e4c-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "misha-and-anna-48e4c",
+        storageBucket: "misha-and-anna-48e4c.firebasestorage.app",
+        messagingSenderId: "822036073579",
+        appId: "1:822036073579:web:cd59fd4f5362b5f0bb752e",
+        measurementId: "G-XR86X6PXMX"
+    };
 
-        let app, db, auth;
-        try {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            console.log("Firebase успешно инициализирован:", app);
-        } catch (e) {
-            console.error("Ошибка инициализации Firebase:", e);
-            alert("Не удалось инициализировать Firebase: " + e.message);
-        }
+    let app, db, auth;
+    try {
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        console.log("Firebase успешно инициализирован:", app);
+    } catch (e) {
+        console.error("Ошибка инициализации Firebase:", e);
+        alert("Не удалось инициализировать Firebase: " + e.message);
+    }
 
-        const courseSchedule = {
-            'Курс английского': ['Понедельник, 16:00', 'Среда, 16:00', 'Пятница, 10:00', 'Пятница, 19:00', 'Суббота, 10:00', 'Суббота, 19:00', 'Воскресенье, 10:00', 'Воскресенье, 15:00'],
-            'Курс русского': ['Понедельник, 17:00', 'Среда, 17:00', 'Пятница, 11:00', 'Пятница, 14:00', 'Пятница, 15:00', 'Суббота, 11:00', 'Суббота, 14:00', 'Суббота, 15:00'],
-            'Курс математики': ['Понедельник, 18:00', 'Среда, 18:00', 'Пятница, 17:00', 'Суббота, 17:00', 'Воскресенье, 11:00', 'Воскресенье, 14:00', 'Воскресенье, 17:00', 'Воскресенье, 19:00']
-        };
+    const courseSchedule = {
+        'Курс английского': ['Понедельник, 16:00', 'Среда, 16:00', 'Пятница, 10:00', 'Пятница, 19:00', 'Суббота, 10:00', 'Суббота, 19:00', 'Воскресенье, 10:00', 'Воскресенье, 15:00'],
+        'Курс русского': ['Понедельник, 17:00', 'Среда, 17:00', 'Пятница, 11:00', 'Пятница, 14:00', 'Пятница, 15:00', 'Суббота, 11:00', 'Суббота, 14:00', 'Суббота, 15:00'],
+        'Курс математики': ['Понедельник, 18:00', 'Среда, 18:00', 'Пятница, 17:00', 'Суббота, 17:00', 'Воскресенье, 11:00', 'Воскресенье, 14:00', 'Воскресенье, 17:00', 'Воскресенье, 19:00']
+    };
 
-        const telegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
-        const teacherChatId = '1042168412';
+    const telegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
+    const teacherChatId = '1042168412';
 
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                document.querySelector('.loading-screen').style.opacity = '0';
-                document.querySelector('.loading-screen').style.visibility = 'hidden';
-            }, 2000);
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            document.querySelector('.loading-screen').style.opacity = '0';
+            document.querySelector('.loading-screen').style.visibility = 'hidden';
+        }, 2000);
 
-            const cursor = document.querySelector('.cursor');
-            document.addEventListener('mousemove', function(e) {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-                
-                const trail = document.createElement('div');
-                trail.className = 'cursor-trail';
-                trail.style.left = e.clientX + 'px';
-                trail.style.top = e.clientY + 'px';
-                document.body.appendChild(trail);
-                
-                setTimeout(() => {
-                    trail.remove();
-                }, 600);
-            });
-
-            document.querySelectorAll('button, a, .course-card').forEach(item => {
-                item.addEventListener('mouseenter', function() {
-                    cursor.classList.add('hover');
-                });
-                item.addEventListener('mouseleave', function() {
-                    cursor.classList.remove('hover');
-                });
-            });
-
-            const particlesContainer = document.querySelector('.particles-container');
-            function createParticle() {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                const size = Math.random() * 5 + 2;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.left = Math.random() * window.innerWidth + 'px';
-                particle.style.top = Math.random() * window.innerHeight + 'px';
-                
-                particlesContainer.appendChild(particle);
-                
-                const animationDuration = Math.random() * 10 + 5;
-                const xMovement = Math.random() * 100 - 50;
-                const yMovement = Math.random() * 100 - 50;
-                
-                particle.animate([
-                    { transform: 'translate(0, 0)', opacity: 0 },
-                    { transform: `translate(${xMovement}px, ${yMovement}px)`, opacity: 0.8 },
-                    { transform: `translate(${xMovement * 2}px, ${yMovement * 2}px)`, opacity: 0 }
-                ], {
-                    duration: animationDuration * 1000,
-                    easing: 'ease-in-out'
-                });
-                
-                setTimeout(() => {
-                    particle.remove();
-                }, animationDuration * 1000);
-            }
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
             
-            setInterval(createParticle, 300);
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            document.body.appendChild(trail);
+            
+            setTimeout(() => {
+                trail.remove();
+            }, 600);
+        });
 
-            document.addEventListener('mousemove', function(e) {
-                const x = e.clientX / window.innerWidth;
-                const y = e.clientY / window.innerHeight;
-                document.querySelector('.bio-bg').style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(74, 44, 42, 0.15), transparent 50%), url('https://www.transparenttextures.com/patterns/brocade.png') repeat`;
+        document.querySelectorAll('button, a, .course-card').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                cursor.classList.add('hover');
             });
+            item.addEventListener('mouseleave', function() {
+                cursor.classList.remove('hover');
+            });
+        });
 
-            document.getElementById('explore-btn').addEventListener('click', function() {
-                document.querySelector('header').style.opacity = '0';
-                document.querySelector('header').style.transform = 'translateY(-50px)';
+        const particlesContainer = document.querySelector('.particles-container');
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 5 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = Math.random() * window.innerHeight + 'px';
+            
+            particlesContainer.appendChild(particle);
+            
+            const animationDuration = Math.random() * 10 + 5;
+            const xMovement = Math.random() * 100 - 50;
+            const yMovement = Math.random() * 100 - 50;
+            
+            particle.animate([
+                { transform: 'translate(0, 0)', opacity: 0 },
+                { transform: `translate(${xMovement}px, ${yMovement}px)`, opacity: 0.8 },
+                { transform: `translate(${xMovement * 2}px, ${yMovement * 2}px)`, opacity: 0 }
+            ], {
+                duration: animationDuration * 1000,
+                easing: 'ease-in-out'
+            });
+            
+            setTimeout(() => {
+                particle.remove();
+            }, animationDuration * 1000);
+        }
+        
+        setInterval(createParticle, 300);
+
+        document.addEventListener('mousemove', function(e) {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            document.querySelector('.bio-bg').style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(74, 44, 42, 0.15), transparent 50%), url('https://www.transparenttextures.com/patterns/brocade.png') repeat`;
+        });
+
+        document.getElementById('explore-btn').addEventListener('click', function() {
+            document.querySelector('header').style.opacity = '0';
+            document.querySelector('header').style.transform = 'translateY(-50px)';
+            
+            setTimeout(function() {
+                document.querySelector('header').style.display = 'none';
+                document.getElementById('auth-modal').classList.add('active');
+            }, 800);
+        });
+
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.auth-content').forEach(c => c.classList.remove('active'));
                 
-                setTimeout(function() {
-                    document.querySelector('header').style.display = 'none';
-                    document.getElementById('auth-modal').classList.add('active');
-                }, 800);
+                this.classList.add('active');
+                document.getElementById(this.getAttribute('data-tab') + '-content').classList.add('active');
             });
+        });
 
-            document.querySelectorAll('.auth-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.auth-content').forEach(c => c.classList.remove('active'));
-                    
-                    this.classList.add('active');
-                    document.getElementById(this.getAttribute('data-tab') + '-content').classList.add('active');
-                });
-            });
+        const regTypeSelect = document.getElementById('reg-type');
+        const emailField = document.getElementById('email-field');
+        const telegramField = document.getElementById('telegram-field');
 
-            const regTypeSelect = document.getElementById('reg-type');
-            const emailField = document.getElementById('email-field');
-            const telegramField = document.getElementById('telegram-field');
-
-            regTypeSelect.addEventListener('change', function() {
-                if (this.value === 'email') {
-                    emailField.style.display = 'block';
-                    telegramField.style.display = 'none';
-                    document.getElementById('reg-email').setAttribute('required', '');
-                    document.getElementById('reg-telegram').removeAttribute('required');
-                } else if (this.value === 'telegram') {
-                    emailField.style.display = 'none';
-                    telegramField.style.display = 'block';
-                    document.getElementById('reg-email').removeAttribute('required');
-                    document.getElementById('reg-telegram').setAttribute('required', '');
-                }
-            });
-
-            let currentUser = null;
-            onAuthStateChanged(auth, (user) => {
-                currentUser = user;
-            });
-
-            const registerForm = document.getElementById('register-form');
-            if (registerForm) {
-                registerForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    const name = document.getElementById('reg-name').value;
-                    const regType = document.getElementById('reg-type').value;
-                    const email = regType === 'email' ? document.getElementById('reg-email').value : null;
-                    const telegram = regType === 'telegram' ? document.getElementById('reg-telegram').value : null;
-                    const password = document.getElementById('reg-password').value;
-
-                    if (!name || !password || (regType === 'email' && !email) || (regType === 'telegram' && !telegram)) {
-                        alert("Пожалуйста, заполните все необходимые поля.");
-                        return;
-                    }
-
-                    try {
-                        let userCredential;
-                        if (regType === 'email') {
-                            userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                        } else {
-                            const tempEmail = `${telegram.replace('@', '')}@telegram.placeholder.com`;
-                            userCredential = await createUserWithEmailAndPassword(auth, tempEmail, password);
-                        }
-                        const user = userCredential.user;
-
-                        await updateProfile(user, { displayName: name });
-
-                        await addDoc(collection(db, "users"), {
-                            uid: user.uid,
-                            name: name,
-                            email: regType === 'email' ? email : null,
-                            telegram: regType === 'telegram' ? telegram : null,
-                            regType: regType,
-                            role: "student",
-                            createdAt: new Date().toISOString()
-                        });
-
-                        document.getElementById('success-title').textContent = 'Регистрация успешна!';
-                        document.getElementById('success-message').textContent = 'Добро пожаловать, ученик! Теперь вы можете записаться на курсы.';
-                        document.getElementById('success-modal').classList.add('active');
-                        
-                        setTimeout(function() {
-                            document.getElementById('success-modal').classList.remove('active');
-                            document.getElementById('auth-modal').classList.remove('active');
-                            document.getElementById('main-content').classList.add('active');
-                        }, 2000);
-                    } catch (e) {
-                        console.error("Ошибка при регистрации: ", e);
-                        alert("Ошибка регистрации: " + e.message);
-                    }
-
-                    this.reset();
-                });
+        regTypeSelect.addEventListener('change', function() {
+            if (this.value === 'email') {
+                emailField.style.display = 'block';
+                telegramField.style.display = 'none';
+                document.getElementById('reg-email').setAttribute('required', '');
+                document.getElementById('reg-telegram').removeAttribute('required');
+            } else if (this.value === 'telegram') {
+                emailField.style.display = 'none';
+                telegramField.style.display = 'block';
+                document.getElementById('reg-email').removeAttribute('required');
+                document.getElementById('reg-telegram').setAttribute('required', '');
             }
+        });
 
-            const loginForm = document.getElementById('login-form');
-            if (loginForm) {
-                loginForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    const email = document.getElementById('login-email').value;
-                    const password = document.getElementById('login-password').value;
+        // Переключение полей входа в зависимости от типа
+        const loginTypeSelect = document.getElementById('login-type');
+        const loginEmailField = document.getElementById('login-email-field');
+        const loginTelegramField = document.getElementById('login-telegram-field');
 
-                    try {
-                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-                        console.log("Вход успешен:", user.uid);
-
-                        document.getElementById('success-title').textContent = 'Вход выполнен!';
-                        document.getElementById('success-message').textContent = 'Добро пожаловать обратно! Вы успешно вошли в систему как ученик.';
-                        document.getElementById('success-modal').classList.add('active');
-                        
-                        setTimeout(function() {
-                            document.getElementById('success-modal').classList.remove('active');
-                            document.getElementById('auth-modal').classList.remove('active');
-                            document.getElementById('main-content').classList.add('active');
-                        }, 2000);
-                    } catch (e) {
-                        console.error("Ошибка при входе: ", e);
-                        alert("Ошибка входа: " + e.message);
-                    }
-
-                    this.reset();
-                });
+        loginTypeSelect.addEventListener('change', function() {
+            if (this.value === 'email') {
+                loginEmailField.style.display = 'block';
+                loginTelegramField.style.display = 'none';
+                document.getElementById('login-email').setAttribute('required', '');
+                document.getElementById('login-telegram').removeAttribute('required');
+            } else if (this.value === 'telegram') {
+                loginEmailField.style.display = 'none';
+                loginTelegramField.style.display = 'block';
+                document.getElementById('login-email').removeAttribute('required');
+                document.getElementById('login-telegram').setAttribute('required', '');
             }
+        });
 
-            const teacherForm = document.getElementById('teacher-form');
-            if (teacherForm) {
-                teacherForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    const email = document.getElementById('teacher-email').value;
-                    const password = document.getElementById('teacher-password').value;
-                    const teacherEmail = "languageweblab@gmail.com";
+        let currentUser = null;
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+        });
 
-                    if (email !== teacherEmail) {
-                        alert("Неверный email учителя!");
-                        return;
-                    }
-
-                    try {
-                        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                        const user = userCredential.user;
-                        
-                        document.getElementById('success-title').textContent = 'Вход выполнен!';
-                        document.getElementById('success-message').textContent = 'Добро пожаловать, учитель! Вы получили доступ к управлению курсами.';
-                        document.getElementById('success-modal').classList.add('active');
-                        
-                        setTimeout(function() {
-                            document.getElementById('success-modal').classList.remove('active');
-                            document.getElementById('auth-modal').classList.remove('active');
-                            document.getElementById('main-content').classList.add('active');
-                        }, 2000);
-                    } catch (e) {
-                        console.error("Ошибка при входе учителя: ", e);
-                        alert("Ошибка входа: " + e.message);
-                    }
-
-                    this.reset();
-                });
-            }
-
-            const courseData = {
-                russian: {
-                    title: 'Русский язык',
-                    description: 'Курс русского языка охватывает грамматику, орфографию и стилистику. Подходит как для начинающих, так и для тех, кто хочет улучшить свои навыки письма и общения.'
-                },
-                english: {
-                    title: 'Английский язык',
-                    description: 'Наши курсы английского языка разработаны для всех уровней владения языком. От базовой грамматики до свободного общения на профессиональные темы.'
-                },
-                math: {
-                    title: 'Математика',
-                    description: 'Курс математики включает алгебру, геометрию и основы анализа. Мы используем интерактивные методы для развития логического мышления.'
-                }
-            };
-
-            document.querySelectorAll('.course-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const courseId = this.getAttribute('data-course');
-                    const course = courseData[courseId];
-                    
-                    document.getElementById('popup-title').textContent = course.title;
-                    document.getElementById('popup-description').textContent = course.description;
-                    document.getElementById('course-popup').classList.add('active');
-                });
-            });
-
-            document.querySelector('#course-popup .popup-close').addEventListener('click', function() {
-                document.getElementById('course-popup').classList.remove('active');
-            });
-
-            const coursePopup = document.getElementById('course-popup');
-            const scheduleModal = document.getElementById('schedule-modal');
-            const courseSelect = document.getElementById('course-select');
-            const timeSelect1 = document.getElementById('time-select-1');
-            const timeSelect2 = document.getElementById('time-select-2');
-
-            coursePopup.querySelector('button').addEventListener('click', function() {
-                if (!currentUser) {
-                    alert('Пожалуйста, войдите в систему для записи на курс');
-                    coursePopup.classList.remove('active');
-                    document.getElementById('auth-modal').classList.add('active');
-                    return;
-                }
-                coursePopup.classList.remove('active');
-                scheduleModal.classList.add('active');
-            });
-
-            document.querySelector('#schedule-modal .popup-close').addEventListener('click', function() {
-                scheduleModal.classList.remove('active');
-            });
-
-            async function getTakenTimes(course) {
-                const q = query(collection(db, "enrollments"), where("course", "==", course));
-                const querySnapshot = await getDocs(q);
-                const takenTimes = [];
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    if (data.time1) takenTimes.push(data.time1);
-                    if (data.time2) takenTimes.push(data.time2);
-                });
-                return takenTimes;
-            }
-
-            courseSelect.addEventListener('change', async function() {
-                const selectedCourse = this.value;
-                timeSelect1.innerHTML = '<option value="">Выберите время</option>';
-                timeSelect2.innerHTML = '<option value="">Выберите время (опционально)</option>';
-                
-                if (courseSchedule[selectedCourse]) {
-                    const takenTimes = await getTakenTimes(selectedCourse);
-                    const availableTimes = courseSchedule[selectedCourse].filter(time => !takenTimes.includes(time));
-
-                    if (availableTimes.length === 0) {
-                        alert('На этот курс больше нет свободных временных слотов.');
-                        timeSelect1.disabled = true;
-                        timeSelect2.disabled = true;
-                    } else {
-                        availableTimes.forEach(time => {
-                            const option1 = document.createElement('option');
-                            option1.value = time;
-                            option1.textContent = time;
-                            timeSelect1.appendChild(option1);
-
-                            const option2 = document.createElement('option');
-                            option2.value = time;
-                            option2.textContent = time;
-                            timeSelect2.appendChild(option2);
-                        });
-                        timeSelect1.disabled = false;
-                        timeSelect2.disabled = false;
-                    }
-                }
-            });
-
-            timeSelect1.addEventListener('change', function() {
-                const selectedTime1 = this.value;
-                Array.from(timeSelect2.options).forEach(option => {
-                    if (option.value === selectedTime1 && option.value !== "") {
-                        option.disabled = true;
-                    } else {
-                        option.disabled = false;
-                    }
-                });
-            });
-
-            timeSelect2.addEventListener('change', function() {
-                const selectedTime2 = this.value;
-                Array.from(timeSelect1.options).forEach(option => {
-                    if (option.value === selectedTime2 && option.value !== "") {
-                        option.disabled = true;
-                    } else {
-                        option.disabled = false;
-                    }
-                });
-            });
-
-            document.getElementById('schedule-form').addEventListener('submit', async function(e) {
+        const registerForm = document.getElementById('register-form');
+        if (registerForm) {
+            registerForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
-                const course = courseSelect.value;
-                const time1 = timeSelect1.value;
-                const time2 = timeSelect2.value;
-                
-                if (!course || !time1) {
-                    alert('Пожалуйста, выберите курс и хотя бы одно время для Занятия 1');
-                    return;
-                }
+                const name = document.getElementById('reg-name').value;
+                const regType = document.getElementById('reg-type').value;
+                const email = regType === 'email' ? document.getElementById('reg-email').value : null;
+                const telegram = regType === 'telegram' ? document.getElementById('reg-telegram').value : null;
+                const password = document.getElementById('reg-password').value;
 
-                if (time1 === time2 && time2 !== "") {
-                    alert('Пожалуйста, выберите разные времена для Занятия 1 и Занятия 2');
+                if (!name || !password || (regType === 'email' && !email) || (regType === 'telegram' && !telegram)) {
+                    alert("Пожалуйста, заполните все необходимые поля.");
                     return;
                 }
 
                 try {
-                    const takenTimes = await getTakenTimes(course);
-                    if (takenTimes.includes(time1) || (time2 && takenTimes.includes(time2))) {
-                        alert('Выбранное время уже занято другим пользователем. Пожалуйста, выберите другое время.');
-                        return;
+                    let userCredential;
+                    if (regType === 'email') {
+                        userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    } else {
+                        const tempEmail = `${telegram.replace('@', '')}@telegram.placeholder.com`;
+                        userCredential = await createUserWithEmailAndPassword(auth, tempEmail, password);
                     }
+                    const user = userCredential.user;
 
-                    const userQuery = query(collection(db, "users"), where("uid", "==", currentUser.uid));
-                    const userSnapshot = await getDocs(userQuery);
-                    let userData = null;
-                    userSnapshot.forEach(doc => {
-                        userData = doc.data();
+                    await updateProfile(user, { displayName: name });
+
+                    await addDoc(collection(db, "users"), {
+                        uid: user.uid,
+                        name: name,
+                        email: regType === 'email' ? email : null,
+                        telegram: regType === 'telegram' ? telegram : null,
+                        regType: regType,
+                        role: "student",
+                        createdAt: new Date().toISOString()
                     });
 
-                    const contact = userData.regType === 'telegram' ? userData.telegram : userData.email;
-
-                    const enrollment = {
-                        userId: currentUser.uid,
-                        userContact: contact,
-                        userName: currentUser.displayName || (userData.regType === 'telegram' ? contact.replace('@', '') : contact.split('@')[0]),
-                        course: course,
-                        time1: time1,
-                        time2: time2 || null,
-                        enrolledAt: new Date().toISOString(),
-                        status: 'pending'
-                    };
-
-                    await addDoc(collection(db, "enrollments"), enrollment);
-
-                    const message = `Новая запись на курс:\nИмя: ${enrollment.userName}\nКонтакт: ${enrollment.userContact}\nКурс: ${enrollment.course}\nЗанятие 1: ${enrollment.time1}${enrollment.time2 ? `\nЗанятие 2: ${enrollment.time2}` : ''}`;
-                    const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(message)}`;
-
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error('Ошибка отправки в Telegram');
-                    }
-
-                    document.getElementById('success-title').textContent = 'Запись подтверждена!';
-                    document.getElementById('success-message').textContent = `Вы записаны на ${course}: Занятие 1 - ${time1}${time2 ? `, Занятие 2 - ${time2}` : ''}. Учитель уведомлён через Telegram.`;
+                    document.getElementById('success-title').textContent = 'Регистрация успешна!';
+                    document.getElementById('success-message').textContent = 'Добро пожаловать, ученик! Теперь вы можете записаться на курсы.';
                     document.getElementById('success-modal').classList.add('active');
                     
-                    scheduleModal.classList.remove('active');
-                    
-                    setTimeout(() => {
+                    setTimeout(function() {
                         document.getElementById('success-modal').classList.remove('active');
-                    }, 3000);
-                    
-                    this.reset();
+                        document.getElementById('auth-modal').classList.remove('active');
+                        document.getElementById('main-content').classList.add('active');
+                    }, 2000);
                 } catch (e) {
-                    console.error("Ошибка: ", e);
-                    alert("Ошибка при записи: " + e.message);
+                    console.error("Ошибка при регистрации: ", e);
+                    alert("Ошибка регистрации: " + e.message);
                 }
+
+                this.reset();
             });
+        }
 
-            document.getElementById('contact-form').addEventListener('submit', async function(e) {
+        const loginForm = document.getElementById('login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
-                const message = document.getElementById('message').value;
+                const loginType = document.getElementById('login-type').value;
+                const email = loginType === 'email' ? document.getElementById('login-email').value : null;
+                const telegram = loginType === 'telegram' ? document.getElementById('login-telegram').value : null;
+                const password = document.getElementById('login-password').value;
 
-                const newMessage = {
-                    name: name,
-                    email: email,
-                    message: message,
-                    createdAt: new Date().toISOString()
-                };
+                if ((loginType === 'email' && !email) || (loginType === 'telegram' && !telegram) || !password) {
+                    alert("Пожалуйста, заполните все необходимые поля.");
+                    return;
+                }
 
                 try {
-                    await addDoc(collection(db, "messages"), newMessage);
-
-                    const telegramMessage = `Новое сообщение из формы "Связаться с Нами":\nИмя: ${name}\nEmail: ${email}\nСообщение: ${message}`;
-                    const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(telegramMessage)}`;
-
-                    const response = await fetch(url);
-                    if (!response.ok) {
-                        throw new Error('Ошибка отправки в Telegram');
+                    let loginEmail = email;
+                    if (loginType === 'telegram') {
+                        loginEmail = `${telegram.replace('@', '')}@telegram.placeholder.com`;
                     }
 
-                    document.getElementById('success-title').textContent = 'Сообщение отправлено!';
-                    document.getElementById('success-message').textContent = 'Спасибо за обращение. Мы свяжемся с вами в ближайшее время.';
+                    const userCredential = await signInWithEmailAndPassword(auth, loginEmail, password);
+                    const user = userCredential.user;
+                    console.log("Вход успешен:", user.uid);
+
+                    document.getElementById('success-title').textContent = 'Вход выполнен!';
+                    document.getElementById('success-message').textContent = 'Добро пожаловать обратно! Вы успешно вошли в систему как ученик.';
                     document.getElementById('success-modal').classList.add('active');
                     
-                    setTimeout(() => {
+                    setTimeout(function() {
                         document.getElementById('success-modal').classList.remove('active');
-                    }, 3000);
-                    
-                    this.reset();
+                        document.getElementById('auth-modal').classList.remove('active');
+                        document.getElementById('main-content').classList.add('active');
+                    }, 2000);
                 } catch (e) {
-                    console.error("Ошибка отправки сообщения: ", e);
-                    alert("Ошибка при отправке сообщения: " + e.message);
+                    console.error("Ошибка при входе: ", e);
+                    alert("Ошибка входа: " + e.message);
+                }
+
+                this.reset();
+            });
+        }
+
+        const teacherForm = document.getElementById('teacher-form');
+        if (teacherForm) {
+            teacherForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const email = document.getElementById('teacher-email').value;
+                const password = document.getElementById('teacher-password').value;
+                const teacherEmail = "languageweblab@gmail.com";
+
+                if (email !== teacherEmail) {
+                    alert("Неверный email учителя!");
+                    return;
+                }
+
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    
+                    document.getElementById('success-title').textContent = 'Вход выполнен!';
+                    document.getElementById('success-message').textContent = 'Добро пожаловать, учитель! Вы получили доступ к управлению курсами.';
+                    document.getElementById('success-modal').classList.add('active');
+                    
+                    setTimeout(function() {
+                        document.getElementById('success-modal').classList.remove('active');
+                        document.getElementById('auth-modal').classList.remove('active');
+                        document.getElementById('main-content').classList.add('active');
+                    }, 2000);
+                } catch (e) {
+                    console.error("Ошибка при входе учителя: ", e);
+                    alert("Ошибка входа: " + e.message);
+                }
+
+                this.reset();
+            });
+        }
+
+        const courseData = {
+            russian: {
+                title: 'Русский язык',
+                description: 'Курс русского языка охватывает грамматику, орфографию и стилистику. Подходит как для начинающих, так и для тех, кто хочет улучшить свои навыки письма и общения.'
+            },
+            english: {
+                title: 'Английский язык',
+                description: 'Наши курсы английского языка разработаны для всех уровней владения языком. От базовой грамматики до свободного общения на профессиональные темы.'
+            },
+            math: {
+                title: 'Математика',
+                description: 'Курс математики включает алгебру, геометрию и основы анализа. Мы используем интерактивные методы для развития логического мышления.'
+            }
+        };
+
+        document.querySelectorAll('.course-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const courseId = this.getAttribute('data-course');
+                const course = courseData[courseId];
+                
+                document.getElementById('popup-title').textContent = course.title;
+                document.getElementById('popup-description').textContent = course.description;
+                document.getElementById('course-popup').classList.add('active');
+            });
+        });
+
+        document.querySelector('#course-popup .popup-close').addEventListener('click', function() {
+            document.getElementById('course-popup').classList.remove('active');
+        });
+
+        const coursePopup = document.getElementById('course-popup');
+        const scheduleModal = document.getElementById('schedule-modal');
+        const courseSelect = document.getElementById('course-select');
+        const timeSelect1 = document.getElementById('time-select-1');
+        const timeSelect2 = document.getElementById('time-select-2');
+
+        coursePopup.querySelector('button').addEventListener('click', function() {
+            if (!currentUser) {
+                alert('Пожалуйста, войдите в систему для записи на курс');
+                coursePopup.classList.remove('active');
+                document.getElementById('auth-modal').classList.add('active');
+                return;
+            }
+            coursePopup.classList.remove('active');
+            scheduleModal.classList.add('active');
+        });
+
+        document.querySelector('#schedule-modal .popup-close').addEventListener('click', function() {
+            scheduleModal.classList.remove('active');
+        });
+
+        async function getTakenTimes(course) {
+            const q = query(collection(db, "enrollments"), where("course", "==", course));
+            const querySnapshot = await getDocs(q);
+            const takenTimes = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.time1) takenTimes.push(data.time1);
+                if (data.time2) takenTimes.push(data.time2);
+            });
+            console.log(`Занятые времена для ${course}:`, takenTimes);
+            return takenTimes;
+        }
+
+        courseSelect.addEventListener('change', async function() {
+            const selectedCourse = this.value;
+            timeSelect1.innerHTML = '<option value="">Выберите время</option>';
+            timeSelect2.innerHTML = '<option value="">Выберите время (опционально)</option>';
+            
+            if (courseSchedule[selectedCourse]) {
+                const takenTimes = await getTakenTimes(selectedCourse);
+                const availableTimes = courseSchedule[selectedCourse].filter(time => !takenTimes.includes(time));
+
+                if (availableTimes.length === 0) {
+                    alert('На этот курс больше нет свободных временных слотов.');
+                    timeSelect1.disabled = true;
+                    timeSelect2.disabled = true;
+                } else {
+                    availableTimes.forEach(time => {
+                        const option1 = document.createElement('option');
+                        option1.value = time;
+                        option1.textContent = time;
+                        timeSelect1.appendChild(option1);
+
+                        const option2 = document.createElement('option');
+                        option2.value = time;
+                        option2.textContent = time;
+                        timeSelect2.appendChild(option2);
+                    });
+                    timeSelect1.disabled = false;
+                    timeSelect2.disabled = false;
+                }
+            }
+        });
+
+        timeSelect1.addEventListener('change', function() {
+            const selectedTime1 = this.value;
+            Array.from(timeSelect2.options).forEach(option => {
+                if (option.value === selectedTime1 && option.value !== "") {
+                    option.disabled = true;
+                } else {
+                    option.disabled = false;
                 }
             });
         });
-    </script>
+
+        timeSelect2.addEventListener('change', function() {
+            const selectedTime2 = this.value;
+            Array.from(timeSelect1.options).forEach(option => {
+                if (option.value === selectedTime2 && option.value !== "") {
+                    option.disabled = true;
+                } else {
+                    option.disabled = false;
+                }
+            });
+        });
+
+        document.getElementById('schedule-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const course = courseSelect.value;
+            const time1 = timeSelect1.value;
+            const time2 = timeSelect2.value;
+            
+            if (!course || !time1) {
+                alert('Пожалуйста, выберите курс и хотя бы одно время для Занятия 1');
+                return;
+            }
+
+            if (time1 === time2 && time2 !== "") {
+                alert('Пожалуйста, выберите разные времена для Занятия 1 и Занятия 2');
+                return;
+            }
+
+            try {
+                const takenTimes = await getTakenTimes(course);
+                if (takenTimes.includes(time1) || (time2 && takenTimes.includes(time2))) {
+                    alert('Выбранное время уже занято другим пользователем. Пожалуйста, выберите другое время.');
+                    return;
+                }
+
+                const userQuery = query(collection(db, "users"), where("uid", "==", currentUser.uid));
+                const userSnapshot = await getDocs(userQuery);
+                let userData = null;
+                userSnapshot.forEach(doc => {
+                    userData = doc.data();
+                });
+
+                const contact = userData.regType === 'telegram' ? userData.telegram : userData.email;
+
+                const enrollment = {
+                    userId: currentUser.uid,
+                    userContact: contact,
+                    userName: currentUser.displayName || (userData.regType === 'telegram' ? contact.replace('@', '') : contact.split('@')[0]),
+                    course: course,
+                    time1: time1,
+                    time2: time2 || null,
+                    enrolledAt: new Date().toISOString(),
+                    status: 'pending'
+                };
+
+                await addDoc(collection(db, "enrollments"), enrollment);
+
+                const message = `Новая запись на курс:\nИмя: ${enrollment.userName}\nКонтакт: ${enrollment.userContact}\nКурс: ${enrollment.course}\nЗанятие 1: ${enrollment.time1}${enrollment.time2 ? `\nЗанятие 2: ${enrollment.time2}` : ''}`;
+                const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(message)}`;
+
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Ошибка отправки в Telegram');
+                }
+
+                document.getElementById('success-title').textContent = 'Запись подтверждена!';
+                document.getElementById('success-message').textContent = `Вы записаны на ${course}: Занятие 1 - ${time1}${time2 ? `, Занятие 2 - ${time2}` : ''}. Учитель уведомлён через Telegram.`;
+                document.getElementById('success-modal').classList.add('active');
+                
+                scheduleModal.classList.remove('active');
+                
+                setTimeout(() => {
+                    document.getElementById('success-modal').classList.remove('active');
+                }, 3000);
+                
+                this.reset();
+            } catch (e) {
+                console.error("Ошибка: ", e);
+                alert("Ошибка при записи: " + e.message);
+            }
+        });
+
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            const newMessage = {
+                name: name,
+                email: email,
+                message: message,
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                await addDoc(collection(db, "messages"), newMessage);
+
+                const telegramMessage = `Новое сообщение из формы "Связаться с Нами":\nИмя: ${name}\nEmail: ${email}\nСообщение: ${message}`;
+                const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(telegramMessage)}`;
+
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Ошибка отправки в Telegram');
+                }
+
+                document.getElementById('success-title').textContent = 'Сообщение отправлено!';
+                document.getElementById('success-message').textContent = 'Спасибо за обращение. Мы свяжемся с вами в ближайшее время.';
+                document.getElementById('success-modal').classList.add('active');
+                
+                setTimeout(() => {
+                    document.getElementById('success-modal').classList.remove('active');
+                }, 3000);
+                
+                this.reset();
+            } catch (e) {
+                console.error("Ошибка отправки сообщения: ", e);
+                alert("Ошибка при отправке сообщения: " + e.message);
+            }
+        });
+    });
+</script>
 </body>
 </html>
