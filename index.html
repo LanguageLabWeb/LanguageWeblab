@@ -1195,11 +1195,7 @@
                     <input type="text" id="telegram-username" name="telegram-username" placeholder=" " required>
                     <label for="telegram-username">@Username</label>
                 </div>
-                <div class="form-group" id="telegram-code-group" style="display: none;">
-                    <input type="text" id="telegram-code" name="telegram-code" placeholder=" " required>
-                    <label for="telegram-code">Код подтверждения</label>
-                </div>
-                <button type="submit" id="telegram-submit">ПОЛУЧИТЬ КОД</button>
+                <button type="submit">ВОЙТИ ЧЕРЕЗ TELEGRAM</button>
             </form>
         </div>
         
@@ -1396,10 +1392,9 @@
             'Курс математики': ['Понедельник, 18:00', 'Среда, 18:00', 'Пятница, 17:00', 'Суббота, 17:00', 'Воскресенье, 11:00', 'Воскресенье, 14:00', 'Воскресенье, 17:00', 'Воскресенье, 19:00']
         };
 
-        // Токены Telegram (небезопасно в клиентском коде!)
+        // Токены Telegram для уведомлений учителя
         const teacherTelegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
         const teacherChatId = '1042168412';
-        const studentTelegramToken = '8165339261:AAGbUamKca-hDVgDMc-Bcg_hkf5_nC9oQJ0';
 
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
@@ -1521,94 +1516,50 @@
                 });
             }
 
-            // Регистрация через Telegram
+            // Регистрация через Telegram (упрощённая)
             const telegramForm = document.getElementById('telegram-form');
-            const telegramSubmitBtn = document.getElementById('telegram-submit');
-            let telegramCodeSent = false;
-            let generatedCode = null;
-
             if (telegramForm) {
                 telegramForm.addEventListener('submit', async function(e) {
                     e.preventDefault();
                     const username = document.getElementById('telegram-username').value.trim();
-                    const codeInput = document.getElementById('telegram-code');
 
-                    console.log("Нажата кнопка Telegram. Username:", username, "telegramCodeSent:", telegramCodeSent);
+                    console.log("Регистрация через Telegram. Username:", username);
 
-                    if (!telegramCodeSent) {
-                        if (!username.startsWith('@')) {
-                            alert('Пожалуйста, введите корректный Telegram-username, начиная с @');
-                            console.log("Ошибка: некорректный username");
-                            return;
-                        }
+                    if (!username.startsWith('@')) {
+                        alert('Пожалуйста, введите корректный Telegram-username, начиная с @');
+                        console.log("Ошибка: некорректный username");
+                        return;
+                    }
 
-                        generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-                        const message = `Ваш код подтверждения для регистрации в Языковой Лаборатории: ${generatedCode}`;
-                        // Временный прокси для обхода CORS
-                        const url = `https://cors-anywhere.herokuapp.com/https://api.telegram.org/bot${studentTelegramToken}/sendMessage?chat_id=${username}&text=${encodeURIComponent(message)}`;
+                    try {
+                        const email = `${username.replace('@', '')}@telegram.com`;
+                        const password = Math.random().toString(36).slice(-8); // Случайный пароль
+                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
 
-                        console.log("Попытка отправить код в Telegram:", url);
+                        await updateProfile(user, { displayName: username });
+                        await addDoc(collection(db, "users"), {
+                            uid: user.uid,
+                            name: username,
+                            email: email,
+                            telegramUsername: username,
+                            role: "student",
+                            createdAt: new Date().toISOString()
+                        });
 
-                        try {
-                            const response = await fetch(url);
-                            const data = await response.json();
-                            console.log("Ответ от Telegram:", data);
+                        document.getElementById('success-title').textContent = 'Регистрация успешна!';
+                        document.getElementById('success-message').textContent = `Добро пожаловать, ${username}!`;
+                        document.getElementById('success-modal').classList.add('active');
+                        setTimeout(() => {
+                            document.getElementById('success-modal').classList.remove('active');
+                            document.getElementById('auth-modal').classList.remove('active');
+                            document.getElementById('main-content').classList.add('active');
+                        }, 2000);
 
-                            if (!data.ok) {
-                                throw new Error(data.description || 'Не удалось отправить код. Убедитесь, что вы начали общение с ботом (@StudentBotName).');
-                            }
-
-                            telegramCodeSent = true;
-                            document.getElementById('telegram-code-group').style.display = 'block';
-                            telegramSubmitBtn.textContent = 'ПОДТВЕРДИТЬ';
-                            alert('Код подтверждения отправлен в Telegram.');
-                        } catch (e) {
-                            console.error("Ошибка отправки кода: ", e);
-                            alert("Ошибка: " + e.message);
-                        }
-                    } else {
-                        const enteredCode = codeInput.value.trim();
-                        console.log("Введённый код:", enteredCode, "Сгенерированный код:", generatedCode);
-
-                        if (enteredCode !== generatedCode) {
-                            alert('Неверный код подтверждения.');
-                            console.log("Ошибка: неверный код");
-                            return;
-                        }
-
-                        try {
-                            const email = `${username.replace('@', '')}@telegram.com`;
-                            const password = generatedCode;
-                            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                            const user = userCredential.user;
-
-                            await updateProfile(user, { displayName: username });
-                            await addDoc(collection(db, "users"), {
-                                uid: user.uid,
-                                name: username,
-                                email: email,
-                                telegramUsername: username,
-                                role: "student",
-                                createdAt: new Date().toISOString()
-                            });
-
-                            document.getElementById('success-title').textContent = 'Регистрация успешна!';
-                            document.getElementById('success-message').textContent = `Добро пожаловать, ${username}!`;
-                            document.getElementById('success-modal').classList.add('active');
-                            setTimeout(() => {
-                                document.getElementById('success-modal').classList.remove('active');
-                                document.getElementById('auth-modal').classList.remove('active');
-                                document.getElementById('main-content').classList.add('active');
-                            }, 2000);
-
-                            telegramCodeSent = false;
-                            document.getElementById('telegram-code-group').style.display = 'none';
-                            telegramSubmitBtn.textContent = 'ПОЛУЧИТЬ КОД';
-                            this.reset();
-                        } catch (e) {
-                            console.error("Ошибка при регистрации через Telegram: ", e);
-                            alert("Ошибка регистрации: " + e.message);
-                        }
+                        this.reset();
+                    } catch (e) {
+                        console.error("Ошибка при регистрации через Telegram: ", e);
+                        alert("Ошибка регистрации: " + e.message);
                     }
                 });
             }
