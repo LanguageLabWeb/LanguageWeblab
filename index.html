@@ -477,6 +477,7 @@
             animation: borderGlow 3s infinite alternate ease-in-out;
         }
 
+        @iodesktop
         @keyframes borderGlow {
             0% { opacity: 0.5; }
             100% { opacity: 1; }
@@ -1156,7 +1157,6 @@
     box-shadow: 0 0 15px var(--primary-color);
 }
 
-/* Анимация дыхания для кнопки */
 @keyframes breatheBtn {
     0%, 100% { box-shadow: var(--gold-glow); }
     50% { box-shadow: 0 0 20px rgba(184, 134, 11, 0.9); }
@@ -1166,7 +1166,6 @@
     animation: breatheBtn 3s infinite ease-in-out;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
     .return-btn {
         padding: 10px 25px;
@@ -1261,7 +1260,7 @@
             </form>
         </div>
 
-         <div class="return-btn-container">
+        <div class="return-btn-container">
                     <a href="Presentation.html" class="return-btn">Информация о курсах</a>
                 </div>
 
@@ -1298,10 +1297,9 @@
             </div>
         </section>
 
-                        <div class="return-btn-container">
+        <div class="return-btn-container">
                     <a href="achievement.html" class="return-btn">Моя история</a>
                 </div>
-
 
         <div class="bio-divider"></div>
 
@@ -1417,7 +1415,7 @@
         </div>
     </footer>
 
-  <script type="module">
+    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
@@ -1560,7 +1558,6 @@
             }
         });
 
-        // Переключение полей входа в зависимости от типа
         const loginTypeSelect = document.getElementById('login-type');
         const loginEmailField = document.getElementById('login-email-field');
         const loginTelegramField = document.getElementById('login-telegram-field');
@@ -1582,6 +1579,7 @@
         let currentUser = null;
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
+            console.log("Текущий пользователь:", user ? user.uid : "Нет пользователя");
         });
 
         const registerForm = document.getElementById('register-form');
@@ -1611,7 +1609,7 @@
 
                     await updateProfile(user, { displayName: name });
 
-                    await addDoc(collection(db, "users"), {
+                    const docRef = await addDoc(collection(db, "users"), {
                         uid: user.uid,
                         name: name,
                         email: regType === 'email' ? email : null,
@@ -1620,6 +1618,7 @@
                         role: "student",
                         createdAt: new Date().toISOString()
                     });
+                    console.log("Пользователь успешно добавлен с ID: ", docRef.id);
 
                     document.getElementById('success-title').textContent = 'Регистрация успешна!';
                     document.getElementById('success-message').textContent = 'Добро пожаловать, ученик! Теперь вы можете записаться на курсы.';
@@ -1864,6 +1863,11 @@
                     userData = doc.data();
                 });
 
+                if (!userData) {
+                    alert('Ошибка: данные пользователя не найдены. Пожалуйста, зарегистрируйтесь заново или обратитесь в поддержку.');
+                    return;
+                }
+
                 const contact = userData.regType === 'telegram' ? userData.telegram : userData.email;
 
                 const enrollment = {
@@ -1944,6 +1948,6 @@
             }
         });
     });
-</script>
+    </script>
 </body>
 </html>
