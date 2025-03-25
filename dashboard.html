@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет - Языковая лаборатория</title>
+    <title data-lang="dashboard-title">Личный кабинет - Языковая лаборатория</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-color: #4A2C2A;
@@ -87,6 +88,7 @@
             border-radius: 10px;
             border: 2px solid var(--secondary-color);
             box-shadow: var(--gold-glow);
+            position: relative;
         }
 
         .sidebar ul {
@@ -106,6 +108,16 @@
             background: var(--primary-color);
             transform: translateX(10px);
             box-shadow: var(--glow-shadow);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--secondary-color);
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
 
         .main-section {
@@ -225,11 +237,72 @@
         progress::-webkit-progress-value { background: var(--primary-color); }
         progress::-moz-progress-bar { background: var(--primary-color); }
 
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: var(--light-text);
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: var(--glow-shadow);
+            z-index: 2000;
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
+        }
+
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        .achievement {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            background: var(--accent-color);
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .calendar {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(15, 20, 25, 0.8);
+            border-radius: 10px;
+            border: 1px solid var(--secondary-color);
+        }
+
+        .language-switcher {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .language-switcher button {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             .dashboard-container {
                 grid-template-columns: 1fr;
             }
             h2 { font-size: 2rem; }
+            .sidebar {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 250px;
+                height: 100%;
+                z-index: 1000;
+            }
+            .sidebar.active {
+                display: block;
+            }
+            .hamburger {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -240,18 +313,25 @@
 
     <div class="dashboard-container">
         <div class="sidebar">
+            <span class="hamburger">☰</span>
             <ul>
-                <li data-section="homework" class="active">Домашние задания</li>
-                <li data-section="tests">Тесты</li>
-                <li data-section="tasks">Задачи</li>
-                <li data-section="progress">Прогресс</li>
-                <li id="logout-btn">Выйти</li>
+                <li data-section="homework" class="active" data-lang="sidebar-homework">Домашние задания</li>
+                <li data-section="tests" data-lang="sidebar-tests">Тесты</li>
+                <li data-section="tasks" data-lang="sidebar-tasks">Задачи</li>
+                <li data-section="progress" data-lang="sidebar-progress">Прогресс</li>
+                <li data-section="calendar" data-lang="sidebar-calendar">Календарь</li>
+                <li id="logout-btn" data-lang="sidebar-logout">Выйти</li>
             </ul>
         </div>
         <div class="main-section">
+            <div class="language-switcher">
+                <button data-lang="ru">RU</button>
+                <button data-lang="en">EN</button>
+            </div>
+
             <!-- Домашние задания -->
             <div class="section-content active" id="homework">
-                <h2>Домашние задания</h2>
+                <h2 data-lang="homework-title">Домашние задания</h2>
                 <form id="homework-form">
                     <div class="form-group">
                         <select id="homework-course" required>
@@ -260,13 +340,13 @@
                             <option value="english">Английский язык</option>
                             <option value="math">Математика</option>
                         </select>
-                        <label for="homework-course">Курс</label>
+                        <label for="homework-course" data-lang="course-label">Курс</label>
                     </div>
                     <div class="form-group">
-                        <input type="file" id="homework-file" accept=".pdf,.txt,.jpg,.png" required>
-                        <label for="homework-file">Загрузить файл</label>
+                        <input type="file" id="homework-files" accept=".pdf,.txt,.jpg,.png" multiple required>
+                        <label for="homework-files" data-lang="upload-label">Загрузить файлы</label>
                     </div>
-                    <button type="submit">Отправить</button>
+                    <button type="submit" data-lang="submit-btn">Отправить</button>
                 </form>
                 <div class="form-group">
                     <select id="homework-filter">
@@ -275,21 +355,21 @@
                         <option value="english">Английский язык</option>
                         <option value="math">Математика</option>
                     </select>
-                    <label for="homework-filter">Фильтр по курсу</label>
+                    <label for="homework-filter" data-lang="filter-label">Фильтр по курсу</label>
                 </div>
                 <div class="homework-list" id="homework-list"></div>
                 <div class="teacher-section" id="teacher-homework" style="display: none;">
-                    <h2>Проверка заданий</h2>
+                    <h2 data-lang="teacher-homework-title">Проверка заданий</h2>
                     <div id="teacher-homework-list"></div>
                 </div>
             </div>
 
             <!-- Тесты -->
             <div class="section-content" id="tests">
-                <h2>Тесты</h2>
+                <h2 data-lang="tests-title">Тесты</h2>
                 <div class="test-list" id="test-list"></div>
                 <div class="teacher-section" id="teacher-tests" style="display: none;">
-                    <h2>Создать тест</h2>
+                    <h2 data-lang="teacher-tests-title">Создать тест</h2>
                     <form id="test-form">
                         <div class="form-group">
                             <select id="test-course" required>
@@ -298,27 +378,27 @@
                                 <option value="english">Английский язык</option>
                                 <option value="math">Математика</option>
                             </select>
-                            <label for="test-course">Курс</label>
+                            <label for="test-course" data-lang="course-label">Курс</label>
                         </div>
                         <div class="form-group">
                             <input type="text" id="test-question" placeholder=" " required>
-                            <label for="test-question">Вопрос</label>
+                            <label for="test-question" data-lang="question-label">Вопрос</label>
                         </div>
                         <div class="form-group">
                             <input type="text" id="test-answer" placeholder=" " required>
-                            <label for="test-answer">Правильный ответ</label>
+                            <label for="test-answer" data-lang="answer-label">Правильный ответ</label>
                         </div>
-                        <button type="submit">Добавить тест</button>
+                        <button type="submit" data-lang="add-test-btn">Добавить тест</button>
                     </form>
                 </div>
             </div>
 
             <!-- Задачи -->
             <div class="section-content" id="tasks">
-                <h2>Задачи</h2>
+                <h2 data-lang="tasks-title">Задачи</h2>
                 <div class="task-list" id="task-list"></div>
                 <div class="teacher-section" id="teacher-tasks" style="display: none;">
-                    <h2>Создать задачу</h2>
+                    <h2 data-lang="teacher-tasks-title">Создать задачу</h2>
                     <form id="task-form">
                         <div class="form-group">
                             <select id="task-course" required>
@@ -327,36 +407,44 @@
                                 <option value="english">Английский язык</option>
                                 <option value="math">Математика</option>
                             </select>
-                            <label for="task-course">Курс</label>
+                            <label for="task-course" data-lang="course-label">Курс</label>
                         </div>
                         <div class="form-group">
                             <input type="text" id="task-question" placeholder=" " required>
-                            <label for="task-question">Задача</label>
+                            <label for="task-question" data-lang="task-label">Задача</label>
                         </div>
                         <div class="form-group">
                             <input type="text" id="task-answer" placeholder=" " required>
-                            <label for="task-answer">Правильный ответ</label>
+                            <label for="task-answer" data-lang="answer-label">Правильный ответ</label>
                         </div>
-                        <button type="submit">Добавить задачу</button>
+                        <button type="submit" data-lang="add-task-btn">Добавить задачу</button>
                     </form>
                 </div>
             </div>
 
             <!-- Прогресс -->
             <div class="section-content" id="progress">
-                <h2>Ваш прогресс</h2>
+                <h2 data-lang="progress-title">Ваш прогресс</h2>
                 <div id="progress-stats">
-                    <p>Выполнено заданий: <span id="homework-count">0</span></p>
+                    <p data-lang="homework-count">Выполнено заданий: <span id="homework-count">0</span></p>
                     <progress id="homework-progress" max="100" value="0"></progress>
-                    <p>Пройдено тестов: <span id="test-count">0</span></p>
+                    <p data-lang="test-count">Пройдено тестов: <span id="test-count">0</span></p>
                     <progress id="test-progress" max="100" value="0"></progress>
-                    <p>Решено задач: <span id="task-count">0</span></p>
+                    <p data-lang="task-count">Решено задач: <span id="task-count">0</span></p>
                     <progress id="task-progress" max="100" value="0"></progress>
+                    <canvas id="progress-chart" style="max-width: 600px; margin: 20px auto;"></canvas>
+                    <div id="achievements" style="text-align: center;"></div>
                 </div>
             </div>
 
+            <!-- Календарь -->
+            <div class="section-content" id="calendar">
+                <h2 data-lang="calendar-title">Календарь занятий</h2>
+                <div class="calendar" id="schedule-calendar"></div>
+            </div>
+
             <div style="text-align: center; margin-top: 20px;">
-                <a href="index.html" style="color: var(--secondary-color); text-decoration: none; font-family: 'Cinzel', serif;">Вернуться на главную</a>
+                <a href="index.html" style="color: var(--secondary-color); text-decoration: none; font-family: 'Cinzel', serif;" data-lang="back-to-main">Вернуться на главную</a>
             </div>
         </div>
     </div>
@@ -385,6 +473,69 @@
         const telegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
         const teacherChatId = '1042168412';
 
+        const translations = {
+            ru: {
+                'dashboard-title': 'Личный кабинет - Языковая лаборатория',
+                'sidebar-homework': 'Домашние задания',
+                'sidebar-tests': 'Тесты',
+                'sidebar-tasks': 'Задачи',
+                'sidebar-progress': 'Прогресс',
+                'sidebar-calendar': 'Календарь',
+                'sidebar-logout': 'Выйти',
+                'homework-title': 'Домашние задания',
+                'course-label': 'Курс',
+                'upload-label': 'Загрузить файлы',
+                'submit-btn': 'Отправить',
+                'filter-label': 'Фильтр по курсу',
+                'teacher-homework-title': 'Проверка заданий',
+                'tests-title': 'Тесты',
+                'teacher-tests-title': 'Создать тест',
+                'question-label': 'Вопрос',
+                'answer-label': 'Правильный ответ',
+                'add-test-btn': 'Добавить тест',
+                'tasks-title': 'Задачи',
+                'teacher-tasks-title': 'Создать задачу',
+                'task-label': 'Задача',
+                'add-task-btn': 'Добавить задачу',
+                'progress-title': 'Ваш прогресс',
+                'homework-count': 'Выполнено заданий:',
+                'test-count': 'Пройдено тестов:',
+                'task-count': 'Решено задач:',
+                'calendar-title': 'Календарь занятий',
+                'back-to-main': 'Вернуться на главную'
+            },
+            en: {
+                'dashboard-title': 'Dashboard - Language Laboratory',
+                'sidebar-homework': 'Homework',
+                'sidebar-tests': 'Tests',
+                'sidebar-tasks': 'Tasks',
+                'sidebar-progress': 'Progress',
+                'sidebar-calendar': 'Calendar',
+                'sidebar-logout': 'Logout',
+                'homework-title': 'Homework',
+                'course-label': 'Course',
+                'upload-label': 'Upload Files',
+                'submit-btn': 'Submit',
+                'filter-label': 'Filter by Course',
+                'teacher-homework-title': 'Review Assignments',
+                'tests-title': 'Tests',
+                'teacher-tests-title': 'Create Test',
+                'question-label': 'Question',
+                'answer-label': 'Correct Answer',
+                'add-test-btn': 'Add Test',
+                'tasks-title': 'Tasks',
+                'teacher-tasks-title': 'Create Task',
+                'task-label': 'Task',
+                'add-task-btn': 'Add Task',
+                'progress-title': 'Your Progress',
+                'homework-count': 'Completed Homework:',
+                'test-count': 'Completed Tests:',
+                'task-count': 'Solved Tasks:',
+                'calendar-title': 'Class Schedule',
+                'back-to-main': 'Back to Main'
+            }
+        };
+
         const elements = {
             homeworkForm: document.getElementById('homework-form'),
             homeworkList: document.getElementById('homework-list'),
@@ -400,8 +551,15 @@
             homeworkProgress: document.getElementById('homework-progress'),
             testProgress: document.getElementById('test-progress'),
             taskProgress: document.getElementById('task-progress'),
-            logoutBtn: document.getElementById('logout-btn')
+            logoutBtn: document.getElementById('logout-btn'),
+            scheduleCalendar: document.getElementById('schedule-calendar'),
+            achievements: document.getElementById('achievements'),
+            hamburger: document.querySelector('.hamburger'),
+            sidebar: document.querySelector('.sidebar')
         };
+
+        let currentLang = 'ru';
+        let progressChart;
 
         document.addEventListener('DOMContentLoaded', () => {
             const cursor = document.querySelector('.cursor');
@@ -420,6 +578,10 @@
                     if (select.value) label.style.top = '-25px';
                     else label.style.top = '15px';
                 });
+            });
+
+            elements.hamburger.addEventListener('click', () => {
+                elements.sidebar.classList.toggle('active');
             });
 
             let isTeacher = false;
@@ -445,41 +607,46 @@
                     document.querySelectorAll('.section-content').forEach(content => content.classList.remove('active'));
                     item.classList.add('active');
                     document.getElementById(item.getAttribute('data-section')).classList.add('active');
+                    if (window.innerWidth <= 768) elements.sidebar.classList.remove('active');
                 });
             });
 
             elements.homeworkForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                if (!confirm('Вы уверены, что хотите отправить это задание?')) return;
+                if (!confirm(translations[currentLang]['submit-btn'] === 'Отправить' ? 'Вы уверены, что хотите отправить это задание?' : 'Are you sure you want to submit this homework?')) return;
                 const course = document.getElementById('homework-course').value;
-                const file = document.getElementById('homework-file').files[0];
-                if (!file || !course) return;
+                const files = document.getElementById('homework-files').files;
+                if (!files.length || !course) return;
 
-                const storageRef = ref(storage, `homework/${auth.currentUser.uid}/${file.name}`);
-                const snapshot = await uploadBytes(storageRef, file);
-                const fileURL = await getDownloadURL(snapshot.ref);
+                const fileURLs = [];
+                for (let file of files) {
+                    const storageRef = ref(storage, `homework/${auth.currentUser.uid}/${file.name}`);
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const fileURL = await getDownloadURL(snapshot.ref);
+                    fileURLs.push({ name: file.name, url: fileURL });
+                }
 
                 await addDoc(collection(db, "homework"), {
                     userId: auth.currentUser.uid,
                     course: course,
-                    fileName: file.name,
-                    fileURL: fileURL,
+                    files: fileURLs,
                     status: "pending",
                     timestamp: new Date().toISOString()
                 });
 
-                const message = `Новое домашнее задание:\nКурс: ${course}\nФайл: ${file.name}\nСсылка: ${fileURL}`;
+                const message = `Новое домашнее задание:\nКурс: ${course}\nФайлы: ${fileURLs.map(f => f.name).join(', ')}\nСсылки: ${fileURLs.map(f => f.url).join(', ')}`;
                 const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(message)}`;
                 await fetch(url);
 
-                alert('Домашнее задание отправлено!');
+                showNotification(translations[currentLang]['submit-btn'] === 'Отправить' ? 'Домашнее задание отправлено!' : 'Homework submitted!');
                 loadHomework(auth.currentUser.uid);
+                updateAchievements(auth.currentUser.uid);
                 e.target.reset();
             });
 
             elements.testForm?.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                if (!confirm('Вы уверены, что хотите добавить этот тест?')) return;
+                if (!confirm(translations[currentLang]['add-test-btn'] === 'Добавить тест' ? 'Вы уверены, что хотите добавить этот тест?' : 'Are you sure you want to add this test?')) return;
                 const course = document.getElementById('test-course').value;
                 const question = document.getElementById('test-question').value;
                 const answer = document.getElementById('test-answer').value;
@@ -492,14 +659,14 @@
                     timestamp: new Date().toISOString()
                 });
 
-                alert('Тест добавлен!');
+                showNotification(translations[currentLang]['add-test-btn'] === 'Добавить тест' ? 'Тест добавлен!' : 'Test added!');
                 loadTests(auth.currentUser.uid);
                 e.target.reset();
             });
 
             elements.taskForm?.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                if (!confirm('Вы уверены, что хотите добавить эту задачу?')) return;
+                if (!confirm(translations[currentLang]['add-task-btn'] === 'Добавить задачу' ? 'Вы уверены, что хотите добавить эту задачу?' : 'Are you sure you want to add this task?')) return;
                 const course = document.getElementById('task-course').value;
                 const question = document.getElementById('task-question').value;
                 const answer = document.getElementById('task-answer').value;
@@ -512,7 +679,7 @@
                     timestamp: new Date().toISOString()
                 });
 
-                alert('Задача добавлена!');
+                showNotification(translations[currentLang]['add-task-btn'] === 'Добавить задачу' ? 'Задача добавлена!' : 'Task added!');
                 loadTasks(auth.currentUser.uid);
                 e.target.reset();
             });
@@ -525,16 +692,51 @@
                     window.location.href = 'index.html';
                 } catch (e) {
                     console.error("Ошибка выхода:", e);
-                    alert("Ошибка при выходе: " + e.message);
+                    showNotification("Ошибка при выходе: " + e.message);
                 }
             });
+
+            document.querySelectorAll('.language-switcher button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentLang = btn.getAttribute('data-lang');
+                    updateLanguage();
+                });
+            });
         });
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function updateLanguage() {
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                const key = element.getAttribute('data-lang');
+                if (translations[currentLang][key]) {
+                    if (element.tagName === 'BUTTON' || element.tagName === 'LI' || element.tagName === 'A') {
+                        element.textContent = translations[currentLang][key];
+                    } else if (element.tagName === 'H2' || element.tagName === 'P') {
+                        element.textContent = translations[currentLang][key] + (element.tagName === 'P' ? ` ${element.querySelector('span')?.textContent || ''}` : '');
+                    } else if (element.tagName === 'LABEL') {
+                        element.textContent = translations[currentLang][key];
+                    } else if (element.tagName === 'TITLE') {
+                        element.textContent = translations[currentLang][key];
+                    }
+                }
+            });
+        }
 
         async function loadContent(userId) {
             loadHomework(userId);
             loadTests(userId);
             loadTasks(userId);
             loadProgress(userId);
+            loadCalendar(userId);
+            updateAchievements(userId);
+            updateLanguage();
         }
 
         async function loadHomework(userId) {
@@ -551,9 +753,9 @@
                         const item = document.createElement('div');
                         item.className = 'item-card';
                         item.innerHTML = `
-                            <p>Курс: ${data.course}</p>
-                            <p>Файл: <a href="${data.fileURL}" target="_blank">${data.fileName}</a></p>
-                            <p>Статус: ${data.status}</p>
+                            <p>${translations[currentLang]['course-label']}: ${data.course}</p>
+                            <p>${translations[currentLang]['upload-label']}: ${data.files.map(f => `<a href="${f.url}" target="_blank">${f.name}</a>`).join(', ')}</p>
+                            <p>Статус: ${data.status}${data.comment ? ` (Комментарий: ${data.comment})` : ''}</p>
                         `;
                         elements.homeworkList.appendChild(item);
                     }
@@ -561,11 +763,12 @@
                         const teacherItem = document.createElement('div');
                         teacherItem.className = 'item-card';
                         teacherItem.innerHTML = `
-                            <p>Курс: ${data.course}</p>
-                            <p>Файл: <a href="${data.fileURL}" target="_blank">${data.fileName}</a></p>
-                            <p>Статус: ${data.status}</p>
-                            <button onclick="updateStatus('${doc.id}', 'approved')">Одобрить</button>
-                            <button onclick="updateStatus('${doc.id}', 'rejected')">Отклонить</button>
+                            <p>${translations[currentLang]['course-label']}: ${data.course}</p>
+                            <p>${translations[currentLang]['upload-label']}: ${data.files.map(f => `<a href="${f.url}" target="_blank">${f.name}</a>`).join(', ')}</p>
+                            <p>Статус: ${data.status}${data.comment ? ` (Комментарий: ${data.comment})` : ''}</p>
+                            <input type="text" id="comment-${doc.id}" placeholder="Комментарий">
+                            <button onclick="updateStatus('${doc.id}', 'approved', '${userId}')">${translations[currentLang]['sidebar-logout'] === 'Выйти' ? 'Одобрить' : 'Approve'}</button>
+                            <button onclick="updateStatus('${doc.id}', 'rejected', '${userId}')">${translations[currentLang]['sidebar-logout'] === 'Выйти' ? 'Отклонить' : 'Reject'}</button>
                         `;
                         elements.teacherHomeworkList.appendChild(teacherItem);
                     }
@@ -584,10 +787,10 @@
                 const item = document.createElement('div');
                 item.className = 'item-card';
                 item.innerHTML = `
-                    <p>Курс: ${data.course}</p>
-                    <p>${type === 'test' ? 'Вопрос' : 'Задача'}: ${data.question}</p>
-                    <input type="text" id="${type}-${doc.id}" placeholder="Ваш ответ">
-                    <button onclick="checkItem('${doc.id}', '${data.answer}', '${type}')">Проверить</button>
+                    <p>${translations[currentLang]['course-label']}: ${data.course}</p>
+                    <p>${type === 'test' ? translations[currentLang]['question-label'] : translations[currentLang]['task-label']}: ${data.question}</p>
+                    <input type="text" id="${type}-${doc.id}" placeholder="${translations[currentLang]['sidebar-logout'] === 'Выйти' ? 'Ваш ответ' : 'Your answer'}">
+                    <button onclick="checkItem('${doc.id}', '${data.answer}', '${type}', '${userId}')">${translations[currentLang]['sidebar-logout'] === 'Выйти' ? 'Проверить' : 'Check'}</button>
                 `;
                 list.appendChild(item);
             });
@@ -610,15 +813,66 @@
             elements.homeworkCount.textContent = hCount;
             elements.testCount.textContent = tCount;
             elements.taskCount.textContent = tkCount;
-            elements.homeworkProgress.value = hCount * 10; // Пример: 10% за каждое задание
-            elements.testProgress.value = tCount * 20;     // Пример: 20% за каждый тест
-            elements.taskProgress.value = tkCount * 15;    // Пример: 15% за каждую задачу
+            elements.homeworkProgress.value = hCount * 10;
+            elements.testProgress.value = tCount * 20;
+            elements.taskProgress.value = tkCount * 15;
+
+            if (progressChart) progressChart.destroy();
+            progressChart = new Chart(document.getElementById('progress-chart'), {
+                type: 'line',
+                data: {
+                    labels: ['Неделя 1', 'Неделя 2', 'Неделя 3', 'Неделя 4'],
+                    datasets: [{
+                        label: translations[currentLang]['progress-title'],
+                        data: [hCount * 10, tCount * 20, tkCount * 15, (hCount + tCount + tkCount) / 3],
+                        borderColor: var(--secondary-color),
+                        backgroundColor: 'rgba(184, 134, 11, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    scales: { y: { beginAtZero: true, max: 100 } }
+                }
+            });
         }
 
-        window.checkItem = async (itemId, correctAnswer, type) => {
+        async function loadCalendar(userId) {
+            elements.scheduleCalendar.innerHTML = '';
+            const q = query(collection(db, "enrollments"), where("userId", "==", userId));
+            const snapshot = await getDocs(q);
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const item = document.createElement('div');
+                item.className = 'item-card';
+                item.innerHTML = `
+                    <p>${translations[currentLang]['course-label']}: ${data.course}</p>
+                    <p>Занятие 1: ${data.time1}</p>
+                    ${data.time2 ? `<p>Занятие 2: ${data.time2}</p>` : ''}
+                `;
+                elements.scheduleCalendar.appendChild(item);
+            });
+        }
+
+        async function updateAchievements(userId) {
+            const homeworkQ = query(collection(db, "homework"), where("userId", "==", userId), where("status", "==", "approved"));
+            const testsQ = query(collection(db, "testResults"), where("userId", "==", userId), where("correct", "==", true));
+            const tasksQ = query(collection(db, "taskResults"), where("userId", "==", userId), where("correct", "==", true));
+
+            const [hSnapshot, tSnapshot, tkSnapshot] = await Promise.all([getDocs(homeworkQ), getDocs(testsQ), getDocs(tasksQ)]);
+            const hCount = hSnapshot.size;
+            const tCount = tSnapshot.size;
+            const tkCount = tkSnapshot.size;
+
+            elements.achievements.innerHTML = '';
+            if (hCount >= 5) elements.achievements.innerHTML += `<span class="achievement">${translations[currentLang]['sidebar-logout'] === 'Выйти' ? 'Мастер заданий' : 'Homework Master'}</span>`;
+            if (tCount >= 3) elements.achievements.innerHTML += `<span class="achievement">${translations[currentLang]['sidebar-logout'] === 'Выйти' ? 'Знаток тестов' : 'Test Expert'}</span>`;
+            if (tkCount >= 5) elements.achievements.innerHTML += `<span class="achievement">${translations[currentLang]['sidebar-logout'] === 'Выйти' ? 'Решатель задач' : 'Task Solver'}</span>`;
+        }
+
+        window.checkItem = async (itemId, correctAnswer, type, userId) => {
             const userAnswer = document.getElementById(`${type}-${itemId}`).value;
             const isCorrect = userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
-            alert(isCorrect ? 'Правильно!' : 'Неправильно, попробуйте снова.');
+            showNotification(isCorrect ? (translations[currentLang]['sidebar-logout'] === 'Выйти' ? 'Правильно!' : 'Correct!') : (translations[currentLang]['sidebar-logout'] === 'Выйти' ? 'Неправильно!' : 'Incorrect!'));
             await addDoc(collection(db, `${type}Results`), {
                 userId: auth.currentUser.uid,
                 [`${type}Id`]: itemId,
@@ -626,16 +880,18 @@
                 correct: isCorrect,
                 timestamp: new Date().toISOString()
             });
-            loadProgress(auth.currentUser.uid);
+            loadProgress(userId);
+            updateAchievements(userId);
         };
 
-        window.updateStatus = async (homeworkId, status) => {
-            if (!confirm(`Вы уверены, что хотите ${status === 'approved' ? 'одобрить' : 'отклонить'} это задание?`)) return;
+        window.updateStatus = async (homeworkId, status, userId) => {
+            const comment = document.getElementById(`comment-${homeworkId}`).value;
+            if (!confirm(translations[currentLang]['sidebar-logout'] === 'Выйти' ? `Вы уверены, что хотите ${status === 'approved' ? 'одобрить' : 'отклонить'} это задание?` : `Are you sure you want to ${status === 'approved' ? 'approve' : 'reject'} this homework?`)) return;
             const homeworkRef = doc(db, "homework", homeworkId);
-            await updateDoc(homeworkRef, { status: status });
-            alert(`Задание ${status === 'approved' ? 'одобрено' : 'отклонено'}!`);
-            loadHomework(auth.currentUser.uid);
-            loadProgress(auth.currentUser.uid);
+            await updateDoc(homeworkRef, { status: status, comment: comment || '' });
+            showNotification(translations[currentLang]['sidebar-logout'] === 'Выйти' ? `Задание ${status === 'approved' ? 'одобрено' : 'отклонено'}!` : `Homework ${status === 'approved' ? 'approved' : 'rejected'}!`);
+            loadHomework(userId);
+            loadProgress(userId);
         };
     </script>
 </body>
