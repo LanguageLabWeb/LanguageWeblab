@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Языковая лаборатория</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4A2C2A;
+            --secondary-color: #B8860B;
+            --accent-color: #355E3B;
+            --dark-bg: #1C2526;
+            --darker-bg: #0F1419;
+            --light-text: #E8D8C4;
+            --glow-shadow: 0 0 15px rgba(74, 44, 42, 0.6);
+            --gold-glow: 0 0 15px rgba(184, 134, 11, 0.5);
+            --green-glow: 0 0 15px rgba(53, 94, 59, 0.5);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cinzel', serif;
+            background: var(--dark-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+            position: relative;
+            cursor: none;
+        }
+
+        .bio-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(74, 44, 42, 0.2), transparent 50%),
+                        url('https://www.transparenttextures.com/patterns/brocade.png') repeat;
+            z-index: -2;
+            animation: pulseBG 10s infinite ease-in-out;
+            opacity: 0.85;
+        }
+
+        .hex-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(60deg, rgba(184, 134, 11, 0.06) 0px, rgba(184, 134, 11, 0.06) 2px, transparent 2px, transparent 40px),
+                        repeating-linear-gradient(-60deg, rgba(184, 134, 11, 0.06) 0px, rgba(184, 134, 11, 0.06) 2px, transparent 2px, transparent 40px);
+            z-index: -1;
+            animation: shiftGrid 30s infinite linear;
+            opacity: 0.3;
+        }
+
+        @keyframes shiftGrid { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+        @keyframes pulseBG { 0%, 100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
+
+        .cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            background: radial-gradient(circle, rgba(184, 134, 11, 0.6), transparent 70%);
+            border: 2px solid rgba(184, 134, 11, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+        }
+
+        .cursor.hover {
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, rgba(53, 94, 59, 0.6), transparent 70%);
+            border-color: rgba(53, 94, 59, 0.4);
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: rgba(15, 20, 25, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--secondary-color);
+            box-shadow: var(--gold-glow);
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            padding: 15px;
+            color: var(--light-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Crimson Text', serif;
+            font-size: 1.2rem;
+        }
+
+        .sidebar li:hover, .sidebar li.active {
+            background: var(--primary-color);
+            transform: translateX(10px);
+            box-shadow: var(--glow-shadow);
+        }
+
+        .main-section {
+            background: rgba(28, 37, 38, 0.6);
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid var(--secondary-color);
+            box-shadow: var(--gold-glow);
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            text-shadow: var(--gold-glow);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .section-content {
+            display: none;
+            font-family: 'Crimson Text', serif;
+            line-height: 1.6;
+        }
+
+        .section-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(28, 37, 38, 0.9);
+            border: 1px solid var(--secondary-color);
+            border-radius: 5px;
+            color: var(--light-text);
+            font-family: 'Crimson Text', serif;
+            font-size: 1rem;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: rgba(232, 216, 196, 0.6);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-style: italic;
+        }
+
+        .form-group input:focus ~ label,
+        .form-group input:not(:placeholder-shown) ~ label,
+        .form-group textarea:focus ~ label,
+        .form-group textarea:not(:placeholder-shown) ~ label,
+        .form-group select:focus ~ label,
+        .form-group select:not(:placeholder-shown) ~ label {
+            top: -25px;
+            left: 5px;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: var(--primary-color);
+            box-shadow: var(--glow-shadow);
+            outline: none;
+        }
+
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: 2px solid var(--secondary-color);
+            color: var(--light-text);
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: var(--gold-glow);
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color);
+        }
+
+        .homework-list, .test-list, .task-list {
+            margin-top: 20px;
+        }
+
+        .item-card {
+            background: rgba(15, 20, 25, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--accent-color);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+            transform: scale(1.02);
+            box-shadow: var(--green-glow);
+        }
+
+        .teacher-section {
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bio-bg"></div>
+    <div class="hex-grid"></div>
+    <div class="cursor"></div>
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <ul>
+                <li data-section="homework" class="active">Домашние задания</li>
+                <li data-section="tests">Тесты</li>
+                <li data-section="tasks">Задачи</li>
+                <li data-section="progress">Прогресс</li>
+            </ul>
+        </div>
+        <div class="main-section">
+            <!-- Домашние задания -->
+            <div class="section-content active" id="homework">
+                <h2>Домашние задания</h2>
+                <form id="homework-form">
+                    <div class="form-group">
+                        <select id="homework-course" required>
+                            <option value="">Выберите курс</option>
+                            <option value="russian">Русский язык</option>
+                            <option value="english">Английский язык</option>
+                            <option value="math">Математика</option>
+                        </select>
+                        <label for="homework-course">Курс</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" id="homework-file" accept=".pdf,.txt,.jpg,.png" required>
+                        <label for="homework-file">Загрузить файл</label>
+                    </div>
+                    <button type="submit">Отправить</button>
+                </form>
+                <div class="homework-list" id="homework-list"></div>
+                <div class="teacher-section" id="teacher-homework" style="display: none;">
+                    <h2>Проверка заданий</h2>
+                    <div id="teacher-homework-list"></div>
+                </div>
+            </div>
+
+            <!-- Тесты -->
+            <div class="section-content" id="tests">
+                <h2>Тесты</h2>
+                <div class="test-list" id="test-list"></div>
+                <div class="teacher-section" id="teacher-tests" style="display: none;">
+                    <h2>Создать тест</h2>
+                    <form id="test-form">
+                        <div class="form-group">
+                            <select id="test-course" required>
+                                <option value="">Выберите курс</option>
+                                <option value="russian">Русский язык</option>
+                                <option value="english">Английский язык</option>
+                                <option value="math">Математика</option>
+                            </select>
+                            <label for="test-course">Курс</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="test-question" placeholder=" " required>
+                            <label for="test-question">Вопрос</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="test-answer" placeholder=" " required>
+                            <label for="test-answer">Правильный ответ</label>
+                        </div>
+                        <button type="submit">Добавить тест</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Задачи -->
+            <div class="section-content" id="tasks">
+                <h2>Задачи</h2>
+                <div class="task-list" id="task-list"></div>
+                <div class="teacher-section" id="teacher-tasks" style="display: none;">
+                    <h2>Создать задачу</h2>
+                    <form id="task-form">
+                        <div class="form-group">
+                            <select id="task-course" required>
+                                <option value="">Выберите курс</option>
+                                <option value="russian">Русский язык</option>
+                                <option value="english">Английский язык</option>
+                                <option value="math">Математика</option>
+                            </select>
+                            <label for="task-course">Курс</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="task-question" placeholder=" " required>
+                            <label for="task-question">Задача</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="task-answer" placeholder=" " required>
+                            <label for="task-answer">Правильный ответ</label>
+                        </div>
+                        <button type="submit">Добавить задачу</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Прогресс -->
+            <div class="section-content" id="progress">
+                <h2>Ваш прогресс</h2>
+                <div id="progress-stats">
+                    <p>Выполнено заданий: <span id="homework-count">0</span></p>
+                    <p>Пройдено тестов: <span id="test-count">0</span></p>
+                    <p>Решено задач: <span id="task-count">0</span></p>
+                </div>
+            </div>
+
+          <div style="text-align: center; margin-top: 20px;">
+    <a href="index.html" style="color: var(--secondary-color); text-decoration: none; font-family: 'Cinzel', serif;">Вернуться на главную</a>
+</div>
+          
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA-qRTFlszcMafJv1eesYg-PUxsxYoo28U",
+            authDomain: "misha-and-anna-48e4c.firebaseapp.com",
+            databaseURL: "https://misha-and-anna-48e4c-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "misha-and-anna-48e4c",
+            storageBucket: "misha-and-anna-48e4c.firebasestorage.app",
+            messagingSenderId: "822036073579",
+            appId: "1:822036073579:web:cd59fd4f5362b5f0bb752e",
+            measurementId: "G-XR86X6PXMX"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Кастомный курсор
+            const cursor = document.querySelector('.cursor');
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+            document.querySelectorAll('button, li').forEach(item => {
+                item.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                item.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+
+            // Проверка авторизации
+            let isTeacher = false;
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+                const userQuery = query(collection(db, "users"), where("uid", "==", user.uid));
+                const userSnapshot = await getDocs(userQuery);
+                userSnapshot.forEach(doc => {
+                    if (doc.data().email === "languageweblab@gmail.com") {
+                        isTeacher = true;
+                        document.querySelectorAll('.teacher-section').forEach(section => section.style.display = 'block');
+                    }
+                });
+                loadContent(user.uid);
+            });
+
+            // Переключение секций
+            document.querySelectorAll('.sidebar li').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+                    document.querySelectorAll('.section-content').forEach(content => content.classList.remove('active'));
+                    item.classList.add('active');
+                    document.getElementById(item.getAttribute('data-section')).classList.add('active');
+                });
+            });
+
+            // Отправка домашнего задания
+            document.getElementById('homework-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const course = document.getElementById('homework-course').value;
+                const file = document.getElementById('homework-file').files[0];
+                if (!file || !course) return;
+
+                const storageRef = ref(storage, `homework/${auth.currentUser.uid}/${file.name}`);
+                const snapshot = await uploadBytes(storageRef, file);
+                const fileURL = await getDownloadURL(snapshot.ref);
+
+                await addDoc(collection(db, "homework"), {
+                    userId: auth.currentUser.uid,
+                    course: course,
+                    fileName: file.name,
+                    fileURL: fileURL,
+                    status: "pending",
+                    timestamp: new Date().toISOString()
+                });
+
+                alert('Домашнее задание отправлено!');
+                loadHomework(auth.currentUser.uid);
+                e.target.reset();
+            });
+
+            // Создание теста
+            document.getElementById('test-form')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const course = document.getElementById('test-course').value;
+                const question = document.getElementById('test-question').value;
+                const answer = document.getElementById('test-answer').value;
+
+                await addDoc(collection(db, "tests"), {
+                    course: course,
+                    question: question,
+                    answer: answer,
+                    createdBy: auth.currentUser.uid,
+                    timestamp: new Date().toISOString()
+                });
+
+                alert('Тест добавлен!');
+                loadTests(auth.currentUser.uid);
+                e.target.reset();
+            });
+
+            // Создание задачи
+            document.getElementById('task-form')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const course = document.getElementById('task-course').value;
+                const question = document.getElementById('task-question').value;
+                const answer = document.getElementById('task-answer').value;
+
+                await addDoc(collection(db, "tasks"), {
+                    course: course,
+                    question: question,
+                    answer: answer,
+                    createdBy: auth.currentUser.uid,
+                    timestamp: new Date().toISOString()
+                });
+
+                alert('Задача добавлена!');
+                loadTasks(auth.currentUser.uid);
+                e.target.reset();
+            });
+        });
+
+        // Загрузка контента
+        async function loadContent(userId) {
+            loadHomework(userId);
+            loadTests(userId);
+            loadTasks(userId);
+            loadProgress(userId);
+        }
+
+        async function loadHomework(userId) {
+            const homeworkList = document.getElementById('homework-list');
+            const teacherHomeworkList = document.getElementById('teacher-homework-list');
+            homeworkList.innerHTML = '';
+            if (teacherHomeworkList) teacherHomeworkList.innerHTML = '';
+
+            const q = collection(db, "homework");
+            const snapshot = await getDocs(q);
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if (data.userId === userId) {
+                    const item = document.createElement('div');
+                    item.className = 'item-card';
+                    item.innerHTML = `
+                        <p>Курс: ${data.course}</p>
+                        <p>Файл: <a href="${data.fileURL}" target="_blank">${data.fileName}</a></p>
+                        <p>Статус: ${data.status}</p>
+                    `;
+                    homeworkList.appendChild(item);
+                }
+                if (teacherHomeworkList) {
+                    const teacherItem = document.createElement('div');
+                    teacherItem.className = 'item-card';
+                    teacherItem.innerHTML = `
+                        <p>Курс: ${data.course}</p>
+                        <p>Файл: <a href="${data.fileURL}" target="_blank">${data.fileName}</a></p>
+                        <p>Статус: ${data.status}</p>
+                        <button onclick="updateStatus('${doc.id}', 'approved')">Одобрить</button>
+                        <button onclick="updateStatus('${doc.id}', 'rejected')">Отклонить</button>
+                    `;
+                    teacherHomeworkList.appendChild(teacherItem);
+                }
+            });
+        }
+
+        async function loadTests(userId) {
+            const testList = document.getElementById('test-list');
+            testList.innerHTML = '';
+
+            const q = collection(db, "tests");
+            const snapshot = await getDocs(q);
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const item = document.createElement('div');
+                item.className = 'item-card';
+                item.innerHTML = `
+                    <p>Курс: ${data.course}</p>
+                    <p>Вопрос: ${data.question}</p>
+                    <input type="text" id="test-${doc.id}" placeholder="Ваш ответ">
+                    <button onclick="checkTest('${doc.id}', '${data.answer}')">Проверить</button>
+                `;
+                testList.appendChild(item);
+            });
+        }
+
+        async function loadTasks(userId) {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = '';
+
+            const q = collection(db, "tasks");
+            const snapshot = await getDocs(q);
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const item = document.createElement('div');
+                item.className = 'item-card';
+                item.innerHTML = `
+                    <p>Курс: ${data.course}</p>
+                    <p>Задача: ${data.question}</p>
+                    <input type="text" id="task-${doc.id}" placeholder="Ваш ответ">
+                    <button onclick="checkTask('${doc.id}', '${data.answer}')">Проверить</button>
+                `;
+                taskList.appendChild(item);
+            });
+        }
+
+        async function loadProgress(userId) {
+            const homeworkCount = document.getElementById('homework-count');
+            const testCount = document.getElementById('test-count');
+            const taskCount = document.getElementById('task-count');
+
+            let hCount = 0, tCount = 0, tkCount = 0;
+            const homeworkQ = query(collection(db, "homework"), where("userId", "==", userId), where("status", "==", "approved"));
+            const testsQ = query(collection(db, "testResults"), where("userId", "==", userId), where("correct", "==", true));
+            const tasksQ = query(collection(db, "taskResults"), where("userId", "==", userId), where("correct", "==", true));
+
+            const [hSnapshot, tSnapshot, tkSnapshot] = await Promise.all([getDocs(homeworkQ), getDocs(testsQ), getDocs(tasksQ)]);
+            hCount = hSnapshot.size;
+            tCount = tSnapshot.size;
+            tkCount = tkSnapshot.size;
+
+            homeworkCount.textContent = hCount;
+            testCount.textContent = tCount;
+            taskCount.textContent = tkCount;
+        }
+
+        window.checkTest = async (testId, correctAnswer) => {
+            const userAnswer = document.getElementById(`test-${testId}`).value;
+            const isCorrect = userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+            alert(isCorrect ? 'Правильно!' : 'Неправильно, попробуйте снова.');
+            await addDoc(collection(db, "testResults"), {
+                userId: auth.currentUser.uid,
+                testId: testId,
+                answer: userAnswer,
+                correct: isCorrect,
+                timestamp: new Date().toISOString()
+            });
+            loadProgress(auth.currentUser.uid);
+        };
+
+        window.checkTask = async (taskId, correctAnswer) => {
+            const userAnswer = document.getElementById(`task-${taskId}`).value;
+            const isCorrect = userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+            alert(isCorrect ? 'Правильно!' : 'Неправильно, попробуйте снова.');
+            await addDoc(collection(db, "taskResults"), {
+                userId: auth.currentUser.uid,
+                taskId: taskId,
+                answer: userAnswer,
+                correct: isCorrect,
+                timestamp: new Date().toISOString()
+            });
+            loadProgress(auth.currentUser.uid);
+        };
+
+        window.updateStatus = async (homeworkId, status) => {
+            const homeworkRef = doc(db, "homework", homeworkId);
+            await updateDoc(homeworkRef, { status: status });
+            alert(`Задание ${status === 'approved' ? 'одобрено' : 'отклонено'}!`);
+            loadHomework(auth.currentUser.uid);
+            loadProgress(auth.currentUser.uid);
+        };
+    </script>
+</body>
+</html>
