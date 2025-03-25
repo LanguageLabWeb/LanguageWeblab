@@ -44,7 +44,6 @@
             background: radial-gradient(circle at 50% 50%, rgba(74, 44, 42, 0.2), transparent 50%),
                         url('https://www.transparenttextures.com/patterns/brocade.png') repeat;
             z-index: -2;
-            animation: pulseBG 10s infinite ease-in-out;
             transition: background 0.3s ease;
             opacity: 0.85;
         }
@@ -60,36 +59,7 @@
                 repeating-linear-gradient(-60deg, rgba(184, 134, 11, 0.06) 0px, rgba(184, 134, 11, 0.06) 2px, transparent 2px, transparent 40px),
                 repeating-linear-gradient(120deg, rgba(53, 94, 59, 0.04) 0px, rgba(53, 94, 59, 0.04) 1px, transparent 1px, transparent 60px);
             z-index: -1;
-            animation: shiftGrid 30s infinite linear;
             opacity: 0.3;
-        }
-
-        .particles-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            background: var(--secondary-color);
-            border-radius: 50%;
-            opacity: 0.3;
-            pointer-events: none;
-        }
-
-        @keyframes shiftGrid {
-            0% { background-position: 0 0; }
-            100% { background-position: 40px 40px; }
-        }
-
-        @keyframes pulseBG {
-            0%, 100% { opacity: 0.85; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.03); }
         }
 
         .crest-container {
@@ -121,7 +91,6 @@
             height: 150px;
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             clip-path: polygon(50% 0%, 100% 20%, 100% 80%, 50% 100%, 0% 80%, 0% 20%);
-            animation: crestPulse 6s infinite ease-in-out;
         }
 
         .crest-shield::before {
@@ -133,7 +102,6 @@
             font-size: 2rem;
             color: var(--secondary-color);
             text-shadow: var(--gold-glow);
-            animation: crestSymbol 4s infinite alternate ease-in-out;
         }
 
         .crest-shield::after {
@@ -146,7 +114,6 @@
             height: 2px;
             background: var(--secondary-color);
             box-shadow: var(--gold-glow);
-            animation: crestLine 5s infinite ease-in-out;
         }
 
         .crest-flourish {
@@ -159,7 +126,6 @@
             border: 2px dashed var(--accent-color);
             border-radius: 10px;
             opacity: 0.5;
-            animation: flourishRotate 12s infinite linear;
         }
 
         .crest-motto {
@@ -173,32 +139,6 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             text-shadow: var(--glow-shadow);
-            animation: mottoFade 8s infinite ease-in-out;
-        }
-
-        @keyframes crestPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
-            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
-        }
-
-        @keyframes crestSymbol {
-            0% { transform: translateX(-50%) scale(1); }
-            100% { transform: translateX(-50%) scale(1.1); }
-        }
-
-        @keyframes crestLine {
-            0%, 100% { width: 80%; opacity: 0.7; }
-            50% { width: 90%; opacity: 1; }
-        }
-
-        @keyframes flourishRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes mottoFade {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
         }
 
         .cursor {
@@ -221,23 +161,6 @@
             border-color: rgba(53, 94, 59, 0.4);
         }
 
-        .cursor-trail {
-            position: fixed;
-            width: 12px;
-            height: 12px;
-            background: rgba(184, 134, 11, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 999;
-            mix-blend-mode: screen;
-            animation: fadeTrail 0.6s ease-out forwards;
-        }
-
-        @keyframes fadeTrail {
-            0% { opacity: 0.3; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.5); }
-        }
-
         header {
             text-align: center;
             padding: 100px 20px;
@@ -256,7 +179,6 @@
             text-transform: uppercase;
             letter-spacing: 5px;
             position: relative;
-            animation: growText 2s ease-out forwards;
             margin-bottom: 1rem;
         }
 
@@ -269,13 +191,7 @@
             width: 60%;
             height: 3px;
             background: linear-gradient(90deg, transparent, var(--secondary-color), var(--primary-color), transparent);
-            animation: pulseWidth 3s infinite ease-in-out;
             border-radius: 1px;
-        }
-
-        @keyframes pulseWidth {
-            0%, 100% { width: 60%; opacity: 0.7; }
-            50% { width: 80%; opacity: 1; }
         }
 
         h2 {
@@ -303,24 +219,12 @@
             text-shadow: 0 0 5px rgba(74, 44, 42, 0.4);
         }
 
-        @keyframes growText {
-            0% { transform: scale(0.5); opacity: 0; filter: blur(10px); }
-            100% { transform: scale(1); opacity: 1; filter: blur(0); }
-        }
-
         .subtitle {
             font-size: 1.5rem;
             color: var(--light-text);
             margin: 20px 0 40px;
             text-shadow: 0 0 10px rgba(184, 134, 11, 0.5);
-            animation: fadeIn 2s ease-out 0.5s forwards;
-            opacity: 0;
             font-family: 'Crimson Text', serif;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .bio-btn {
@@ -335,7 +239,6 @@
             border-radius: 25px;
             transition: all 0.3s ease;
             box-shadow: var(--gold-glow);
-            animation: breathe 3s infinite ease-in-out;
             position: relative;
             overflow: hidden;
             z-index: 1;
@@ -351,7 +254,6 @@
             width: 200%;
             height: 200%;
             background: conic-gradient(transparent, rgba(232, 216, 196, 0.4), transparent 20%);
-            animation: rotateGradient 10s linear infinite;
             z-index: -1;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -367,16 +269,6 @@
             text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
-        @keyframes rotateGradient {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes breathe {
-            0%, 100% { box-shadow: 0 0 15px rgba(184, 134, 11, 0.6); }
-            50% { box-shadow: 0 0 25px rgba(184, 134, 11, 0.9); }
-        }
-
         .content {
             display: none;
             padding: 50px 20px;
@@ -386,7 +278,6 @@
 
         .content.active {
             display: block;
-            animation: fadeIn 1s ease-in;
         }
 
         .bio-divider {
@@ -395,7 +286,6 @@
             background: linear-gradient(90deg, transparent, var(--primary-color), var(--secondary-color), var(--accent-color), transparent);
             margin: 60px auto;
             box-shadow: 0 0 10px var(--primary-color);
-            animation: flowLine 4s infinite ease-in-out;
             position: relative;
             border-radius: 2px;
         }
@@ -407,7 +297,6 @@
             left: 25%;
             color: var(--secondary-color);
             font-size: 1.5rem;
-            animation: moveDot 4s infinite alternate ease-in-out;
         }
 
         .bio-divider::after {
@@ -417,17 +306,6 @@
             right: 25%;
             color: var(--accent-color);
             font-size: 1.5rem;
-            animation: moveDot 4s infinite alternate-reverse ease-in-out;
-        }
-
-        @keyframes moveDot {
-            0% { transform: translateX(-30px); }
-            100% { transform: translateX(30px); }
-        }
-
-        @keyframes flowLine {
-            0%, 100% { transform: scaleX(0.8); opacity: 0.6; }
-            50% { transform: scaleX(1); opacity: 1; }
         }
 
         .hex-panel {
@@ -459,7 +337,6 @@
             background: linear-gradient(45deg, rgba(74, 44, 42, 0.1), rgba(184, 134, 11, 0.1), rgba(53, 94, 59, 0.1));
             opacity: 0.4;
             z-index: -1;
-            animation: pulseHex 5s infinite ease-in-out;
         }
 
         .hex-panel::after {
@@ -474,18 +351,6 @@
             clip-path: polygon(5% 0%, 95% 0%, 100% 5%, 100% 95%, 95% 100%, 5% 100%, 0% 95%, 0% 5%);
             border: 2px solid transparent;
             border-image: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color)) 1;
-            animation: borderGlow 3s infinite alternate ease-in-out;
-        }
-
-        @iodesktop
-        @keyframes borderGlow {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes pulseHex {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.7; }
         }
 
         .about-content {
@@ -509,7 +374,6 @@
             height: 200px;
             border-radius: 50%;
             filter: drop-shadow(0 0 15px var(--primary-color));
-            animation: float 3s ease-in-out infinite;
             border: 4px solid var(--secondary-color);
             position: relative;
             transition: transform 0.3s ease;
@@ -533,21 +397,10 @@
             border-radius: 50%;
             border: 2px solid var(--accent-color);
             opacity: 0.5;
-            animation: pulseCircle 3s infinite alternate ease-in-out;
         }
 
         .holo-img:hover {
             transform: scale(1.1) rotate(5deg);
-        }
-
-        @keyframes pulseCircle {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
         }
 
         .course-grid {
@@ -585,7 +438,6 @@
             width: 200%;
             height: 200%;
             background: conic-gradient(transparent, rgba(184, 134, 11, 0.15), transparent 30%);
-            animation: rotateGradient 10s linear infinite;
             z-index: -1;
         }
 
@@ -646,7 +498,6 @@
 
         .course-popup.active {
             display: block;
-            animation: popupFade 0.5s ease-in;
         }
 
         .popup-close {
@@ -670,11 +521,6 @@
             background: var(--accent-color);
             color: var(--dark-bg);
             transform: rotate(90deg);
-        }
-
-        @keyframes popupFade {
-            from { opacity: 0; transform: translate(-50%, -60%); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
         }
 
         .course-popup button {
@@ -719,7 +565,6 @@
 
         .schedule-modal.active {
             display: block;
-            animation: modalFade 0.5s ease-in;
         }
 
         .schedule-modal h3 {
@@ -819,7 +664,6 @@
             border-radius: 25px;
             transition: all 0.3s ease;
             box-shadow: 0 0 15px var(--primary-color);
-            animation: breathe 3s infinite ease-in-out;
             font-family: 'Cinzel', serif;
             font-weight: bold;
             font-size: 1.1rem;
@@ -994,18 +838,12 @@
             font-family: 'Cinzel', serif;
             color: var(--secondary-color);
             letter-spacing: 3px;
-            animation: pulse 1.5s infinite alternate ease-in-out;
             text-transform: uppercase;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
         }
 
         .auth-modal {
@@ -1030,7 +868,6 @@
 
         .auth-modal.active {
             display: block;
-            animation: modalFade 0.5s ease-in;
         }
 
         .success-modal {
@@ -1054,12 +891,6 @@
 
         .success-modal.active {
             display: block;
-            animation: modalFade 0.5s ease-in;
-        }
-
-        @keyframes modalFade {
-            from { opacity: 0; transform: translate(-50%, -60%); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
         }
 
         .success-icon {
@@ -1103,82 +934,72 @@
         }
 
         .return-btn-container {
-    text-align: center;
-    margin: 40px 0;
-}
+            text-align: center;
+            margin: 40px 0;
+        }
 
-.return-btn {
-    display: inline-block;
-    padding: 12px 30px;
-    font-family: 'Cinzel', serif;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--light-text);
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    border: 2px solid var(--secondary-color);
-    border-radius: 25px;
-    text-decoration: none;
-    box-shadow: var(--gold-glow);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    z-index: 1;
-    cursor: pointer;
-}
+        .return-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--light-text);
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border: 2px solid var(--secondary-color);
+            border-radius: 25px;
+            text-decoration: none;
+            box-shadow: var(--gold-glow);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 1;
+            cursor: pointer;
+        }
 
-.return-btn::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(transparent, rgba(232, 216, 196, 0.4), transparent 20%);
-    animation: rotateGradient 8s linear infinite;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
+        .return-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(232, 216, 196, 0.4), transparent 20%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-.return-btn:hover::before {
-    opacity: 1;
-}
+        .return-btn:hover::before {
+            opacity: 1;
+        }
 
-.return-btn:hover {
-    transform: scale(1.05) translateY(-5px);
-    box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color);
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-}
+        .return-btn:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
 
-.return-btn:active {
-    transform: scale(0.95);
-    box-shadow: 0 0 15px var(--primary-color);
-}
+        .return-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 15px var(--primary-color);
+        }
 
-@keyframes breatheBtn {
-    0%, 100% { box-shadow: var(--gold-glow); }
-    50% { box-shadow: 0 0 20px rgba(184, 134, 11, 0.9); }
-}
+        @media (max-width: 768px) {
+            .return-btn {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+        }
 
-.return-btn {
-    animation: breatheBtn 3s infinite ease-in-out;
-}
-
-@media (max-width: 768px) {
-    .return-btn {
-        padding: 10px 25px;
-        font-size: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .return-btn {
-        padding: 8px 20px;
-        font-size: 0.9rem;
-    }
-}
+        @media (max-width: 480px) {
+            .return-btn {
+                padding: 8px 20px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1191,7 +1012,6 @@
 
     <div class="bio-bg"></div>
     <div class="hex-grid"></div>
-    <div class="particles-container"></div>
 
     <header>
         <h1 class="title">Языковая Лаборатория</h1>
@@ -1261,9 +1081,8 @@
         </div>
 
         <div class="return-btn-container">
-                    <a href="Presentation.html" class="return-btn">Информация о курсах</a>
-                </div>
-
+            <a href="Presentation.html" class="return-btn">Информация о курсах</a>
+        </div>
         
         <div class="auth-content" id="teacher-content">
             <form id="teacher-form">
@@ -1298,8 +1117,8 @@
         </section>
 
         <div class="return-btn-container">
-                    <a href="achievement.html" class="return-btn">Моя история</a>
-                </div>
+            <a href="achievement.html" class="return-btn">Моя история</a>
+        </div>
 
         <div class="bio-divider"></div>
 
@@ -1389,7 +1208,7 @@
                 </select>
                 <label for="time-select-1">Занятие 1</label>
             </div>
-            <div class="form-group">
+                        <div class="form-group">
                 <select id="time-select-2">
                     <option value="">Выберите время (опционально)</option>
                 </select>
@@ -1461,16 +1280,6 @@
         document.addEventListener('mousemove', function(e) {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
-            
-            const trail = document.createElement('div');
-            trail.className = 'cursor-trail';
-            trail.style.left = e.clientX + 'px';
-            trail.style.top = e.clientY + 'px';
-            document.body.appendChild(trail);
-            
-            setTimeout(() => {
-                trail.remove();
-            }, 600);
         });
 
         document.querySelectorAll('button, a, .course-card').forEach(item => {
@@ -1481,38 +1290,6 @@
                 cursor.classList.remove('hover');
             });
         });
-
-        const particlesContainer = document.querySelector('.particles-container');
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            const size = Math.random() * 5 + 2;
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.left = Math.random() * window.innerWidth + 'px';
-            particle.style.top = Math.random() * window.innerHeight + 'px';
-            
-            particlesContainer.appendChild(particle);
-            
-            const animationDuration = Math.random() * 10 + 5;
-            const xMovement = Math.random() * 100 - 50;
-            const yMovement = Math.random() * 100 - 50;
-            
-            particle.animate([
-                { transform: 'translate(0, 0)', opacity: 0 },
-                { transform: `translate(${xMovement}px, ${yMovement}px)`, opacity: 0.8 },
-                { transform: `translate(${xMovement * 2}px, ${yMovement * 2}px)`, opacity: 0 }
-            ], {
-                duration: animationDuration * 1000,
-                easing: 'ease-in-out'
-            });
-            
-            setTimeout(() => {
-                particle.remove();
-            }, animationDuration * 1000);
-        }
-        
-        setInterval(createParticle, 300);
 
         document.addEventListener('mousemove', function(e) {
             const x = e.clientX / window.innerWidth;
@@ -1627,7 +1404,7 @@
                     setTimeout(function() {
                         document.getElementById('success-modal').classList.remove('active');
                         document.getElementById('auth-modal').classList.remove('active');
-                        document.getElementById('main-content').classList.add('active');
+                        window.location.href = 'dashboard.html';
                     }, 2000);
                 } catch (e) {
                     console.error("Ошибка при регистрации: ", e);
@@ -1669,7 +1446,7 @@
                     setTimeout(function() {
                         document.getElementById('success-modal').classList.remove('active');
                         document.getElementById('auth-modal').classList.remove('active');
-                        document.getElementById('main-content').classList.add('active');
+                        window.location.href = 'dashboard.html';
                     }, 2000);
                 } catch (e) {
                     console.error("Ошибка при входе: ", e);
@@ -1704,7 +1481,7 @@
                     setTimeout(function() {
                         document.getElementById('success-modal').classList.remove('active');
                         document.getElementById('auth-modal').classList.remove('active');
-                        document.getElementById('main-content').classList.add('active');
+                        window.location.href = 'dashboard.html';
                     }, 2000);
                 } catch (e) {
                     console.error("Ошибка при входе учителя: ", e);
