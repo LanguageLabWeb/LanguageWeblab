@@ -38,7 +38,6 @@
             background: radial-gradient(circle at 50% 50%, rgba(74, 44, 42, 0.2), transparent 50%),
                         url('https://www.transparenttextures.com/patterns/brocade.png') repeat;
             z-index: -2;
-            animation: pulseBG 10s infinite ease-in-out;
             opacity: 0.85;
         }
 
@@ -51,12 +50,8 @@
             background: repeating-linear-gradient(60deg, rgba(184, 134, 11, 0.06) 0px, rgba(184, 134, 11, 0.06) 2px, transparent 2px, transparent 40px),
                         repeating-linear-gradient(-60deg, rgba(184, 134, 11, 0.06) 0px, rgba(184, 134, 11, 0.06) 2px, transparent 2px, transparent 40px);
             z-index: -1;
-            animation: shiftGrid 30s infinite linear;
             opacity: 0.3;
         }
-
-        @keyframes shiftGrid { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
-        @keyframes pulseBG { 0%, 100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.03); } }
 
         .cursor {
             position: fixed;
@@ -173,18 +168,6 @@
             font-style: italic;
         }
 
-        .form-group input:focus ~ label,
-        .form-group input:not(:placeholder-shown) ~ label,
-        .form-group textarea:focus ~ label,
-        .form-group textarea:not(:placeholder-shown) ~ label,
-        .form-group select:focus ~ label,
-        .form-group select:not(:placeholder-shown) ~ label {
-            top: -25px;
-            left: 5px;
-            font-size: 0.9rem;
-            color: var(--primary-color);
-        }
-
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             border-color: var(--primary-color);
             box-shadow: var(--glow-shadow);
@@ -232,6 +215,16 @@
             margin-top: 20px;
         }
 
+        progress {
+            width: 100%;
+            height: 20px;
+            margin: 10px 0;
+            background: var(--darker-bg);
+            border: 1px solid var(--secondary-color);
+        }
+        progress::-webkit-progress-value { background: var(--primary-color); }
+        progress::-moz-progress-bar { background: var(--primary-color); }
+
         @media (max-width: 768px) {
             .dashboard-container {
                 grid-template-columns: 1fr;
@@ -252,6 +245,7 @@
                 <li data-section="tests">Тесты</li>
                 <li data-section="tasks">Задачи</li>
                 <li data-section="progress">Прогресс</li>
+                <li id="logout-btn">Выйти</li>
             </ul>
         </div>
         <div class="main-section">
@@ -274,6 +268,15 @@
                     </div>
                     <button type="submit">Отправить</button>
                 </form>
+                <div class="form-group">
+                    <select id="homework-filter">
+                        <option value="">Все курсы</option>
+                        <option value="russian">Русский язык</option>
+                        <option value="english">Английский язык</option>
+                        <option value="math">Математика</option>
+                    </select>
+                    <label for="homework-filter">Фильтр по курсу</label>
+                </div>
                 <div class="homework-list" id="homework-list"></div>
                 <div class="teacher-section" id="teacher-homework" style="display: none;">
                     <h2>Проверка заданий</h2>
@@ -344,22 +347,24 @@
                 <h2>Ваш прогресс</h2>
                 <div id="progress-stats">
                     <p>Выполнено заданий: <span id="homework-count">0</span></p>
+                    <progress id="homework-progress" max="100" value="0"></progress>
                     <p>Пройдено тестов: <span id="test-count">0</span></p>
+                    <progress id="test-progress" max="100" value="0"></progress>
                     <p>Решено задач: <span id="task-count">0</span></p>
+                    <progress id="task-progress" max="100" value="0"></progress>
                 </div>
             </div>
 
-          <div style="text-align: center; margin-top: 20px;">
-    <a href="index.html" style="color: var(--secondary-color); text-decoration: none; font-family: 'Cinzel', serif;">Вернуться на главную</a>
-</div>
-          
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="index.html" style="color: var(--secondary-color); text-decoration: none; font-family: 'Cinzel', serif;">Вернуться на главную</a>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -377,20 +382,46 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         const storage = getStorage(app);
+        const telegramToken = '8052501239:AAGFdenBK73gNDaogdoPdcclkdHSTnNBEyI';
+        const teacherChatId = '1042168412';
+
+        const elements = {
+            homeworkForm: document.getElementById('homework-form'),
+            homeworkList: document.getElementById('homework-list'),
+            testList: document.getElementById('test-list'),
+            taskList: document.getElementById('task-list'),
+            testForm: document.getElementById('test-form'),
+            taskForm: document.getElementById('task-form'),
+            homeworkFilter: document.getElementById('homework-filter'),
+            teacherHomeworkList: document.getElementById('teacher-homework-list'),
+            homeworkCount: document.getElementById('homework-count'),
+            testCount: document.getElementById('test-count'),
+            taskCount: document.getElementById('task-count'),
+            homeworkProgress: document.getElementById('homework-progress'),
+            testProgress: document.getElementById('test-progress'),
+            taskProgress: document.getElementById('task-progress'),
+            logoutBtn: document.getElementById('logout-btn')
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Кастомный курсор
             const cursor = document.querySelector('.cursor');
             document.addEventListener('mousemove', (e) => {
                 cursor.style.left = e.clientX + 'px';
                 cursor.style.top = e.clientY + 'px';
             });
-            document.querySelectorAll('button, li').forEach(item => {
+            document.querySelectorAll('button, li, a').forEach(item => {
                 item.addEventListener('mouseenter', () => cursor.classList.add('hover'));
                 item.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
             });
 
-            // Проверка авторизации
+            document.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', () => {
+                    const label = select.nextElementSibling;
+                    if (select.value) label.style.top = '-25px';
+                    else label.style.top = '15px';
+                });
+            });
+
             let isTeacher = false;
             onAuthStateChanged(auth, async (user) => {
                 if (!user) {
@@ -408,7 +439,6 @@
                 loadContent(user.uid);
             });
 
-            // Переключение секций
             document.querySelectorAll('.sidebar li').forEach(item => {
                 item.addEventListener('click', () => {
                     document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
@@ -418,9 +448,9 @@
                 });
             });
 
-            // Отправка домашнего задания
-            document.getElementById('homework-form').addEventListener('submit', async (e) => {
+            elements.homeworkForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (!confirm('Вы уверены, что хотите отправить это задание?')) return;
                 const course = document.getElementById('homework-course').value;
                 const file = document.getElementById('homework-file').files[0];
                 if (!file || !course) return;
@@ -438,14 +468,18 @@
                     timestamp: new Date().toISOString()
                 });
 
+                const message = `Новое домашнее задание:\nКурс: ${course}\nФайл: ${file.name}\nСсылка: ${fileURL}`;
+                const url = `https://api.telegram.org/bot${telegramToken}/sendMessage?chat_id=${teacherChatId}&text=${encodeURIComponent(message)}`;
+                await fetch(url);
+
                 alert('Домашнее задание отправлено!');
                 loadHomework(auth.currentUser.uid);
                 e.target.reset();
             });
 
-            // Создание теста
-            document.getElementById('test-form')?.addEventListener('submit', async (e) => {
+            elements.testForm?.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (!confirm('Вы уверены, что хотите добавить этот тест?')) return;
                 const course = document.getElementById('test-course').value;
                 const question = document.getElementById('test-question').value;
                 const answer = document.getElementById('test-answer').value;
@@ -463,9 +497,9 @@
                 e.target.reset();
             });
 
-            // Создание задачи
-            document.getElementById('task-form')?.addEventListener('submit', async (e) => {
+            elements.taskForm?.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                if (!confirm('Вы уверены, что хотите добавить эту задачу?')) return;
                 const course = document.getElementById('task-course').value;
                 const question = document.getElementById('task-question').value;
                 const answer = document.getElementById('task-answer').value;
@@ -482,9 +516,20 @@
                 loadTasks(auth.currentUser.uid);
                 e.target.reset();
             });
+
+            elements.homeworkFilter?.addEventListener('change', () => loadHomework(auth.currentUser.uid));
+
+            elements.logoutBtn.addEventListener('click', async () => {
+                try {
+                    await signOut(auth);
+                    window.location.href = 'index.html';
+                } catch (e) {
+                    console.error("Ошибка выхода:", e);
+                    alert("Ошибка при выходе: " + e.message);
+                }
+            });
         });
 
-        // Загрузка контента
         async function loadContent(userId) {
             loadHomework(userId);
             loadTests(userId);
@@ -493,45 +538,46 @@
         }
 
         async function loadHomework(userId) {
-            const homeworkList = document.getElementById('homework-list');
-            const teacherHomeworkList = document.getElementById('teacher-homework-list');
-            homeworkList.innerHTML = '';
-            if (teacherHomeworkList) teacherHomeworkList.innerHTML = '';
+            const filter = elements.homeworkFilter?.value || '';
+            elements.homeworkList.innerHTML = '';
+            if (elements.teacherHomeworkList) elements.teacherHomeworkList.innerHTML = '';
 
             const q = collection(db, "homework");
             const snapshot = await getDocs(q);
             snapshot.forEach(doc => {
                 const data = doc.data();
-                if (data.userId === userId) {
-                    const item = document.createElement('div');
-                    item.className = 'item-card';
-                    item.innerHTML = `
-                        <p>Курс: ${data.course}</p>
-                        <p>Файл: <a href="${data.fileURL}" target="_blank">${data.fileName}</a></p>
-                        <p>Статус: ${data.status}</p>
-                    `;
-                    homeworkList.appendChild(item);
-                }
-                if (teacherHomeworkList) {
-                    const teacherItem = document.createElement('div');
-                    teacherItem.className = 'item-card';
-                    teacherItem.innerHTML = `
-                        <p>Курс: ${data.course}</p>
-                        <p>Файл: <a href="${data.fileURL}" target="_blank">${data.fileName}</a></p>
-                        <p>Статус: ${data.status}</p>
-                        <button onclick="updateStatus('${doc.id}', 'approved')">Одобрить</button>
-                        <button onclick="updateStatus('${doc.id}', 'rejected')">Отклонить</button>
-                    `;
-                    teacherHomeworkList.appendChild(teacherItem);
+                if (!filter || data.course === filter) {
+                    if (data.userId === userId) {
+                        const item = document.createElement('div');
+                        item.className = 'item-card';
+                        item.innerHTML = `
+                            <p>Курс: ${data.course}</p>
+                            <p>Файл: <a href="${data.fileURL}" target="_blank">${data.fileName}</a></p>
+                            <p>Статус: ${data.status}</p>
+                        `;
+                        elements.homeworkList.appendChild(item);
+                    }
+                    if (elements.teacherHomeworkList) {
+                        const teacherItem = document.createElement('div');
+                        teacherItem.className = 'item-card';
+                        teacherItem.innerHTML = `
+                            <p>Курс: ${data.course}</p>
+                            <p>Файл: <a href="${data.fileURL}" target="_blank">${data.fileName}</a></p>
+                            <p>Статус: ${data.status}</p>
+                            <button onclick="updateStatus('${doc.id}', 'approved')">Одобрить</button>
+                            <button onclick="updateStatus('${doc.id}', 'rejected')">Отклонить</button>
+                        `;
+                        elements.teacherHomeworkList.appendChild(teacherItem);
+                    }
                 }
             });
         }
 
-        async function loadTests(userId) {
-            const testList = document.getElementById('test-list');
-            testList.innerHTML = '';
+        async function loadItems(userId, collectionName, containerId, type) {
+            const list = elements[containerId];
+            list.innerHTML = '';
 
-            const q = collection(db, "tests");
+            const q = collection(db, collectionName);
             const snapshot = await getDocs(q);
             snapshot.forEach(doc => {
                 const data = doc.data();
@@ -539,39 +585,18 @@
                 item.className = 'item-card';
                 item.innerHTML = `
                     <p>Курс: ${data.course}</p>
-                    <p>Вопрос: ${data.question}</p>
-                    <input type="text" id="test-${doc.id}" placeholder="Ваш ответ">
-                    <button onclick="checkTest('${doc.id}', '${data.answer}')">Проверить</button>
+                    <p>${type === 'test' ? 'Вопрос' : 'Задача'}: ${data.question}</p>
+                    <input type="text" id="${type}-${doc.id}" placeholder="Ваш ответ">
+                    <button onclick="checkItem('${doc.id}', '${data.answer}', '${type}')">Проверить</button>
                 `;
-                testList.appendChild(item);
+                list.appendChild(item);
             });
         }
 
-        async function loadTasks(userId) {
-            const taskList = document.getElementById('task-list');
-            taskList.innerHTML = '';
-
-            const q = collection(db, "tasks");
-            const snapshot = await getDocs(q);
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                const item = document.createElement('div');
-                item.className = 'item-card';
-                item.innerHTML = `
-                    <p>Курс: ${data.course}</p>
-                    <p>Задача: ${data.question}</p>
-                    <input type="text" id="task-${doc.id}" placeholder="Ваш ответ">
-                    <button onclick="checkTask('${doc.id}', '${data.answer}')">Проверить</button>
-                `;
-                taskList.appendChild(item);
-            });
-        }
+        async function loadTests(userId) { await loadItems(userId, "tests", "testList", "test"); }
+        async function loadTasks(userId) { await loadItems(userId, "tasks", "taskList", "task"); }
 
         async function loadProgress(userId) {
-            const homeworkCount = document.getElementById('homework-count');
-            const testCount = document.getElementById('test-count');
-            const taskCount = document.getElementById('task-count');
-
             let hCount = 0, tCount = 0, tkCount = 0;
             const homeworkQ = query(collection(db, "homework"), where("userId", "==", userId), where("status", "==", "approved"));
             const testsQ = query(collection(db, "testResults"), where("userId", "==", userId), where("correct", "==", true));
@@ -582,32 +607,21 @@
             tCount = tSnapshot.size;
             tkCount = tkSnapshot.size;
 
-            homeworkCount.textContent = hCount;
-            testCount.textContent = tCount;
-            taskCount.textContent = tkCount;
+            elements.homeworkCount.textContent = hCount;
+            elements.testCount.textContent = tCount;
+            elements.taskCount.textContent = tkCount;
+            elements.homeworkProgress.value = hCount * 10; // Пример: 10% за каждое задание
+            elements.testProgress.value = tCount * 20;     // Пример: 20% за каждый тест
+            elements.taskProgress.value = tkCount * 15;    // Пример: 15% за каждую задачу
         }
 
-        window.checkTest = async (testId, correctAnswer) => {
-            const userAnswer = document.getElementById(`test-${testId}`).value;
+        window.checkItem = async (itemId, correctAnswer, type) => {
+            const userAnswer = document.getElementById(`${type}-${itemId}`).value;
             const isCorrect = userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
             alert(isCorrect ? 'Правильно!' : 'Неправильно, попробуйте снова.');
-            await addDoc(collection(db, "testResults"), {
+            await addDoc(collection(db, `${type}Results`), {
                 userId: auth.currentUser.uid,
-                testId: testId,
-                answer: userAnswer,
-                correct: isCorrect,
-                timestamp: new Date().toISOString()
-            });
-            loadProgress(auth.currentUser.uid);
-        };
-
-        window.checkTask = async (taskId, correctAnswer) => {
-            const userAnswer = document.getElementById(`task-${taskId}`).value;
-            const isCorrect = userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
-            alert(isCorrect ? 'Правильно!' : 'Неправильно, попробуйте снова.');
-            await addDoc(collection(db, "taskResults"), {
-                userId: auth.currentUser.uid,
-                taskId: taskId,
+                [`${type}Id`]: itemId,
                 answer: userAnswer,
                 correct: isCorrect,
                 timestamp: new Date().toISOString()
@@ -616,6 +630,7 @@
         };
 
         window.updateStatus = async (homeworkId, status) => {
+            if (!confirm(`Вы уверены, что хотите ${status === 'approved' ? 'одобрить' : 'отклонить'} это задание?`)) return;
             const homeworkRef = doc(db, "homework", homeworkId);
             await updateDoc(homeworkRef, { status: status });
             alert(`Задание ${status === 'approved' ? 'одобрено' : 'отклонено'}!`);
